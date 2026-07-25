@@ -1,0 +1,28 @@
+LEERHELDEN STARTEN OP DEZE COMPUTER
+====================================
+
+De website staat volgens jouw opgegeven pad in:
+
+C:\Users\Admin\Downloads\LeerHelden-v1.0\leerhelden-pwa
+
+1. Plaats START-LEERHELDEN.bat in die map.
+2. Dubbelklik op START-LEERHELDEN.bat.
+3. De website opent op:
+   http://localhost:8080
+
+Waarom via een lokale server?
+De offline/PWA-functies werken niet betrouwbaar wanneer index.html rechtstreeks
+met file:// wordt geopend.
+
+PUBLICEREN OP GITHUB
+====================
+
+1. Installeer GitHub Desktop.
+2. Dubbelklik op PUBLICEREN-OP-GITHUB.bat.
+3. Open GitHub Desktop.
+4. Kies File > Add local repository.
+5. Selecteer:
+   C:\Users\Admin\Downloads\LeerHelden-v1.0\leerhelden-pwa
+6. Klik Publish repository.
+7. Ga op GitHub naar Settings > Pages.
+8. Kies Deploy from a branch, main, /root.
