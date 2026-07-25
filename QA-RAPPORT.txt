@@ -1,0 +1,21 @@
+LEVELUP LEREN 3.0 - QA-RAPPORT
+===============================
+
+Gecontroleerd:
+- JavaScript-syntaxis van content.js en app.js.
+- Profielselectie en afzonderlijke codes voor Dani, Zana, Lena en ouder.
+- Dani: 5 dagmissies; rekenen 20 vragen; spelling 12 vragen; lezen 6 vragen.
+- Zana: langere tekst van circa 600+ woorden; 8 inhoudelijke vragen.
+- Lena: 4 leeftijdsgerichte dagmissies; luisterverhaal en 3 vragen.
+- Verhalenmachine: 1.000 gegenereerde verhalen per profiel getest; 1.000 unieke teksten per profiel.
+- Volledige rekensessie van 20 vragen afgerond.
+- Volledige leessessie afgerond.
+- Detectie van snel/willekeurig antwoorden en waarschuwing in ouderdashboard.
+- Ouder-detailweergave met alle 20 vragen en antwoordtijden.
+- Marketplace, avatar, wereldplaatsing en spelroutes syntactisch gecontroleerd.
+- Responsive profielscherm en ouderdashboard visueel gerenderd.
+
+Bekende technische grenzen:
+- Lokale browseropslag synchroniseert niet automatisch tussen apparaten.
+- E-mail verzenden vereist een mailprogramma of externe webhook/backend.
+- PWA-installatie en offline cache werken via HTTPS/GitHub Pages, niet noodzakelijk bij direct file:// openen.

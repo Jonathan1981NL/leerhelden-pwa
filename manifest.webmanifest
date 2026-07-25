@@ -1,17 +1,14 @@
 {
-  "name": "LeerHelden",
-  "short_name": "LeerHelden",
-  "description": "Adaptieve huiswerkavonturen voor Dani en Zana.",
+  "name": "LevelUp Leren",
+  "short_name": "LevelUp",
+  "description": "Een adaptieve educatieve gamewereld voor Dani, Zana en Lena.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#08142e",
-  "theme_color": "#10224a",
+  "background_color": "#071129",
+  "theme_color": "#0b1535",
+  "orientation": "any",
   "icons": [
-    {
-      "src": "icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    {"src":"icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }

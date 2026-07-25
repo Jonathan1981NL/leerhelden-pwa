@@ -1,866 +1,166 @@
-
 "use strict";
+const C=window.LEVELUP_CONTENT;
+const {PROFILE_META,ACTIVITY_META,shopItems}=C;
+const STORAGE="levelup-leren-v3";
+const OLD_STORAGE="leerhelden-v1";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=x=>new Intl.DateTimeFormat("nl-NL",{day:"2-digit",month:"short",year:"numeric"}).format(new Date(x));
+const fmtTime=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
+const normalize=x=>String(x??"").trim().toLowerCase().replace(/\s+/g," ").replace(/\./g,",").replace(/€\s*/g,"");
 
-const STORAGE_KEY = "leerhelden-v1";
-const todayKey = () => new Date().toISOString().slice(0, 10);
-const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-const shuffle = arr => [...arr].sort(() => Math.random() - .5);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-const formatDate = iso => new Intl.DateTimeFormat("nl-NL", {day:"2-digit", month:"short", year:"numeric"}).format(new Date(iso));
-const formatTime = sec => `${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}`;
-
-const PROFILE_META = {
-  dani: {
-    name: "Dani", age: 8, grade: "midden groep 5", icon: "⚽",
-    subtitle: "Sterke spits, uitvinder en missieheld",
-    theme: "Stadion van de Toekomst",
-    subjects: ["reading","spelling","math"],
-    subjectLabels: {reading:"Lezen", spelling:"Spelling", math:"Rekenen"},
-    subjectIcons: {reading:"📖", spelling:"✍️", math:"🧮"},
-    worldPieces: ["🌳","🪵","🛖","🪜","🏟️","🥅","🏆","🚀","🛸","🦖","🏰","🏎️"],
-    tags: ["Voetbal", "Kracht", "Avontuur", "Uitvinden"]
-  },
-  zana: {
-    name: "Zana", age: 11, grade: "groep 8 + brugklas challenge", icon: "🏑",
-    subtitle: "Toekomstige CEO, wereldstudent en hockeystrateeg",
-    theme: "Future Campus",
-    subjects: ["reading","spelling","math","english","world"],
-    subjectLabels: {reading:"Begrijpend lezen", spelling:"Taal", math:"Rekenen", english:"Engels", world:"Wereld"},
-    subjectIcons: {reading:"📚", spelling:"🖋️", math:"📊", english:"🇬🇧", world:"🌍"},
-    worldPieces: ["🏑","🎓","🏫","📚","💎","🏢","✈️","🇬🇧","🇺🇸","🏊‍♀️","👑","🌆"],
-    tags: ["Hockey", "Leiderschap", "Engels", "Uitdaging"]
-  }
-};
-
-const DANI_READINGS = [
-  {
-    level: 2, title:"De verdwenen wedstrijdbal",
-    story:`Dani stond als eerste op het voetbalveld. De zon kwam net boven de huizen uit en het gras was nog nat. Vandaag speelde zijn team de halve finale. Dani had de hele week geoefend op aannemen, kijken en pas daarna schieten. Papa Jonathan noemde dat zijn drietrapsraket.
-
-Coach Sam wilde beginnen, maar de wedstrijdbal was verdwenen. Alleen een rij modderige afdrukken liep naar het materiaalhok. Dani rende erheen, stopte plotseling en keek goed. “Niet zomaar naar binnen stormen,” zei hij tegen zichzelf. “Eerst kijken, dan denken, dan doen.”
-
-In het hok zat Lena op een omgekeerde emmer. Naast haar lag de bal. Ze had hem meegenomen omdat ze dacht dat het een grote hockeybal was. Zana lachte en legde uit dat hockeyballen veel kleiner zijn. Lena gaf de bal terug en kreeg van Dani een high five.
-
-Tijdens de wedstrijd stond het vlak voor tijd 2-2. Dani kreeg de bal, maar drie verdedigers kwamen op hem af. Iedereen verwachtte een hard schot. Dani zag echter dat zijn maatje vrijstond. Hij gaf een slimme pass. Doelpunt! Dani had niet zelf gescoord, maar voelde zich toch de held van de wedstrijd. Hij had gekeken, gedacht en precies op tijd gehandeld.`,
-    questions:[
-      {q:"Waarom ging Dani niet meteen het materiaalhok in?", options:["Hij was bang voor het donker.","Hij wilde eerst goed kijken en nadenken.","Hij moest op de coach wachten.","Hij zocht zijn schoenen."], a:1, explain:"Dani gebruikt zijn drietrapsraket: eerst kijken, dan denken, dan doen."},
-      {q:"Wat is de belangrijkste boodschap van het verhaal?", options:["Alleen doelpuntenmakers zijn helden.","Een hockeybal is groter dan een voetbal.","Slim samenwerken kan belangrijker zijn dan zelf scoren.","Je moet altijd als eerste op het veld zijn."], a:2, explain:"Dani kiest voor de beste oplossing voor het team."},
-      {q:"Waardoor weet je dat Dani zich goed kon beheersen?", options:["Hij stopte voordat hij het hok in rende.","Hij gaf Lena een high five.","Hij oefende de hele week.","Hij stond als eerste op het veld."], a:0, explain:"Stoppen en eerst kijken laat zien dat hij zijn impuls beheerst."}
-    ]
-  },
-  {
-    level: 3, title:"De Afleidings-Alien",
-    story:`In de rust van een belangrijke wedstrijd zat Dani op de bank. Zijn team stond met 1-0 achter. Coach Sam tekende een plan op het bord: de linksbuiten moest breed blijven, Dani moest eerst naar de bal toe komen en daarna diep sprinten.
-
-Dani keek aandachtig. Tenminste, dat probeerde hij. Op de rand van het bord landde in zijn fantasie een piepkleine groene alien. Het beest droeg een koptelefoon en fluisterde: “Kijk eens naar die vogel. Denk eens aan een Lamborghini. Hoeveel snoepjes passen er eigenlijk in een voetbalschoen?”
-
-Dani moest bijna lachen. Hij kende deze alien. Het was de Afleidings-Alien, die precies verscheen wanneer iets belangrijk was. Dani drukte zijn duim tegen zijn wijsvinger. Dat was zijn geheime focusknop. Daarna herhaalde hij in zijn hoofd drie woorden: komen, kijken, sprinten.
-
-Na rust kwam de pass van Zaid. Dani liep eerst naar de bal. De verdediger volgde hem. Meteen draaide Dani om en sprintte de ruimte in. Hij kreeg de bal terug en schoot laag in de hoek: 1-1.
-
-In de laatste minuut verscheen de alien opnieuw. Op de tribune zwaaide Lena met een veel te grote sjaal en Zana riep iets over hockey. Dani glimlachte, drukte zijn focusknop in en keek weer naar het spel. Hij onderschepte een pass en gaf de voorzet voor de winnende treffer.
-
-Thuis schreef hij op een kaartje: “Afleiding is niet de baas. Ik merk haar op en kies opnieuw.” Het kaartje legde hij naast zijn bed.`,
-    questions:[
-      {q:"Wat stelt de Afleidings-Alien in het verhaal voor?", options:["Een echte tegenstander","Dani's gedachten die hem afleiden","De scheidsrechter","Een mascotte van de club"], a:1, explain:"De alien is een grappig beeld voor afleidende gedachten."},
-      {q:"Welke drie woorden helpen Dani het plan te onthouden?", options:["rennen, springen, juichen","komen, kijken, sprinten","passen, koppen, vallen","stoppen, eten, slapen"], a:1, explain:"Hij maakt het plan klein en onthoudbaar."},
-      {q:"Welke zin vat Dani's oplossing het best samen?", options:["Afleiding mag nooit bestaan.","Je moet aan iets anders denken.","Je merkt afleiding op en brengt je aandacht terug.","Alleen een coach kan je laten focussen."], a:2, explain:"Focus is niet nooit afgeleid zijn; het is steeds terugkeren."}
-    ]
-  },
-  {
-    level: 3, title:"De haai onder het zwembad",
-    story:`Na de wedstrijd gingen Dani, Zana en Lena zwemmen. Dani wilde van de hoge duikplank, maar onder water zag hij een donkere schaduw. In één seconde dacht hij aan alle haaienfilms die hij ooit had gezien.
-
-“Er zit iets onder mij,” fluisterde hij tegen Zana.
-
-Zana zette haar zwembril op en keek. De schaduw bewoog langzaam heen en weer. “Misschien is het een haai,” zei ze ernstig. Daarna begon ze te lachen. “Of de schoonmaakrobot.”
-
-Dani wilde zeker weten wat het was. Hij vroeg de badmeester om uitleg. De badmeester vertelde dat een machine over de bodem reed en vuil opzoog. Door het golvende water leek de machine veel groter.
-
-Dani sprong alsnog. Onder water keek hij naar de robot. Van dichtbij zag hij wieltjes, een slang en een lampje. Geen tanden. Geen vin. Geen haai.
-
-Later bedacht Dani een uitvinding: een zwembadrobot in de vorm van een vriendelijke dolfijn. Op de bovenkant moest een scherm komen dat liet zien hoeveel vuil hij had opgezogen. “Daar word ik miljonair mee,” zei Dani.
-
-“Alleen wanneer je eerst een goed ontwerp maakt,” zei moeder Lana.
-
-Dani pakte papier. Hij tekende niet alleen de buitenkant, maar schreef ook wat de robot moest kunnen. Angst was veranderd in nieuwsgierigheid, en nieuwsgierigheid in een plan.`,
-    questions:[
-      {q:"Waarom leek de schoonmaakrobot op een groot dier?", options:["Hij had echte vinnen.","Het water liet de schaduw groter en golvend lijken.","Zana duwde hem vooruit.","Het zwembad was donker gemaakt."], a:1, explain:"De beweging van het water vervormde de schaduw."},
-      {q:"Hoe verandert Dani in het verhaal?", options:["Van boos naar moe","Van bang naar nieuwsgierig en ondernemend","Van vrolijk naar verdrietig","Van sterk naar zwak"], a:1, explain:"Hij onderzoekt zijn angst en maakt er een uitvinding van."},
-      {q:"Waarom schrijft Dani op wat de robot moet kunnen?", options:["Een ontwerp gaat ook over functies, niet alleen uiterlijk.","Hij wil meer papier gebruiken.","Lana wil dat hij een verhaal schrijft.","De badmeester vraagt erom."], a:0, explain:"Een goede uitvinding moet een probleem oplossen."}
-    ]
-  },
-  {
-    level: 4, title:"De finale in het onweer",
-    story:`De finale van het jeugdtoernooi begon onder een staalgrijze lucht. Dani voelde zich sterk. Hij had die ochtend tien keer netjes opgedrukt en in de warming-up vloog ieder schot richting kruising. Toch liep de eerste helft anders dan verwacht. De tegenstander verdedigde compact en lokte Dani telkens naar de zijkant.
-
-Bij rust stond het 0-0. In de verte klonk een doffe dreun. De scheidsrechter keek omhoog en overlegde met de coaches. Nog voordat iemand een besluit nam, lichtte de hemel op. De wedstrijd werd stilgelegd en iedereen moest naar de kleedkamers.
-
-Sommige spelers mopperden. Dani wilde dat eerst ook doen. Hij was net lekker bezig. Toen zag hij dat een jongere speler gespannen naar het raam keek. Dani ging naast hem zitten en vertelde over de Afleidings-Alien. “Je hoofd kan van alles roepen,” zei hij. “Maar wij kiezen wat we nu doen.”
-
-Coach Sam gebruikte de pauze om het tactische probleem uit te leggen. Niet Dani moest steeds achter de verdediging rennen; een middenvelder moest juist in de ruimte vóór de verdediging komen. Dani kon dan wegtrekken en ruimte maken.
-
-Na twintig minuten trok het onweer voorbij. De wedstrijd werd hervat. Dani maakte twee felle loopacties zonder de bal. Daardoor kwam Zaid vrij in het midden. Bij de derde keer kreeg Zaid de bal en schoot de 1-0 binnen.
-
-Dani scoorde niet, maar coach Sam gaf hem na afloop een bijzondere beker: de Ruimtemaker. “De beste spelers zien niet alleen waar de bal is,” zei de coach. “Ze begrijpen ook wat hun beweging met anderen doet.”`,
-    questions:[
-      {q:"Waarom werd de wedstrijd stilgelegd?", options:["Het veld was te klein.","De spelers waren moe.","Onweer maakte doorspelen onveilig.","De tegenstander wilde overleggen."], a:2, explain:"Bij bliksem en onweer is stoppen een veiligheidsmaatregel."},
-      {q:"Wat veranderde er tactisch na de pauze?", options:["Dani ging keepen.","Dani maakte ruimte zodat een middenvelder vrij kwam.","Iedereen bleef achterin.","Zaid ging steeds naar de zijkant."], a:1, explain:"Dani's loopacties trokken verdedigers weg."},
-      {q:"Waarom past de beker 'Ruimtemaker' goed bij Dani?", options:["Hij ruimde de kleedkamer op.","Hij maakte door zijn beweging ruimte voor een teamgenoot.","Hij bouwde een grotere tribune.","Hij stond ver van de bal."], a:1, explain:"De naam heeft een letterlijke én tactische betekenis."}
-    ]
-  },
-  {
-    level: 5, title:"Dani en de uitvinding voor Oranje",
-    story:`Jaren later trainde Dani met Oranje voor de finale van het wereldkampioenschap. De temperatuur was hoog en het stadion voelde als een oven. Tijdens de laatste training merkte Dani dat spelers steeds later reageerden. Niet omdat ze niet fit waren, maar omdat vermoeidheid hun keuzes vertraagde.
-
-Dani dacht terug aan zijn oude focusknop. Eén speler kon daarmee zijn aandacht terughalen, maar hoe hielp je een heel team? Samen met Zana, die inmiddels internationale ervaring had met sportdata, ontwierp hij een polsband. De band gaf geen lange instructies. Hij trilde slechts één keer wanneer een speler te lang naar de bal bleef kijken en twee keer wanneer er achter hem ruimte ontstond.
-
-De voetbalbond twijfelde. Technologie mocht de wedstrijd niet oneerlijk maken. Dani legde uit dat de band geen oplossing voorspelde en geen opdrachten van buitenaf ontving. Hij hielp spelers alleen om waar te nemen wat zij zelf konden zien. Na controle werd het systeem toegestaan.
-
-In de finale stond Nederland met 1-0 achter. Dani voelde één trilling. Hij keek los van de bal en zag de rechtsback opkomen. Twee minuten later voelde hij twee trillingen, draaide open en stuurde zijn ploeggenoot de vrije ruimte in: 1-1.
-
-Vlak voor tijd kreeg Nederland een strafschop. Dani legde de bal neer. Op dat moment schakelde hij de band uit. Sommige beslissingen wilde hij helemaal zelf nemen. Hij ademde rustig in, koos zijn hoek en schoot. Wereldkampioen.
-
-Na afloop vroeg een verslaggever hoeveel de uitvinding waard was. Dani keek naar de beker. “Misschien miljoenen,” zei hij. “Maar vandaag was hij vooral één slimme herinnering op het juiste moment.”`,
-    questions:[
-      {q:"Welk probleem probeert Dani met de polsband op te lossen?", options:["Spelers hebben te weinig kracht.","Vermoeidheid vertraagt waarneming en keuzes.","De temperatuur kan niet worden gemeten.","De scheidsrechter ziet buitenspel niet."], a:1, explain:"De band ondersteunt aandacht en oriëntatie wanneer spelers vermoeid raken."},
-      {q:"Waarom wordt de technologie toch toegestaan?", options:["Hij voorspelt ieder doelpunt.","Hij ontvangt geheime instructies.","Hij ondersteunt waarneming zonder de oplossing voor te zeggen.","Alle teams krijgen automatisch een doelpunt."], a:2, explain:"De speler blijft zelf waarnemen en beslissen."},
-      {q:"Waarom schakelt Dani de band uit voor de strafschop?", options:["De batterij is leeg.","Hij wil verantwoordelijkheid voor die keuze zelf dragen.","De verslaggever vraagt dat.","De band mag alleen bij verdedigen."], a:1, explain:"Dit benadrukt zelfstandigheid en vertrouwen."}
-    ]
-  }
-];
-
-const ZANA_READINGS = [
-  {
-    level:3, title:"De selectie die niemand verwachtte",
-    story:`Zana's hockeyteam kreeg vlak voor een belangrijk toernooi een nieuwe trainer. Tijdens de eerste training verdeelde hij geen hesjes op basis van vaste posities. In plaats daarvan liet hij iedereen drie verschillende rollen spelen. Sommige speelsters vonden dat onrustig. Zana was gewend om op het middenveld het spel te verdelen en zag niet direct waarom zij ook als verdediger moest spelen.
-
-Na de training legde de trainer uit dat een team sterker wordt wanneer spelers begrijpen welke informatie hun teamgenoten nodig hebben. Een middenvelder die ooit als verdediger heeft gespeeld, herkent eerder wanneer een pass riskant is. Een aanvaller die een wedstrijd op het middenveld heeft ervaren, begrijpt beter wanneer zij druk moet zetten.
-
-Tijdens het toernooi raakte de vaste verdediger licht geblesseerd. Zana nam haar plek over. Ze merkte dat ze niet alleen beter verdedigde, maar ook haar teamgenoten gerichter coachte. Haar ervaring op verschillende posities bleek geen omweg, maar voorbereiding.`,
-    questions:[
-      {q:"Wat is het hoofddoel van de trainer?", options:["Iedereen onzeker maken","Spelers verschillende perspectieven leren begrijpen","De vaste opstelling geheimhouden","Minder trainen op techniek"], a:1, explain:"De wisselende rollen vergroten tactisch begrip."},
-      {q:"Welke relatie bestaat tussen alinea 2 en 3?", options:["Alinea 3 geeft een praktijkvoorbeeld van de uitleg in alinea 2.","Alinea 3 spreekt alinea 2 volledig tegen.","Beide alinea's gaan over een ander team.","Alinea 2 beschrijft alleen het eindresultaat."], a:0, explain:"De blessure maakt zichtbaar waarom rolbegrip nuttig is."},
-      {q:"Wat betekent 'geen omweg, maar voorbereiding'?", options:["De training duurde te lang.","Een onverwachte ervaring bleek later nuttig.","Zana liep via een andere route.","De trainer veranderde het toernooi."], a:1, explain:"Wat eerst niet nodig leek, had later duidelijke waarde."}
-    ]
-  },
-  {
-    level:4, title:"De campus van 2040",
-    story:`Een internationale universiteit kondigde aan in 2040 volledig klimaatneutraal te willen zijn. Nieuwe gebouwen zouden energie opwekken met zonnepanelen, regenwater opslaan en flexibel worden ingericht. Critici reageerden dat nieuwbouw juist veel grondstoffen kost en dat bestaande gebouwen beter gerenoveerd kunnen worden.
-
-Het universiteitsbestuur liet vervolgens drie scenario's onderzoeken. In scenario A werd alles nieuw gebouwd. Scenario B bestond volledig uit renovatie. Scenario C combineerde renovatie met één nieuw, energiepositief gebouw. Uit het onderzoek bleek dat scenario B op korte termijn de laagste uitstoot veroorzaakte, maar dat scenario C na achttien jaar het gunstigst werd. Het nieuwe gebouw leverde dan meer energie dan het gebruikte en compenseerde een deel van de uitstoot van oudere gebouwen.
-
-De discussie was daarmee niet afgelopen. De berekening hing af van aannames over levensduur, studentenaantallen en toekomstige energiebronnen. De universiteit koos voorlopig voor scenario C, maar beloofde de aannames elke drie jaar opnieuw te toetsen.`,
-    questions:[
-      {q:"Waarom is scenario C niet automatisch de beste keuze?", options:["Het gebruikt geen zonnepanelen.","De uitkomst hangt af van aannames en een lange periode.","Renovatie is wettelijk verboden.","Studenten mogen niet in nieuwe gebouwen."], a:1, explain:"De conclusie is afhankelijk van onzekere toekomstige factoren."},
-      {q:"Welke tekststructuur overheerst?", options:["Probleem – opties – afweging – voorlopig besluit","Chronologische biografie","Instructie met stappenplan","Beschrijving van één persoon"], a:0, explain:"De tekst presenteert een vraagstuk, scenario's en een afgewogen keuze."},
-      {q:"Welke bron zou de claim over achttien jaar het best controleren?", options:["Een reclamefolder van een aannemer","Het volledige onderzoeksrapport met methode en aannames","Een foto van de campus","Een interview met één student"], a:1, explain:"Daarin zijn de berekening en uitgangspunten controleerbaar."}
-    ]
-  },
-  {
-    level:5, title:"Wie bepaalt wat succesvol leiderschap is?",
-    story:`In veel artikelen wordt een succesvolle leider voorgesteld als iemand die snel beslist, overtuigend spreekt en duidelijke doelen stelt. Dat beeld is aantrekkelijk, omdat zulke eigenschappen zichtbaar zijn. Minder zichtbaar is het vermogen om twijfel toe te laten, expertise van anderen te gebruiken en een besluit te herzien wanneer nieuwe informatie dat vraagt.
-
-Onderzoekers die alleen naar winstgroei kijken, kunnen een andere leider als succesvol aanwijzen dan onderzoekers die ook personeelsverloop, innovatie en maatschappelijke gevolgen meten. Zelfs binnen één bedrijf kan een besluit op korte termijn winstgevend zijn en op lange termijn schadelijk blijken.
-
-Daarom is de vraag “Wie is de beste leider?” zonder aanvullende criteria nauwelijks te beantwoorden. Een zorgvuldiger vraag is: “Welke vorm van leiderschap werkt, voor welke organisatie, onder welke omstandigheden en gedurende welke periode?” Dat antwoord is minder geschikt voor een opvallende krantenkop, maar waarschijnlijk bruikbaarder voor iemand die later zelf een organisatie wil leiden.`,
-    questions:[
-      {q:"Welke kritiek geeft de auteur op het gebruikelijke beeld van leiders?", options:["Leiders mogen nooit snel beslissen.","Zichtbare eigenschappen krijgen te veel aandacht ten opzichte van minder zichtbare kwaliteiten.","Winst is altijd onbelangrijk.","Alle leiders zijn hetzelfde."], a:1, explain:"De auteur pleit voor een breder beoordelingskader."},
-      {q:"Waarom kan dezelfde leider verschillend worden beoordeeld?", options:["Onderzoekers gebruiken mogelijk andere criteria en termijnen.","Leiders veranderen elke dag van naam.","Winstgroei is niet meetbaar.","Personeelsverloop zegt altijd alles."], a:0, explain:"De gekozen maatstaven bepalen mede de conclusie."},
-      {q:"Wat is de functie van de laatste vraag in de tekst?", options:["De lezer vermaken met een raadsel","De hoofdvraag nauwkeuriger en onderzoekbaar formuleren","Bewijzen dat leiderschap eenvoudig is","Een definitief antwoord geven"], a:1, explain:"De vraag specificeert context, organisatie en tijdshorizon."}
-    ]
-  }
-];
-
-const SPELLING_BANK = {
-  dani: [
-    {level:1,prompt:"Welk woord is goed gespeld?", answer:"trein", choices:["trijn","trein","tryn"], explain:"Bij dit woord hoor je /ei/ en schrijf je ei: trein."},
-    {level:1,prompt:"Welk woord is goed gespeld?", answer:"goud", choices:["gaut","goud","gout"], explain:"Goud schrijf je met ou."},
-    {level:2,prompt:"Welk woord is goed gespeld?", answer:"konijnen", choices:["konijnen","konijne","konnijnen"], explain:"Konijnen heeft ij en eindigt op -en."},
-    {level:2,prompt:"Kies de juiste spelling.", answer:"voetbalwedstrijd", choices:["voetbal wedstrijd","voetbalwedstrijd","voetballwedstrijd"], explain:"Samenstellingen schrijf je aan elkaar."},
-    {level:2,prompt:"Welke zin heeft de juiste leestekens?", answer:"Dani schiet. Wat een doelpunt!", choices:["dani schiet wat een doelpunt","Dani schiet. Wat een doelpunt!","Dani schiet, wat een doelpunt."], explain:"Een zin begint met een hoofdletter en eindigt met een passend leesteken."},
-    {level:3,prompt:"Welk woord is goed gespeld?", answer:"gevaarlijk", choices:["gevaarelijk","gevaarlijk","gevaarlek"], explain:"Gevaarlijk schrijf je zonder extra e."},
-    {level:3,prompt:"Kies het juiste meervoud.", answer:"auto's", choices:["autos","auto's","auto,s"], explain:"Na een klinker gebruik je hier een apostrof: auto's."},
-    {level:3,prompt:"Welk woord past? De keeper ___ de bal.", answer:"vangt", choices:["vangt","vankt","vangd"], explain:"De stam is vang; bij hij/zij komt er een t bij."},
-    {level:4,prompt:"Welk woord is correct?", answer:"onmiddellijk", choices:["onmiddelijk","onmiddellijk","onmidelijk"], explain:"Onmiddellijk heeft dubbel d en dubbel l."},
-    {level:4,prompt:"Welke zin is correct?", answer:"De snelle spits verwachtte een lastige wedstrijd.", choices:["De snelle spits verwachte een lastige wedstrijd.","De snelle spits verwachtte een lastige wedstrijd.","De snelle spits verwagtte een lastige wedstrijd."], explain:"Verwachtte is verleden tijd: stam verwacht + te."},
-    {level:5,prompt:"Kies de beste interpunctie.", answer:"Dani zei: “Ik blijf rustig, kijk op en speel de bal.”", choices:["Dani zei “Ik blijf rustig kijk op en speel de bal”.","Dani zei: “Ik blijf rustig, kijk op en speel de bal.”","Dani, zei: “Ik blijf rustig kijk op, en speel de bal.”"], explain:"Na 'zei' past een dubbele punt; de opsomming krijgt komma's."}
-  ],
-  zana: [
-    {level:2,prompt:"Welke zin is correct?", answer:"Zana wordt later directeur.", choices:["Zana word later directeur.","Zana wordt later directeur.","Zana wort later directeur."], explain:"Bij zij/hij: stam + t, dus wordt."},
-    {level:3,prompt:"Welke vorm past? Gisteren ___ zij de presentatie.", answer:"leidde", choices:["leide","leidde","lijdde"], explain:"Leiden krijgt in de verleden tijd -de: leidde."},
-    {level:3,prompt:"Kies de juiste zin.", answer:"Hoewel het regende, ging de wedstrijd door.", choices:["Hoewel het regende ging, de wedstrijd door.","Hoewel het regende, ging de wedstrijd door.","Hoewel, het regende ging de wedstrijd door."], explain:"Na de bijzin aan het begin staat een komma."},
-    {level:4,prompt:"Welke vorm past? De resultaten zijn zorgvuldig ___.", answer:"geanalyseerd", choices:["geanalyseert","geanalyseerd","geanaliseerd"], explain:"Het voltooid deelwoord is geanalyseerd."},
-    {level:4,prompt:"Welke zin gebruikt de verwijswoorden correct?", answer:"Het bedrijf veranderde zijn strategie omdat die niet meer werkte.", choices:["Het bedrijf veranderde haar strategie omdat hij niet meer werkte.","Het bedrijf veranderde zijn strategie omdat die niet meer werkte.","Het bedrijf veranderde hun strategie omdat deze niet meer werkte."], explain:"Bedrijf is onzijdig; strategie is een de-woord."},
-    {level:5,prompt:"Kies de stilistisch beste zin.", answer:"De directie herzag het besluit nadat nieuwe cijfers waren gepubliceerd.", choices:["De directie deed het besluit opnieuw anders omdat er cijfers kwamen.","De directie herzag het besluit nadat nieuwe cijfers waren gepubliceerd.","Nadat cijfers, de directie veranderde hun besluit."], explain:"Deze zin is grammaticaal correct, precies en bondig."},
-    {level:5,prompt:"Welke zin is correct gespeld?", answer:"De ideeën van de commissie zijn financieel onderbouwd.", choices:["De ideëen van de commissie zijn financieel onderbouwt.","De ideeën van de commissie zijn financieel onderbouwd.","De ideeën van de kommissie zijn financiëel onderbouwd."], explain:"Ideeën krijgt een trema; onderbouwd is een voltooid deelwoord."}
-  ]
-};
-
-const ENGLISH_BANK = [
-  {level:2,prompt:"Choose the correct sentence.", answer:"She plays hockey every Saturday.", choices:["She play hockey every Saturday.","She plays hockey every Saturday.","She playing hockey every Saturday."], explain:"With she/he/it in the present simple, the verb usually gets -s."},
-  {level:3,prompt:"Which word best completes the sentence? Zana wants to ___ at an international university.", answer:"study", choices:["study","studies","studied"], explain:"After 'to' we use the base form: to study."},
-  {level:4,prompt:"Choose the best connector. The plan was ambitious; ___, the team completed it on time.", answer:"however", choices:["because","however","unless"], explain:"However introduces a contrast."},
-  {level:5,prompt:"Which sentence is most formal?", answer:"I would appreciate further information about the programme.", choices:["Tell me more about it.","I would appreciate further information about the programme.","What's the deal with this course?"], explain:"This wording is precise and appropriate for a formal email."}
-];
-
-const WORLD_BANK = [
-  {level:2,prompt:"Welke gebeurtenis vond het eerst plaats?", answer:"De uitvinding van de boekdrukkunst in Europa", choices:["De eerste maanlanding","De uitvinding van de boekdrukkunst in Europa","De oprichting van de Europese Unie"], explain:"De Europese boekdrukkunst ontstond in de vijftiende eeuw."},
-  {level:3,prompt:"Waarom liggen veel grote steden aan een rivier?", answer:"Rivieren boden vervoer, water en handel.", choices:["Rivieren maken elk klimaat warmer.","Rivieren boden vervoer, water en handel.","Alle rivieren liggen aan zee."], explain:"Waterwegen waren belangrijk voor handel, drinkwater en bereikbaarheid."},
-  {level:4,prompt:"Wat is een belangrijk verschil tussen weer en klimaat?", answer:"Weer gaat over korte tijd; klimaat over patronen van vele jaren.", choices:["Weer is wereldwijd en klimaat lokaal.","Weer gaat over korte tijd; klimaat over patronen van vele jaren.","Er is geen verschil."], explain:"Klimaat beschrijft langjarige gemiddelden en patronen."},
-  {level:5,prompt:"Welke maatregel pakt vooral de oorzaak van klimaatverandering aan?", answer:"Minder fossiele brandstoffen verbranden", choices:["Hogere dijken bouwen","Meer airconditioning installeren","Minder fossiele brandstoffen verbranden"], explain:"Dit vermindert de uitstoot van broeikasgassen; dijken zijn vooral aanpassing."}
-];
-
-function defaultProfile(id) {
-  const skills = {};
-  PROFILE_META[id].subjects.forEach(s => skills[s] = {rating: id === "dani" ? 2.6 : 3.2, attempts:0, correct:0, streak:0, recent:[]});
-  return {
-    xp:0, coins:0, completed:0, buildStage:0, streakDays:0, lastActive:null,
-    skills, sessions:[], achievements:[], daily:{date:"", completed:[], plan:[]},
-    settings:{sound:true, focusMinutes:id==="dani"?8:12}
-  };
+function defaultSkill(id){return{rating:id==="lena"?1.3:id==="dani"?2.7:4.0,attempts:0,accuracy:0,recent:[]}}
+function defaultProfile(id){
+ const skills={};[...new Set([...PROFILE_META[id].subjects,...PROFILE_META[id].free])].forEach(s=>skills[s]=defaultSkill(id));
+ return{xp:0,coins:250,completed:0,streakDays:0,lastActive:null,skills,sessions:[],questionLog:[],alerts:[],daily:{date:"",plan:[],completed:[]},storySerial:0,gameRewards:{date:"",count:0},owned:["skin-light","skin-warm","skin-deep","hair-brown","top-blue","bottom-jeans","acc-none","pet-none"],equipped:{skin:"skin-warm",hair:"hair-brown",top:"top-blue",bottom:"bottom-jeans",accessory:"acc-none",pet:"pet-none",emote:"emote-star"},world:Array(20).fill(null),settings:{sound:true,timer:true,focusMinutes:id==="lena"?5:id==="dani"?10:15}}
 }
+function initialState(){return{version:3,currentProfile:null,view:"home",task:null,parentOpen:false,parent:{pin:"2580",email:"J_van_geelen@hotmail.com",codes:{dani:"2581",zana:"2582",lena:"2583"},webhook:"",autoAlerts:false},security:{failures:[],lockUntil:{}},profiles:{dani:defaultProfile("dani"),zana:defaultProfile("zana"),lena:defaultProfile("lena")}}}
+function load(){
+ try{const s=JSON.parse(localStorage.getItem(STORAGE));if(s?.profiles){const base=initialState();for(const id of Object.keys(base.profiles)){s.profiles[id]={...base.profiles[id],...(s.profiles[id]||{})};s.profiles[id].skills={...base.profiles[id].skills,...(s.profiles[id].skills||{})};s.profiles[id].equipped={...base.profiles[id].equipped,...(s.profiles[id].equipped||{})};if(!Array.isArray(s.profiles[id].world))s.profiles[id].world=Array(20).fill(null)}return{...base,...s,parent:{...base.parent,...s.parent,codes:{...base.parent.codes,...(s.parent?.codes||{})}},security:{...base.security,...(s.security||{})}}}}catch(e){}
+ const fresh=initialState();
+ try{const old=JSON.parse(localStorage.getItem(OLD_STORAGE));if(old?.profiles){for(const id of ["dani","zana"]){const o=old.profiles[id];if(!o)continue;fresh.profiles[id].xp=o.xp||0;fresh.profiles[id].coins=Math.max(250,o.coins||0);fresh.profiles[id].completed=o.completed||0;fresh.profiles[id].streakDays=o.streakDays||0;fresh.profiles[id].lastActive=o.lastActive||null;fresh.profiles[id].sessions=(o.sessions||[]).map(x=>({...x,id:uid(),accuracy:x.score||0,source:"migrated"}));}}}catch(e){}
+ return fresh;
+}
+let state=load(),tick=null,questionStarted=0,pinBuffer="",pinTarget=null,selectedWorldItem=null,shopCat="featured",parentFilter="all";
+const save=()=>localStorage.setItem(STORAGE,JSON.stringify(state));
+const p=()=>state.profiles[state.currentProfile];
+const m=()=>PROFILE_META[state.currentProfile];
+function toast(msg){const e=$("#toast");e.textContent=msg;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2400)}
+function speak(text,lang="nl-NL"){if(!p()?.settings.sound||!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=state.currentProfile==="lena"?.82:.95;speechSynthesis.speak(u)}
+function ensureDaily(id=state.currentProfile){const pr=state.profiles[id],meta=PROFILE_META[id];if(pr.daily.date!==today()){pr.daily={date:today(),plan:[...meta.daily],completed:[]};save()}}
+function level(xp){return Math.floor(xp/350)+1}
+function ratingLabel(id,r){if(id==="lena")return r<1.6?"groep 1/2":r<2.5?"groep 2":"groep 3-start";if(id==="dani")return r<2?"begin groep 5":r<3?"midden groep 5":r<4?"eind groep 5":"plus groep 5/6";return r<3?"groep 7/8":r<4?"eind groep 8":r<4.7?"brugklas HAVO":"brugklas VWO+"}
+function subjectName(id,s){return PROFILE_META[id].subjectLabels[s]||ACTIVITY_META[s]?.title||s}
+function subjectIcon(id,s){return PROFILE_META[id].subjectIcons[s]||ACTIVITY_META[s]?.icon||"⚡"}
+function setView(v){state.view=v;state.task=null;clearInterval(tick);clearTimeout(game?.timeout);save();render();scrollTo(0,0)}
+window.setView=setView;
 
-function initialState() {
-  return {
-    version:1, currentProfile:null, view:"home", activeTask:null,
-    parent:{email:"J_van_geelen@hotmail.com", pin:"2580", webhook:"", autoReport:false},
-    profiles:{dani:defaultProfile("dani"), zana:defaultProfile("zana")}
-  };
-}
+function avatarHTML(id=state.currentProfile,small=false){const pr=state.profiles[id],eq=pr.equipped,item=x=>shopItems.find(i=>i.id===x),skin=item(eq.skin)?.value||"#d99b6c",hair=item(eq.hair)?.value||"#50301d",top=item(eq.top)?.value||"#3179ef",bottom=item(eq.bottom)?.value||"#233d73",acc=item(eq.accessory)?.value||"",pet=item(eq.pet)?.value||"",emote=item(eq.emote)?.value||"";return`<div class="avatar" style="--skin:${skin};--hair:${hair};--top:${top};--bottom:${bottom};${small?"transform:scale(.7)":""}"><div class="arms"></div><div class="legs"></div><div class="body"></div><div class="head"></div><div class="hair"></div><div class="eyes"><i></i><i></i></div><div class="mouth"></div><div class="accessory">${acc}</div><div class="pet">${pet}</div>${emote?`<div class="emote">${emote}</div>`:""}</div>`}
 
-let state = loadState();
-let focusStarted = null;
-let focusInterval = null;
-let inactivityTimer = null;
-let recognition = null;
+function render(){clearInterval(tick);if(!state.currentProfile)return renderProfiles();ensureDaily();if(state.task)return renderTask();if(state.parentOpen)return renderParent();({home:renderHome,learn:renderLearn,games:renderGames,market:renderMarket,world:renderWorld,progress:renderProgress}[state.view]||renderHome)()}
+function renderProfiles(){document.body.dataset.profile="";$("#app").innerHTML=`<main class="profile-screen"><section class="profile-wrap"><div class="brand" style="justify-content:center"><span class="brand-mark">⚡</span> LevelUp Leren</div><h1>Kies je held</h1><p class="lead">Ieder profiel heeft een eigen code, niveau, avatar, winkel en wereld.</p><div class="profile-grid">${["dani","zana","lena"].map(profileTile).join("")}</div><button class="ghost" style="margin-top:22px" onclick="openPin('parent')">🔐 Papa-dashboard</button><p class="muted" style="margin-top:13px;font-size:13px">Standaardcodes: Dani 2581 · Zana 2582 · Lena 2583 · ouder 2580. Wijzig deze in het dashboard.</p></section></main>`}
+function profileTile(id){const x=PROFILE_META[id],pr=state.profiles[id];return`<button class="profile-tile ${id}" onclick="openPin('${id}')"><div class="profile-art">${x.icon}</div><div class="profile-body"><span class="eyebrow">${esc(x.grade)}</span><h2>${x.name}</h2><p class="muted">${x.subtitle}</p><div class="tag-row">${x.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div><div class="lock-note">🔒 Eigen profielcode · level ${level(pr.xp)} · 🪙 ${pr.coins}</div></div></button>`}
+function shell(body,active){document.body.dataset.profile=state.currentProfile;return`<div class="app-shell"><header class="topbar"><div class="brand"><span class="brand-mark">⚡</span><span>LevelUp Leren</span></div><div class="top-actions"><span class="pill">🪙 ${p().coins}</span><button class="icon-btn" onclick="switchProfile()" title="Profiel wisselen">${m().icon}</button><button class="icon-btn" onclick="openPin('parent')" title="Papa-dashboard">🔐</button></div></header><main class="content">${body}</main><nav class="bottom-nav">${nav("home","🏠","Missies",active)}${nav("learn","📚","Oefenen",active)}${nav("games","🎮","Spellen",active)}${nav("market","🛍️","Shop",active)}${nav("world","🌍","Wereld",active)}${nav("progress","📈","Groei",active)}</nav></div>`}
+function nav(v,ic,l,a){return`<button class="nav-btn ${a===v?"active":""}" onclick="setView('${v}')"><span>${ic}</span>${l}</button>`}
+window.switchProfile=()=>{state.currentProfile=null;state.parentOpen=false;state.task=null;save();render()};
 
-function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!saved || !saved.profiles) return initialState();
-    const base = initialState();
-    for (const id of ["dani","zana"]) {
-      saved.profiles[id] = {...base.profiles[id], ...saved.profiles[id]};
-      saved.profiles[id].skills = {...base.profiles[id].skills, ...(saved.profiles[id].skills || {})};
-    }
-    return {...base, ...saved, parent:{...base.parent, ...(saved.parent || {})}};
-  } catch { return initialState(); }
-}
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function profile() { return state.profiles[state.currentProfile]; }
-function meta() { return PROFILE_META[state.currentProfile]; }
-function showToast(message) {
-  const el = document.getElementById("toast");
-  el.textContent = message; el.classList.add("show");
-  setTimeout(() => el.classList.remove("show"), 2600);
-}
-function speak(text) {
-  if (!profile()?.settings.sound || !("speechSynthesis" in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "nl-NL"; u.rate = .95; speechSynthesis.speak(u);
-}
-function xpLevel(xp) { return Math.floor(xp / 250) + 1; }
-function xpIntoLevel(xp) { return xp % 250; }
-function ratingLabel(r) {
-  if (state.currentProfile === "dani") {
-    if (r < 2) return "begin gr. 5";
-    if (r < 3) return "midden gr. 5";
-    if (r < 4) return "eind gr. 5";
-    return "plusniveau";
-  }
-  if (r < 2.5) return "basis gr. 8";
-  if (r < 3.5) return "midden gr. 8";
-  if (r < 4.4) return "eind gr. 8";
-  return "brugklas H/V";
-}
-function ensureDaily() {
-  const p = profile();
-  const date = todayKey();
-  if (p.daily.date !== date) {
-    p.daily = {date, completed:[], plan: state.currentProfile === "dani"
-      ? ["reading","spelling","math","reading","spelling"]
-      : ["reading","math","spelling","reading","english","world"]};
-    saveState();
-  }
-}
-function categoryName(s) { return meta().subjectLabels[s] || s; }
+function renderHome(){const pr=p(),done=pr.daily.completed.length,total=pr.daily.plan.length,next=pr.daily.plan.findIndex((_,i)=>!pr.daily.completed.includes(i));const body=`<section class="hero"><div class="card hero-copy"><span class="eyebrow">${new Intl.DateTimeFormat("nl-NL",{weekday:"long"}).format(new Date())} · dagmissie</span><h1>${greeting()}, ${m().name}!</h1><p class="lead">${done>=total?"Minimum gehaald. Alles wat je nu nog doet is bonus — spelen en leren mag gewoon doorgaan.":`Nog ${total-done} minimale opdracht${total-done===1?"":"en"}. Daarna blijft de hele leerwereld open.`}</p><div class="hero-stats"><div class="hero-stat"><span>🔥</span><div><strong>${pr.streakDays}</strong><small>actieve dagen</small></div></div><div class="hero-stat"><span>🪙</span><div><strong>${pr.coins}</strong><small>LevelCoins</small></div></div><div class="hero-stat"><span>🏆</span><div><strong>${pr.completed}</strong><small>missies</small></div></div></div></div><div class="card hero-avatar"><div class="avatar-bubble">${avatarHTML()}</div><h3>${m().subtitle}</h3><button class="ghost" onclick="setView('market')">Verander mijn look</button></div></section><div class="grid-2"><section class="card"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Dagminimum</span><h2>${done}/${total} klaar</h2></div><strong>${Math.round(done/total*100)}%</strong></div><div class="progress" style="margin-bottom:16px"><span style="--w:${done/total*100}%"></span></div><div class="daily-list">${pr.daily.plan.map((s,i)=>missionItem(s,i,pr.daily.completed.includes(i),i===next)).join("")}</div></section><section class="card"><span class="eyebrow">Direct bonusspel</span><h2>Blijf doorgaan</h2><p class="muted">Dagminimum klaar of nog niet: extra oefenen en spellen blijven beschikbaar.</p><div class="activity-strip">${m().free.slice(0,6).map(s=>activityCard(s)).join("")}</div><button class="primary" onclick="setView('learn')">Alle activiteiten bekijken</button></section></div><div class="section-head"><div><span class="eyebrow">Verhalenkluis</span><h2>Meer dan 1.000 dagen variatie</h2></div><p class="muted">Dag, profiel, onderwerp en keuzes maken steeds een andere combinatie.</p></div><section class="card"><div class="grid-3"><div class="glass"><h3>${state.currentProfile==="zana"?"12 volwassen themawerelden":"12 avonturenwerelden"}</h3><p class="muted">${state.currentProfile==="lena"?"Korte luisterverhalen met herkenbare beelden.":state.currentProfile==="zana"?"Van topsport, studie en leiderschap tot wetenschap, media, financiën en ethiek.":"Voetbal blijft de hoofdrol spelen, afgewisseld met uitvinden, aliens, haaien, karate en familie."}</p></div><div class="glass"><h3>${state.currentProfile==="zana"?"8 vragen per tekst":state.currentProfile==="dani"?"6 vragen per tekst":"3 luistervragen"}</h3><p class="muted">Niet raden op losse woorden: vragen over feiten, verbanden, hoofdgedachte, brongebruik en gevolgtrekkingen.</p></div><div class="glass"><h3>Geen dagslot</h3><p class="muted">Een afgeronde dag opent niets of sluit niets: ze kunnen altijd een nieuw verhaal starten.</p></div></div></section>`;$("#app").innerHTML=shell(body,"home")}
+function greeting(){const h=new Date().getHours();return h<12?"Goedemorgen":h<18?"Goedemiddag":"Goedenavond"}
+function missionItem(s,i,done,isNext){const a=ACTIVITY_META[s]||{title:subjectName(state.currentProfile,s),icon:subjectIcon(state.currentProfile,s),desc:"Adaptieve missie"};return`<div class="mission ${done?"done":""}"><div class="mission-icon">${done?"✅":a.icon}</div><div><strong>${a.title}</strong><small>${done?"Voltooid — opnieuw spelen mag":a.desc}</small></div><button class="${isNext?"primary":"ghost"}" onclick="startActivity('${s}',${i})">${done?"Nogmaals":"Start"}</button></div>`}
+function activityCard(s){const a=ACTIVITY_META[s]||{title:s,icon:"⚡",desc:"Nieuwe uitdaging"};return`<button class="activity-card" onclick="startActivity('${s}',null)"><div class="big">${a.icon}</div><strong>${a.title}</strong><small>${a.desc}</small></button>`}
 
-function render() {
-  clearInterval(focusInterval);
-  if (!state.currentProfile) return renderProfiles();
-  ensureDaily();
-  if (state.view === "task" && state.activeTask) return renderTask();
-  if (state.view === "parent") return renderParent();
-  if (state.view === "world") return renderWorldPage();
-  if (state.view === "progress") return renderProgress();
-  renderHome();
-}
+function renderLearn(){const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Vrij oefenen</span><h1>Kies je volgende missie</h1></div><p class="muted">Onbeperkt spelen na, voor of tussen de dagopdrachten.</p></div><div class="games-grid">${m().free.map(s=>{const a=ACTIVITY_META[s];return`<button class="game-tile" onclick="startActivity('${s}',null)"><div class="big">${a.icon}</div><h3>${a.title}</h3><p class="muted">${a.desc}</p><span class="pill">${s==="math"?"20 vragen":s==="spelling"||s==="language"?"12 vragen":s==="reading"?state.currentProfile==="zana"?"8 tekstvragen":"6 tekstvragen":"adaptief"}</span></button>`}).join("")}</div><div class="section-head"><div><span class="eyebrow">Slim niveau</span><h2>Per vaardigheid apart</h2></div></div><section class="card">${Object.entries(p().skills).filter(([s])=>m().free.includes(s)).map(([s,sk])=>`<div style="display:grid;grid-template-columns:160px 1fr 120px;gap:12px;align-items:center;margin:12px 0"><strong>${ACTIVITY_META[s]?.icon||"⚡"} ${subjectName(state.currentProfile,s)}</strong><div class="progress"><span style="--w:${(sk.rating-1)/4*100}%"></span></div><span class="pill">${sk.rating.toFixed(1)} · ${ratingLabel(state.currentProfile,sk.rating)}</span></div>`).join("")}</section>`;$("#app").innerHTML=shell(body,"learn")}
 
-function renderProfiles() {
-  document.getElementById("app").innerHTML = `
-    <main class="profile-screen">
-      <section class="profile-wrap">
-        <div class="brand" style="justify-content:center"><span class="brand-mark">⚡</span> LeerHelden</div>
-        <h1>Wie gaat er op missie?</h1>
-        <p>Kies je profiel. Jouw opdrachten, niveau en bouwwereld worden apart onthouden.</p>
-        <div class="profile-grid">
-          ${profileCard("dani")}
-          ${profileCard("zana")}
-        </div>
-        <button class="ghost-btn" style="margin-top:22px" onclick="openParentFromProfiles()">🔐 Ouderomgeving</button>
-      </section>
-    </main>`;
+function startActivity(subject,dailyIndex=null){
+ if(subject==="focus")return startFocus();if(subject==="memory")return startMemory();
+ const id=state.currentProfile,pr=p(),serial=++pr.storySerial,seed=`${today()}-${serial}-${dailyIndex??"free"}`;let task={id:uid(),subject,dailyIndex,source:dailyIndex===null?"free":"daily",startedAt:Date.now(),questionStartedAt:Date.now(),index:0,results:[],answered:false,selected:null};
+ if(subject==="reading"||subject==="story"){const story=id==="dani"?C.daniStory(seed,Math.round(pr.skills.reading.rating)):id==="zana"?C.zanaStory(seed,Math.round(pr.skills.reading.rating)):C.lenaStory(seed,Math.round(pr.skills.story.rating));task={...task,type:"reading",story,readConfirmed:false,subject:id==="lena"?"story":"reading"}}
+ else if(subject==="math"){task={...task,type:"quiz",items:C.makeMath(id,seed,20,Math.round(pr.skills.math.rating)),title:"Rekenrace 20"}}
+ else if(subject==="counting"){task={...task,type:"quiz",items:C.makeMath("lena",seed,10,1),title:"Telavontuur"}}
+ else if(["spelling","language","letters"].includes(subject)){task={...task,type:"quiz",items:C.makeSpelling(id,seed,12),title:subject==="language"?"Taalstudio":subject==="letters"?"Letterfeest":"Spellingarena"}}
+ else if(subject==="shapes"){task={...task,type:"quiz",items:shapeQuestions(seed),title:"Patroonpret"}}
+ else task={...task,type:"quiz",items:C.makeBankQuiz(subject,id,seed,10),title:ACTIVITY_META[subject]?.title||"Challenge"};
+ state.task=task;save();render();questionStarted=Date.now();
 }
-function profileCard(id) {
-  const m = PROFILE_META[id], p = state.profiles[id];
-  return `<button class="profile-card ${id}" onclick="selectProfile('${id}')">
-    <div class="profile-banner">${m.icon}</div>
-    <div class="profile-body">
-      <span class="eyebrow">${esc(m.grade)}</span>
-      <h2>${m.name}</h2>
-      <p>${m.subtitle}. Level ${xpLevel(p.xp)} · ${p.completed} missies voltooid.</p>
-      <div class="tag-row">${m.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-    </div>
-  </button>`;
-}
-window.selectProfile = id => { state.currentProfile=id; state.view="home"; saveState(); render(); };
-window.switchProfile = () => { state.currentProfile=null; state.view="home"; saveState(); render(); };
-window.navigate = view => { state.view=view; state.activeTask=null; saveState(); render(); scrollTo(0,0); };
+window.startActivity=startActivity;
+function shapeQuestions(seed){const r=C.rng(C.hash(seed+"shape")),colors=["🔴","🔵","🟢","🟡"],forms=["🔺","🟦","⚪","⭐"];return Array.from({length:10},(_,i)=>{if(i%2===0){const a=C.pick(r,colors),b=C.pick(r,forms);return{prompt:`Wat komt daarna? ${a} ${b} ${a} ${b} ...`,answer:a,options:C.shuffle(r,[a,b,"⬛"]),explain:"De twee tekens wisselen elkaar af."}}const n=2+Math.floor(r()*3);return{prompt:`Welke vorm heeft ${n===3?"drie":"vier"} hoeken?`,answer:n===3?"driehoek":"vierkant",options:C.shuffle(r,["driehoek","vierkant","cirkel"]),explain:n===3?"Een driehoek heeft drie hoeken.":"Een vierkant heeft vier hoeken."}})}
 
-function shell(content, active="home") {
-  return `<div class="app-shell">
-    <header class="topbar">
-      <div class="brand"><span class="brand-mark">⚡</span><span>LeerHelden</span></div>
-      <div class="top-actions">
-        <button class="icon-btn" title="Wissel profiel" onclick="switchProfile()">${meta().icon}</button>
-        <button class="icon-btn" title="Ouderomgeving" onclick="openParent()">🔐</button>
-      </div>
-    </header>
-    <main class="content">${content}</main>
-    <nav class="bottom-nav" aria-label="Hoofdnavigatie">
-      ${navButton("home","🏠","Missies",active)}
-      ${navButton("world","🏗️","Bouwen",active)}
-      ${navButton("progress","📈","Groei",active)}
-      ${navButton("parent","🔐","Ouder",active,true)}
-    </nav>
-  </div>`;
-}
-function navButton(view, icon, label, active, parent=false) {
-  return `<button class="nav-btn ${active===view?"active":""}" onclick="${parent?"openParent()":`navigate('${view}')`}"><span>${icon}</span>${label}</button>`;
-}
+function renderTask(){const t=state.task;$("#app").innerHTML=`<div class="task-shell"><div class="task-top"><button class="icon-btn" onclick="leaveTask()">✕</button><div class="progress"><span style="--w:${taskProgress(t)}%"></span></div><strong class="timer" id="timer">0:00</strong></div><section class="card task-card">${t.type==="reading"?readingHTML(t):quizHTML(t)}</section></div>`;tick=setInterval(updateTimer,500);if(t.type==="reading"&&state.currentProfile==="lena"&&!t.readSpoken){t.readSpoken=true;setTimeout(()=>speak(t.story.story),350)}}
+function taskProgress(t){if(t.type==="reading")return t.readConfirmed?((t.index+1)/(t.story.questions.length+1))*100:4;return((t.index+(t.answered?1:0))/t.items.length)*100}
+function updateTimer(){const e=$("#timer");if(e&&state.task)e.textContent=fmtTime((Date.now()-state.task.startedAt)/1000)}
+function dots(t,total){return`<div class="question-count">${Array.from({length:total},(_,i)=>{const r=t.results[i];return`<i class="question-dot ${i===t.index?"current":r?r.correct?"good":"bad":""}"></i>`}).join("")}</div>`}
+function readingHTML(t){const s=t.story;if(!t.readConfirmed)return`<div class="task-meta"><span class="pill">${subjectIcon(state.currentProfile,t.subject)} ${subjectName(state.currentProfile,t.subject)}</span><span class="pill">${s.estimatedWords} woorden</span><span class="pill">Verhaal ${p().storySerial} · unieke dagcombinatie</span></div><span class="eyebrow">${s.genre}</span><h1>${esc(s.title)}</h1><div class="story ${state.currentProfile}">${s.story.split("\n\n").map(x=>`<p>${esc(x)}</p>`).join("")}</div><div class="reading-tools"><button class="ghost" onclick="speakCurrentStory()">🔊 Voorlezen</button><button class="primary" onclick="confirmReading()">✅ ${state.currentProfile==="dani"?"Ik heb hardop gelezen":"Naar de vragen"}</button></div><p class="pace">${state.currentProfile==="zana"?"Lees analytisch: markeer in gedachten probleem, bewijs, beperking en conclusie.":"Lees rustig. Een punt is een korte stop. Denk na over wat er echt gebeurt."}</p>`;
+ const q=s.questions[t.index];return`<div class="task-meta"><span class="pill">Vraag ${t.index+1}/${s.questions.length}</span><span class="pill">${q.kind}</span><button class="ghost" onclick="showStoryModal()">📖 Tekst terugkijken</button></div>${dots(t,s.questions.length)}<h2 class="question-box">${esc(q.q)}</h2><div class="answer-grid">${q.options.map(o=>answerButton(o,q.answer,t)).join("")}</div>${t.answered?feedbackHTML(t,q):""}<div class="task-actions"><span class="muted">Zoek het bewijs in de tekst; kies niet alleen het bekendste woord.</span>${t.answered?`<button class="primary" onclick="nextQuestion()">${t.index===s.questions.length-1?"Afronden":"Volgende vraag"}</button>`:`<button class="primary" onclick="nextQuestion()" ${t.selected===null?"disabled":""}>Controleer</button>`}</div>`}
+function quizHTML(t){const q=t.items[t.index];return`<div class="task-meta"><span class="pill">${subjectIcon(state.currentProfile,t.subject)} ${esc(t.title)}</span><span class="pill">Vraag ${t.index+1}/${t.items.length}</span>${t.subject==="math"?`<span class="pill">⏱️ totaal + tijd per som</span>`:""}</div>${dots(t,t.items.length)}<h2 class="question-box">${esc(q.prompt)}</h2>${q.options?`<div class="answer-grid">${q.options.map(o=>answerButton(o,q.answer,t)).join("")}</div>`:`<input class="answer-input" id="answerInput" inputmode="${t.subject==="math"||t.subject==="counting"?"decimal":"text"}" autocomplete="off" placeholder="Typ je antwoord" value="${esc(t.selected||"")}" onkeydown="if(event.key==='Enter')checkAnswer()">`}${t.answered?feedbackHTML(t,q):""}<div class="task-actions"><span class="muted">${t.subject==="math"?`Tempo: ${t.results.length?Math.round(t.results.reduce((a,b)=>a+b.seconds,0)/t.results.length):0}s gemiddeld per som. Nauwkeurig is belangrijker dan wild snel.`:"Lees de hele zin; de lege plek heeft altijd duidelijke context."}</span>${t.answered?`<button class="primary" onclick="nextQuestion()">${t.index===t.items.length-1?"Afronden":"Volgende"}</button>`:`<button class="primary" onclick="checkAnswer()">Controleer</button>`}</div>`}
+function answerButton(o,answer,t){return`<button class="answer ${t.selected===o?"selected":""} ${t.answered&&normalize(o)===normalize(answer)?"correct":""} ${t.answered&&t.selected===o&&normalize(o)!==normalize(answer)?"wrong":""}" onclick='chooseAnswer(${JSON.stringify(o)})' ${t.answered?"disabled":""}>${esc(o)}</button>`}
+function feedbackHTML(t,q){const last=t.results[t.results.length-1];return`<div class="feedback ${last.correct?"good":"bad"}"><strong>${last.correct?"Goed onderbouwd!":"Nog niet juist."}</strong><br>${esc(q.explain)}${last.correct?"":`<br>Juiste antwoord: <strong>${esc(q.answer)}</strong>`}</div>`}
+window.speakCurrentStory=()=>speak(state.task.story.story);
+window.confirmReading=()=>{state.task.readConfirmed=true;state.task.index=0;state.task.questionStartedAt=Date.now();save();render()};
+window.chooseAnswer=o=>{if(!state.task.answered){state.task.selected=o;save();render()}};
+window.checkAnswer=()=>{const t=state.task,q=t.items[t.index];if(!q.options){const input=$("#answerInput");t.selected=input?.value?.trim()||t.selected}if(t.selected===null||t.selected===undefined||String(t.selected).trim()===""){toast("Kies of typ eerst een antwoord.");return}recordAnswer(q)};
+function recordAnswer(q){const t=state.task,correct=normalize(t.selected)===normalize(q.answer),seconds=Math.max(.2,(Date.now()-(t.questionStartedAt||Date.now()))/1000);t.results.push({prompt:q.q||q.prompt,selected:t.selected,answer:q.answer,correct,seconds:+seconds.toFixed(1),kind:q.kind||t.subject});t.answered=true;save();render()}
+window.nextQuestion=()=>{const t=state.task;if(t.type==="reading"&&!t.answered){const q=t.story.questions[t.index];if(t.selected==null)return toast("Kies eerst een antwoord.");recordAnswer(q);return}if(t.type==="quiz"&&!t.answered)return window.checkAnswer();const total=t.type==="reading"?t.story.questions.length:t.items.length;if(t.index>=total-1)return finishTask();t.index++;t.selected=null;t.answered=false;t.questionStartedAt=Date.now();save();render()};
+window.leaveTask=()=>{if(confirm("Missie pauzeren? Niet afgeronde vragen worden niet opgeslagen.")){state.task=null;save();render()}};
+window.showStoryModal=()=>{const s=state.task.story;modal(`<span class="eyebrow">Tekst terugkijken</span><h2>${esc(s.title)}</h2><div class="story ${state.currentProfile}" style="text-align:left">${s.story.split("\n\n").map(x=>`<p>${esc(x)}</p>`).join("")}</div><button class="primary" onclick="closeModal()">Terug naar de vraag</button>`)};
 
-function renderHome() {
-  const p=profile(), m=meta(), done=p.daily.completed.length, total=p.daily.plan.length;
-  const next = p.daily.plan.findIndex((_,i)=>!p.daily.completed.includes(i));
-  const content=`
-    <section class="hero">
-      <div class="card hero-copy">
-        <span class="eyebrow">Missiecentrum · ${new Intl.DateTimeFormat("nl-NL",{weekday:"long"}).format(new Date())}</span>
-        <h1>${greeting()}, ${m.name}!</h1>
-        <p class="lead">${homeMessage(done,total)} ${state.currentProfile==="dani" ? "Kleine focus, grote actie." : "Slim denken, sterk onderbouwen, ambitieus groeien."}</p>
-        <div class="hero-stats">
-          <div class="stat-chip"><span>🔥</span><div><strong>${p.streakDays}</strong><small>actieve dagen</small></div></div>
-          <div class="stat-chip"><span>🪙</span><div><strong>${p.coins}</strong><small>bouwmunten</small></div></div>
-        </div>
-      </div>
-      <div class="card" style="text-align:center">
-        <div class="level-ring" style="--progress:${Math.round(xpIntoLevel(p.xp)/250*100)}%">
-          <div class="level-ring-inner"><strong>${xpLevel(p.xp)}</strong><span>heldenlevel</span></div>
-        </div>
-        <div class="progress"><span style="--w:${Math.round(xpIntoLevel(p.xp)/250*100)}%"></span></div>
-        <p style="color:var(--muted);margin:10px 0 0">${xpIntoLevel(p.xp)} / 250 XP tot het volgende level</p>
-      </div>
-    </section>
+function finishTask(){const t=state.task,pr=p(),total=t.results.length,correct=t.results.filter(x=>x.correct).length,accuracy=Math.round(correct/Math.max(1,total)*100),seconds=Math.round((Date.now()-t.startedAt)/1000),avg=total?+(t.results.reduce((a,b)=>a+b.seconds,0)/total).toFixed(1):0,fastWrong=t.results.filter(x=>!x.correct&&x.seconds<2.4).length,longWrong=longestWrong(t.results),suspicious=fastWrong>=4||(avg<2.5&&accuracy<65)||longWrong>=6;let coins=correct*4+20+(t.source==="daily"?20:0),xp=correct*7+25;if(suspicious){coins=Math.round(coins*.55);xp=Math.round(xp*.7)}pr.coins+=coins;pr.xp+=xp;pr.completed++;updateStreak(pr);const skill=pr.skills[t.subject]||(pr.skills[t.subject]=defaultSkill(state.currentProfile)),before=skill.rating;updateSkill(skill,accuracy,suspicious);if(t.dailyIndex!==null&&!pr.daily.completed.includes(t.dailyIndex))pr.daily.completed.push(t.dailyIndex);const session={id:t.id,date:new Date().toISOString(),subject:t.subject,title:t.type==="reading"?t.story.title:t.title,source:t.source,questions:total,correct,accuracy,seconds,avgSeconds:avg,fastWrong,longWrong,suspicious,ratingBefore:+before.toFixed(2),ratingAfter:+skill.rating.toFixed(2),results:t.results};pr.sessions.unshift(session);pr.sessions=pr.sessions.slice(0,500);const sameSkill=pr.sessions.filter(x=>x.subject===t.subject).slice(0,3);if(sameSkill.length===3&&sameSkill.reduce((a,b)=>a+b.accuracy,0)/3<60){const recentPattern=pr.alerts.some(a=>a.message.includes(`Herhaald lage score bij ${subjectName(state.currentProfile,t.subject)}`)&&Date.now()-new Date(a.date)<86400000);if(!recentPattern)addAlert(state.currentProfile,"red",`Herhaald lage score bij ${subjectName(state.currentProfile,t.subject)}: gemiddeld ${Math.round(sameSkill.reduce((a,b)=>a+b.accuracy,0)/3)}% over drie sessies.`,session.id)}pr.questionLog.unshift(...t.results.map(x=>({...x,date:session.date,subject:t.subject,sessionId:t.id})));pr.questionLog=pr.questionLog.slice(0,5000);if(suspicious)addAlert(state.currentProfile,"red",`Mogelijk doorklikken: ${accuracy}% goed, ${fastWrong} snelle fouten, langste foutreeks ${longWrong}.`,session.id);else if(accuracy<60)addAlert(state.currentProfile,"amber",`Extra aandacht nodig bij ${subjectName(state.currentProfile,t.subject)}: ${accuracy}% goed.`,session.id);else if(accuracy>=90)addAlert(state.currentProfile,"green",`Sterke sessie ${subjectName(state.currentProfile,t.subject)}: ${accuracy}% goed.`,session.id);state.task=null;save();showReward({coins,xp,accuracy,suspicious,title:session.title});if(state.parent.autoAlerts&&state.parent.webhook&&(suspicious||accuracy<50))sendWebhook(session)}
+function longestWrong(arr){let best=0,cur=0;arr.forEach(x=>{if(!x.correct){cur++;best=Math.max(best,cur)}else cur=0});return best}
+function updateSkill(sk,acc,suspicious){sk.attempts++;sk.recent.push(acc);sk.recent=sk.recent.slice(-8);sk.accuracy=Math.round(sk.recent.reduce((a,b)=>a+b,0)/sk.recent.length);if(!suspicious){if(acc>=90)sk.rating+=.16;else if(acc>=75)sk.rating+=.06;else if(acc<50)sk.rating-=.16;else if(acc<65)sk.rating-=.07}sk.rating=clamp(sk.rating,1,5)}
+function updateStreak(pr){const d=today();if(!pr.lastActive)pr.streakDays=1;else if(pr.lastActive!==d){const diff=Math.round((new Date(d)-new Date(pr.lastActive))/86400000);pr.streakDays=diff===1?pr.streakDays+1:1}pr.lastActive=d}
+function addAlert(id,severity,message,sessionId=null){state.profiles[id].alerts.unshift({id:uid(),date:new Date().toISOString(),severity,message,sessionId,read:false});state.profiles[id].alerts=state.profiles[id].alerts.slice(0,100)}
+function showReward(r){const root=$("#modal-root");root.innerHTML=`<div class="reward"><div class="card reward-box"><div class="reward-icon">${r.suspicious?"🧭":r.accuracy>=90?"🏆":"⭐"}</div><span class="eyebrow">Missie voltooid</span><h1>${r.suspicious?"Rustiger is sterker":r.accuracy>=90?"Topprestatie!":"Level up!"}</h1><p class="lead">${r.accuracy}% goed · +${r.xp} XP · +${r.coins} LevelCoins</p>${r.suspicious?`<div class="feedback bad">Er waren meerdere heel snelle fouten. De beloning is daarom lager. De volgende keer: lees de hele vraag en neem minimaal één denkseconde.</div>`:""}<button class="primary" onclick="closeReward()">Naar mijn overzicht</button></div></div>`;confetti(r.suspicious?14:42);speak(r.suspicious?"Missie klaar. Volgende keer rustiger lezen.":"Missie voltooid. Goed gedaan!")}
+window.closeReward=()=>{$("#modal-root").innerHTML="";state.view="home";save();render()};
+function confetti(n){for(let i=0;i<n;i++){const e=document.createElement("i");e.className="confetti";e.style.left=Math.random()*100+"vw";e.style.background=`hsl(${Math.random()*360} 90% 65%)`;e.style.animationDelay=Math.random()*.45+"s";e.style.animationDuration=1.2+Math.random()*1.2+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}}
 
-    <div class="grid-2">
-      <section class="card">
-        <div class="section-title" style="margin-top:0"><div><span class="eyebrow">Dagmissie</span><h2>${done}/${total} voltooid</h2></div><strong>${Math.round(done/total*100)}%</strong></div>
-        <div class="progress" style="margin-bottom:16px"><span style="--w:${done/total*100}%"></span></div>
-        <div class="quest-list">
-          ${p.daily.plan.map((s,i)=>questItem(s,i,p.daily.completed.includes(i),i===next)).join("")}
-        </div>
-      </section>
-      <section class="card world-card">
-        <span class="eyebrow">Jouw bouwwereld</span>
-        <h2>${m.theme}</h2>
-        ${worldScene()}
-      </section>
-    </div>
+function renderGames(){const games=state.currentProfile==="lena"?[["memory","🃏","Memory"],["focus","👾","Vang de gekke bekken"],["ttt","❌","Boter-kaas-en-eieren"],["sudoku","🔢","Mini-Sudoku 4×4"]]:state.currentProfile==="dani"?[["ttt","❌","Boter-kaas-en-eieren robot"],["connect","🔴","Vier op een rij"],["sudoku","🔢","Sudoku 6×6"],["memory","🃏","Memory"],["focus","👾","Focus Arcade"],["logic","🧩","Breinbrekers"]]:[["ttt","❌","Boter-kaas-en-eieren expert"],["connect","🔴","Vier op een rij"],["sudoku","🔢","Sudoku 9×9"],["memory","🃏","Memory"],["focus","🎯","Reactie & remkracht"],["critical","🧠","Argumentenbattle"]];const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Gamehal</span><h1>Puzzels en robotduels</h1></div><p class="muted">Leeftijdsgericht, zonder advertenties of aankopen met echt geld.</p></div><div class="games-grid">${games.map(([g,ic,n])=>`<button class="game-tile" onclick="launchGame('${g}')"><div class="big">${ic}</div><h3>${n}</h3><p class="muted">${gameDesc(g)}</p></button>`).join("")}</div><section class="card" style="margin-top:18px"><span class="eyebrow">Eerlijke beloning</span><h2>Spellen zijn bonus, leren blijft de snelste route</h2><p class="muted">De eerste vijf afgeronde spellen per dag leveren kleine beloningen op. Daarna blijven ze gewoon speelbaar, maar zonder extra coins.</p></section>`;$("#app").innerHTML=shell(body,"games")}
+function gameDesc(g){return{ttt:"Speel tegen een robot die fouten kan herkennen.",connect:"Plan vooruit en blokkeer de robot.",sudoku:"Vul iedere rij, kolom en vak logisch in.",memory:"Onthoud waar dezelfde symbolen liggen.",focus:"Klik alleen op het juiste bewegende doel.",logic:"Logische reeksen en slimme conclusies.",critical:"Bronnen en argumenten beoordelen."}[g]}
+window.launchGame=g=>{if(g==="ttt")return startTTT();if(g==="connect")return startConnect();if(g==="sudoku")return startSudoku();if(g==="memory")return startMemory();if(g==="focus")return startFocus();startActivity(g,null)};
+let game={};
+function gamePage(title,content){$("#app").innerHTML=shell(`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Bonusgame</span><h1>${title}</h1></div><button class="ghost" onclick="setView('games')">Terug</button></div><section class="card">${content}</section>`,"games")}
+function startTTT(){game={type:"ttt",board:Array(9).fill(""),over:false};renderTTT()}
+function renderTTT(){gamePage("Boter-kaas-en-eieren tegen Robo",`<p class="lead" id="gameMsg">Jij bent ❌. Maak drie op een rij.</p><div class="game-board ttt">${game.board.map((x,i)=>`<button onclick="tttMove(${i})">${x}</button>`).join("")}</div><div style="text-align:center"><button class="ghost" onclick="startTTT()">Opnieuw</button></div>`)}
+window.tttMove=i=>{if(game.over||game.board[i])return;game.board[i]="❌";let w=winner3(game.board);if(w)return endTTT(w);const open=game.board.map((x,j)=>x?null:j).filter(x=>x!==null);if(!open.length)return endTTT("draw");let move=bestTTT("⭕")??bestTTT("❌")??open[Math.floor(Math.random()*open.length)];game.board[move]="⭕";w=winner3(game.board);if(w)return endTTT(w);renderTTT()};
+function bestTTT(mark){for(let i=0;i<9;i++)if(!game.board[i]){game.board[i]=mark;const w=winner3(game.board);game.board[i]="";if(w)return i}return null}
+function winner3(b){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const l of lines)if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[1]]===b[l[2]])return b[l[0]];return null}
+function endTTT(w){game.over=true;renderTTT();setTimeout(()=>{const e=$("#gameMsg");if(e)e.textContent=w==="❌"?"Jij wint! Slim gespeeld.":w==="⭕"?"Robo wint. Kijk waar je eerder had kunnen blokkeren.":"Gelijkspel — sterke verdediging.";if(w==="❌")gameReward(18,"Robot verslagen")},50)}
+function startConnect(){game={type:"connect",board:Array(42).fill(0),over:false};renderConnect()}
+function renderConnect(){gamePage("Vier op een rij",`<p class="lead" id="gameMsg">Jij bent geel. Klik op een kolom.</p><div class="game-board connect">${game.board.map((v,i)=>`<button class="${v===1?"p1":v===2?"p2":""}" onclick="connectMove(${i%7})"></button>`).join("")}</div><div style="text-align:center"><button class="ghost" onclick="startConnect()">Opnieuw</button></div>`)}
+function drop(col,player){for(let row=5;row>=0;row--){const i=row*7+col;if(!game.board[i]){game.board[i]=player;return i}}return-1}
+window.connectMove=col=>{if(game.over||drop(col,1)<0)return;let w=connectWinner();if(w)return endConnect(w);const cols=[0,1,2,3,4,5,6].filter(c=>game.board[c]===0);let choice=cols.find(c=>{const i=drop(c,2),win=connectWinner()===2;game.board[i]=0;return win});if(choice===undefined)choice=cols.find(c=>{const i=drop(c,1),win=connectWinner()===1;game.board[i]=0;return win});if(choice===undefined)choice=cols[Math.floor(Math.random()*cols.length)];drop(choice,2);w=connectWinner();if(w)return endConnect(w);renderConnect()};
+function connectWinner(){for(let r=0;r<6;r++)for(let c=0;c<7;c++){const v=game.board[r*7+c];if(!v)continue;for(const[dR,dC]of[[0,1],[1,0],[1,1],[1,-1]]){let ok=true;for(let k=1;k<4;k++){const rr=r+dR*k,cc=c+dC*k;if(rr<0||rr>=6||cc<0||cc>=7||game.board[rr*7+cc]!==v)ok=false}if(ok)return v}}return 0}
+function endConnect(w){game.over=true;renderConnect();setTimeout(()=>{const e=$("#gameMsg");if(e)e.textContent=w===1?"Vier op een rij! Jij wint.":"Robo heeft vier. Probeer eerder te blokkeren.";if(w===1)gameReward(24,"Vier op een rij gewonnen")},50)}
+const sudokuData={4:{p:"1004041001033020",s:"1234341221433421"},6:{p:"100456456100204560560204345010010345",s:"123456456123234561561234345612612345"},9:{p:"530070000600195000098000060800060003400803001700020006060000280000419005000080079",s:"534678912672195348198342567859761423426853791713924856961537284287419635345286179"}};
+function startSudoku(){const n=state.currentProfile==="lena"?4:state.currentProfile==="dani"?6:9,d=sudokuData[n];game={type:"sudoku",n,puzzle:d.p.split(""),solution:d.s.split("")};renderSudoku()}
+function renderSudoku(){gamePage(`Sudoku ${game.n}×${game.n}`,`<p class="lead">Vul ieder getal precies één keer per rij en kolom in.</p><div class="game-board sudoku" style="--n:${game.n}">${game.puzzle.map((v,i)=>`<input class="${v!=="0"?"fixed":""}" value="${v!=="0"?v:""}" ${v!=="0"?"readonly":""} inputmode="numeric" maxlength="1" data-i="${i}">`).join("")}</div><div style="text-align:center"><button class="primary" onclick="checkSudoku()">Controleer Sudoku</button> <button class="ghost" onclick="startSudoku()">Nieuwe start</button></div>`)}
+window.checkSudoku=()=>{const vals=[...document.querySelectorAll(".sudoku input")].map(x=>x.value.trim());if(vals.some(x=>!x))return toast("Nog niet alle vakjes zijn gevuld.");if(vals.join("")===game.solution.join("")){toast("Sudoku opgelost!");gameReward(game.n===9?35:game.n===6?25:15,"Sudoku opgelost");confetti(28)}else toast("Er staat nog minstens één getal niet goed.")};
+function startMemory(){const set=state.currentProfile==="lena"?["🐶","🐱","🦄","🐸","🌈","⭐"]:["⚽","🏑","🚀","🦈","🏎️","🧠","🏰","🤖"],cards=C.shuffle(C.rng(Date.now()),[...set,...set]);game={type:"memory",cards,open:[],matched:[],moves:0,locked:false};renderMemory()}
+function renderMemory(){gamePage("Memory",`<p class="lead">Zet twee kaarten open en vind alle paren. Beurten: ${game.moves}</p><div class="game-board memory">${game.cards.map((v,i)=>`<button class="${game.open.includes(i)||game.matched.includes(i)?"open":""}" onclick="memoryFlip(${i})">${game.open.includes(i)||game.matched.includes(i)?v:"❓"}</button>`).join("")}</div>`)}
+window.memoryFlip=i=>{if(game.locked||game.open.includes(i)||game.matched.includes(i))return;game.open.push(i);if(game.open.length===2){game.moves++;const[a,b]=game.open;if(game.cards[a]===game.cards[b]){game.matched.push(a,b);game.open=[];if(game.matched.length===game.cards.length){renderMemory();gameReward(20,"Memory compleet");return}}else{game.locked=true;renderMemory();setTimeout(()=>{game.open=[];game.locked=false;renderMemory()},700);return}}renderMemory()};
+function startFocus(){game={type:"focus",score:0,misses:0,round:0,max:state.currentProfile==="lena"?12:20,target:null,start:Date.now(),reaction:[]};renderFocus();setTimeout(nextFocusTarget,250)}
+function renderFocus(){gamePage(state.currentProfile==="lena"?"Vang de gekke bekken":"Focus Arcade",`<div class="focus-hud"><div class="stat"><strong>${game.score}</strong><small>goed</small></div><div class="stat"><strong>${game.misses}</strong><small>mis</small></div><div class="stat"><strong>${game.round}/${game.max}</strong><small>rondes</small></div></div><p class="lead" id="focusRule">${game.rule||"Wacht op het doel..."}</p><div class="focus-stage" id="focusStage">${game.target?`<button class="focus-target" style="left:${game.target.x}%;top:${game.target.y}%" onclick="hitFocus(${game.target.good})"><span class="focus-face">${game.target.face}</span></button>`:""}</div>`)}
+function nextFocusTarget(){if(game.round>=game.max)return endFocus();game.round++;const good=Math.random()>.28,faces=good?["🤪","😜","😎","👽","🤖","🦖"]:["😴","💣","🛑","🌶️"],face=faces[Math.floor(Math.random()*faces.length)];game.rule=state.currentProfile==="lena"?`Klik op een gek gezicht. Klik NIET op ${good?"de stoptekens":"dit stopteken"}.`:`${game.round%3===0?"Remronde: klik alleen op een gezicht, nooit op een stopteken.":"Vang het bewegende doel, maar rem af bij rood of slapend."}`;game.target={good,face,x:4+Math.random()*80,y:8+Math.random()*67,shown:Date.now()};renderFocus();game.timeout=setTimeout(()=>{if(game.target){game.misses++;game.target=null;nextFocusTarget()}},state.currentProfile==="lena"?2300:1500)}
+window.hitFocus=good=>{clearTimeout(game.timeout);const rt=Date.now()-game.target.shown;if(good){game.score++;game.reaction.push(rt)}else game.misses++;game.target=null;nextFocusTarget()};
+function endFocus(){const avg=game.reaction.length?Math.round(game.reaction.reduce((a,b)=>a+b,0)/game.reaction.length):0;gamePage("Focus Arcade klaar",`<div style="text-align:center"><div class="reward-icon">🎯</div><h2>${game.score}/${game.max} goed</h2><p class="lead">Gemiddelde reactietijd: ${avg} ms. Goed focussen is snel zien én op tijd kunnen stoppen.</p><button class="primary" onclick="startFocus()">Nog een ronde</button></div>`);if(game.score/game.max>=.7)gameReward(18,"Focusronde gehaald",false)}
+function gameReward(amount,label,announce=true){const pr=p();if(pr.gameRewards.date!==today())pr.gameRewards={date:today(),count:0};if(pr.gameRewards.count>=5){if(announce)toast("Goed gespeeld. De daglimiet voor spelcoins is al bereikt.");return}pr.gameRewards.count++;pr.coins+=amount;save();if(announce)toast(`+${amount} coins · ${label}`)}
 
-    <div class="section-title"><div><span class="eyebrow">Slimme trainer</span><h2>Jouw actuele niveau</h2></div><p>Past zich per vaardigheid aan</p></div>
-    <section class="card">
-      <div class="skill-list">${m.subjects.map(skillRow).join("")}</div>
-    </section>
+function renderMarket(){const cats=["featured","skin","hair","top","bottom","accessory","pet","emote","world"],items=shopCat==="featured"?shopItems.filter(x=>["top-space","acc-crown","pet-dragon","world-lambo","world-campus","world-dino"].includes(x.id)):shopItems.filter(x=>x.cat===shopCat);const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">LevelShop</span><h1>Maak je eigen skin</h1></div><span class="pill">🪙 ${p().coins} coins</span></div><div class="market-layout"><section class="card"><div class="avatar-studio">${avatarHTML()}</div><div class="custom-controls"><div class="glass"><strong>Gekocht blijft van jou</strong><p class="muted">Koop kleuren, outfits, accessoires, pets en emotes. Er wordt nooit echt geld gebruikt.</p></div><div class="glass"><strong>Zelf namaken</strong><p class="muted">Combineer huidskleur, haar, kleding en accessoires zoals jij wilt.</p></div></div></section><section class="card"><div class="shop-tabs">${cats.map(c=>`<button class="ghost ${shopCat===c?"primary":""}" onclick="setShopCat('${c}')">${catName(c)}</button>`).join("")}</div><div class="shop-grid">${items.map(shopItemHTML).join("")}</div></section></div>`;$("#app").innerHTML=shell(body,"market")}
+function catName(c){return{featured:"✨ Populair",skin:"Huid",hair:"Haar",top:"Shirts",bottom:"Broeken",accessory:"Extra",pet:"Pets",emote:"Emotes",world:"Wereld"}[c]}
+window.setShopCat=c=>{shopCat=c;renderMarket()};
+function shopItemHTML(i){const owned=p().owned.includes(i.id),equipped=p().equipped[i.cat]===i.id;return`<button class="shop-item ${owned?"owned":""} ${equipped?"equipped":""}" onclick="shopAction('${i.id}')"><div class="art">${i.art}</div><strong>${esc(i.name)}</strong><small>${equipped?"In gebruik":owned?"Van jou":`🪙 ${i.price}`}</small></button>`}
+window.shopAction=id=>{const i=shopItems.find(x=>x.id===id),pr=p();if(!pr.owned.includes(id)){if(pr.coins<i.price)return toast("Nog niet genoeg LevelCoins.");if(!confirm(`${i.name} kopen voor ${i.price} coins?`))return;pr.coins-=i.price;pr.owned.push(id);coinAnimation();toast(`${i.name} gekocht!`)}if(i.cat!=="world")pr.equipped[i.cat]=id;save();renderMarket()};
+function coinAnimation(){for(let i=0;i<8;i++){const e=document.createElement("i");e.className="coin-fly";e.textContent="🪙";e.style.left=45+Math.random()*10+"vw";e.style.top=55+Math.random()*10+"vh";document.body.appendChild(e);setTimeout(()=>e.remove(),1100)}}
 
-    <div class="section-title"><div><span class="eyebrow">Focuskracht</span><h2>${state.currentProfile==="dani"?"Versla de Afleidings-Alien":"Werk in krachtige sprints"}</h2></div></div>
-    <section class="card">
-      <p class="lead">${state.currentProfile==="dani"
-        ? "Een echte focusheld is niet nooit afgeleid. Hij merkt afleiding op en kiest opnieuw: kijk naar de opdracht, noem de volgende stap en ga verder."
-        : "Kies één concrete opdracht, werk zonder meldingen en controleer aan het einde niet alleen je antwoord maar ook je redenering."}</p>
-      <div class="tag-row">
-        <span class="tag">1 opdracht tegelijk</span><span class="tag">${p.settings.focusMinutes} minuten</span><span class="tag">na afloop korte pauze</span>
-      </div>
-    </section>`;
-  document.getElementById("app").innerHTML=shell(content,"home");
-}
-function greeting() {
-  const h=new Date().getHours(); return h<12?"Goedemorgen":h<18?"Goedemiddag":"Goedenavond";
-}
-function homeMessage(done,total) {
-  if(done===0) return "Je nieuwe dagmissie staat klaar.";
-  if(done<total) return `Sterk begonnen: nog ${total-done} missie${total-done===1?"":"s"}.`;
-  return "Dagmissie compleet. Je hebt vandaag echt gebouwd aan je brein.";
-}
-function questItem(subject,index,done,isNext) {
-  const level=Math.round(profile().skills[subject].rating);
-  return `<div class="quest ${done?"done":""}">
-    <div class="quest-icon">${done?"✅":meta().subjectIcons[subject]}</div>
-    <div><strong>${categoryName(subject)}</strong><small>${done?"Voltooid":`${ratingLabel(profile().skills[subject].rating)} · niveau ${level}`}</small></div>
-    ${done?`<span>+⭐</span>`:`<button class="${isNext?"primary-btn":"ghost-btn"} small-btn" onclick="startDailyTask(${index})">${isNext?"Start":"Kies"}</button>`}
-  </div>`;
-}
-function skillRow(subject) {
-  const s=profile().skills[subject], pct=(s.rating-1)/4*100;
-  return `<div class="skill-row"><span>${meta().subjectIcons[subject]} ${categoryName(subject)}</span><div class="progress"><span style="--w:${pct}%"></span></div><span class="skill-level">${s.rating.toFixed(1)}</span></div>`;
-}
+function renderWorld(){const ownedWorld=shopItems.filter(x=>x.cat==="world"&&p().owned.includes(x.id));const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Mijn LevelWorld</span><h1>Bouw zoals jij wilt</h1></div><button class="ghost" onclick="clearWorldSelection()">Selectie wissen</button></div><div class="grid-2"><section class="card"><p class="lead">Kies onderaan een gekocht item en tik daarna op een vak. Tik op een geplaatst item om het weg te halen.</p><div class="world-grid">${p().world.map((id,i)=>{const it=shopItems.find(x=>x.id===id);return`<button class="world-cell" onclick="worldCell(${i})">${it?.value||""}</button>`}).join("")}</div><div class="inventory">${ownedWorld.length?ownedWorld.map(i=>`<button class="${selectedWorldItem===i.id?"selected":""}" onclick="selectWorld('${i.id}')" title="${esc(i.name)}">${i.art}</button>`).join(""):`<p class="muted">Koop eerst gebouwen en objecten in de LevelShop.</p>`}</div></section><section class="card"><span class="eyebrow">Bewoner</span><h2>${m().name}'s look</h2><div class="avatar-studio" style="min-height:360px">${avatarHTML()}</div><button class="primary" style="margin-top:14px" onclick="setView('market')">Naar de LevelShop</button></section></div>`;$("#app").innerHTML=shell(body,"world")}
+window.selectWorld=id=>{selectedWorldItem=id;renderWorld()};window.clearWorldSelection=()=>{selectedWorldItem=null;renderWorld()};window.worldCell=i=>{if(selectedWorldItem)p().world[i]=selectedWorldItem;else p().world[i]=null;save();renderWorld()};
 
-window.startDailyTask = index => {
-  const subject=profile().daily.plan[index];
-  const task=createTask(subject);
-  state.activeTask={...task,dailyIndex:index,startedAt:Date.now(),questionIndex:0,score:0,answered:false,readConfirmed:false,attempts:0};
-  state.view="task"; saveState(); render(); resetInactivity();
-};
+function renderProgress(){const pr=p(),sessions=pr.sessions,avg=sessions.length?Math.round(sessions.reduce((a,b)=>a+b.accuracy,0)/sessions.length):0,alerts=pr.alerts.filter(x=>!x.read).slice(0,4);const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Mijn groei</span><h1>Voortgang van ${m().name}</h1></div></div><div class="stat-grid"><div class="stat"><strong>${pr.completed}</strong><small>missies</small></div><div class="stat"><strong>${avg}%</strong><small>gemiddeld</small></div><div class="stat"><strong>${pr.streakDays}</strong><small>actieve dagen</small></div><div class="stat"><strong>${level(pr.xp)}</strong><small>heldenlevel</small></div></div><div class="grid-2" style="margin-top:18px"><section class="card"><span class="eyebrow">Vaardigheden</span><h2>Adaptieve niveaus</h2>${Object.entries(pr.skills).filter(([s])=>m().free.includes(s)).map(([s,x])=>`<div style="margin:14px 0"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${ACTIVITY_META[s]?.icon||"⚡"} ${subjectName(state.currentProfile,s)}</strong><span>${x.rating.toFixed(1)} · ${x.accuracy||0}% recent</span></div><div class="progress" style="margin-top:7px"><span style="--w:${(x.rating-1)/4*100}%"></span></div></div>`).join("")}</section><section class="card"><span class="eyebrow">Laatste 12 sessies</span><h2>Scoretrend</h2><div class="mini-chart">${sessions.slice(0,12).reverse().map(x=>`<i style="--h:${Math.max(5,x.accuracy)}%" data-v="${x.accuracy}%"></i>`).join("")||"<p class='muted'>Nog geen resultaten.</p>"}</div><p class="muted">Een lagere score is geen straf: het systeem past het niveau daarna gerichter aan.</p></section></div><section class="card" style="margin-top:18px"><span class="eyebrow">Signalen</span><h2>Wat valt op?</h2>${alerts.length?alerts.map(alertHTML).join(""):`<div class="alert green"><i class="traffic"></i><div><strong>Geen open signalen</strong><p class="muted" style="margin:3px 0 0">Papa ziet uitgebreidere details in het dashboard.</p></div></div>`}</section><section class="card" style="margin-top:18px"><span class="eyebrow">Recente missies</span><h2>Resultaten</h2>${sessionsTable(sessions.slice(0,15),false)}</section>`;$("#app").innerHTML=shell(body,"progress")}
+function alertHTML(a){return`<div class="alert ${a.severity}"><i class="traffic"></i><div><strong>${fmtDate(a.date)}</strong><p style="margin:3px 0 0">${esc(a.message)}</p></div><button class="ghost" onclick="markAlert('${a.id}')">Gezien</button></div>`}
+window.markAlert=id=>{const a=p().alerts.find(x=>x.id===id);if(a)a.read=true;save();render()};
+function sessionsTable(sessions,withChild=true){if(!sessions.length)return`<p class="muted">Nog geen sessies.</p>`;return`<div class="table-wrap"><table><thead><tr><th>Datum</th>${withChild?"<th>Kind</th>":""}<th>Onderdeel</th><th>Score</th><th>Tijd</th><th>Tempo</th><th>Signaal</th>${withChild?"<th>Details</th>":""}</tr></thead><tbody>${sessions.map(x=>`<tr><td>${fmtDate(x.date)}</td>${withChild?`<td>${x.child}</td>`:""}<td>${esc(subjectName(x.profile||state.currentProfile,x.subject))}</td><td><strong>${x.accuracy}%</strong> (${x.correct}/${x.questions})</td><td>${fmtTime(x.seconds)}</td><td>${x.avgSeconds}s/vraag</td><td>${x.suspicious?"🔴 snel/fout":x.accuracy<60?"🟠 aandacht":"🟢 normaal"}</td>${withChild?`<td><button class="ghost" onclick="openSessionDetails('${x.profile}','${x.id}')">Bekijk</button></td>`:""}</tr>`).join("")}</tbody></table></div>`}
 
-function createTask(subject) {
-  const level=clamp(Math.round(profile().skills[subject].rating),1,5);
-  if(subject==="reading") {
-    const bank=state.currentProfile==="dani"?DANI_READINGS:ZANA_READINGS;
-    const candidates=bank.filter(x=>Math.abs(x.level-level)<=1);
-    const item=candidates[Math.floor(Math.random()*candidates.length)] || bank[0];
-    return {type:"reading",subject,level:item.level,title:item.title,story:item.story,questions:item.questions};
-  }
-  if(subject==="spelling") {
-    const bank=SPELLING_BANK[state.currentProfile];
-    const candidates=bank.filter(x=>Math.abs(x.level-level)<=1);
-    const item=candidates[Math.floor(Math.random()*candidates.length)] || bank[0];
-    return {type:"choice",subject,level:item.level,title:categoryName(subject),prompt:item.prompt,answer:item.answer,choices:shuffle(item.choices),explain:item.explain};
-  }
-  if(subject==="math") return createMath(level);
-  if(subject==="english") {
-    const candidates=ENGLISH_BANK.filter(x=>Math.abs(x.level-level)<=1);
-    const item=candidates[Math.floor(Math.random()*candidates.length)] || ENGLISH_BANK[0];
-    return {type:"choice",subject,level:item.level,title:"English Challenge",prompt:item.prompt,answer:item.answer,choices:shuffle(item.choices),explain:item.explain};
-  }
-  const candidates=WORLD_BANK.filter(x=>Math.abs(x.level-level)<=1);
-  const item=candidates[Math.floor(Math.random()*candidates.length)] || WORLD_BANK[0];
-  return {type:"choice",subject,level:item.level,title:"Wereld Challenge",prompt:item.prompt,answer:item.answer,choices:shuffle(item.choices),explain:item.explain};
-}
+function openPin(target){pinBuffer="";pinTarget=target;const until=state.security.lockUntil[target]||0;if(Date.now()<until)return toast(`Te veel pogingen. Wacht nog ${Math.ceil((until-Date.now())/1000)} seconden.`);renderPin()}
+window.openPin=openPin;
+function renderPin(){const name=pinTarget==="parent"?"Papa-dashboard":PROFILE_META[pinTarget].name;modal(`<div style="font-size:60px">${pinTarget==="parent"?"🔐":PROFILE_META[pinTarget].icon}</div><span class="eyebrow">Beveiligd profiel</span><h2>Code voor ${name}</h2><div class="pin-dots">${Array.from({length:4},(_,i)=>`<i class="pin-dot ${i<pinBuffer.length?"filled":""}"></i>`).join("")}</div><div class="keypad">${[1,2,3,4,5,6,7,8,9,"⌫",0,"✓"].map(x=>`<button onclick="pinKey('${x}')">${x}</button>`).join("")}</div><p class="muted" style="margin-top:14px">Na drie foute pogingen wordt dit profiel 30 seconden vergrendeld.</p>`)}
+window.pinKey=k=>{if(k==="⌫")pinBuffer=pinBuffer.slice(0,-1);else if(k==="✓")return submitPin();else if(pinBuffer.length<4)pinBuffer+=k;renderPin();if(pinBuffer.length===4)setTimeout(submitPin,140)};
+function submitPin(){const expected=pinTarget==="parent"?state.parent.pin:state.parent.codes[pinTarget];if(pinBuffer===expected){closeModal();if(pinTarget==="parent"){if(!state.currentProfile)state.currentProfile="dani";state.parentOpen=true;state.task=null}else{state.currentProfile=pinTarget;state.parentOpen=false;state.view="home";ensureDaily()}save();render();return}state.security.failures.unshift({date:new Date().toISOString(),target:pinTarget,entered:pinBuffer});state.security.failures=state.security.failures.slice(0,100);const recent=state.security.failures.filter(x=>x.target===pinTarget&&Date.now()-new Date(x.date)<120000);if(recent.length>=3)state.security.lockUntil[pinTarget]=Date.now()+30000;save();pinBuffer="";toast("Code klopt niet.");closeModal()}
+function modal(html){$("#modal-root").innerHTML=`<div class="modal-backdrop" onclick="if(event.target===this)closeModal()"><section class="card modal">${html}</section></div>`}
+window.closeModal=()=>$("#modal-root").innerHTML="";
 
-function createMath(level) {
-  const isDani=state.currentProfile==="dani";
-  let a,b,answer,prompt,explain;
-  if(isDani) {
-    if(level<=1) {
-      a=20+Math.floor(Math.random()*60); b=5+Math.floor(Math.random()*20);
-      answer=a+b; prompt=`${a} + ${b} = ?`; explain=`Splits ${b} in tientallen en eenheden en tel in stappen op.`;
-    } else if(level===2) {
-      const table=[3,4,6,7,8,9][Math.floor(Math.random()*6)]; b=2+Math.floor(Math.random()*9);
-      answer=table*b; prompt=`${table} × ${b} = ?`; explain=`Denk aan de tafel van ${table}.`;
-    } else if(level===3) {
-      a=250+Math.floor(Math.random()*650); b=80+Math.floor(Math.random()*300);
-      answer=a-b; prompt=`${a} − ${b} = ?`; explain="Trek eerst de honderdtallen en daarna de rest af, of gebruik kolomsgewijs rekenen.";
-    } else if(level===4) {
-      const price=[12.50,18.75,24.90][Math.floor(Math.random()*3)];
-      const paid=[20,25,30][Math.floor(Math.random()*3)];
-      answer=(paid-price).toFixed(2).replace(".",",");
-      prompt=`Een voetbal kost € ${price.toFixed(2).replace(".",",")}. Je betaalt € ${paid.toFixed(2).replace(".",",")}. Hoeveel krijg je terug?`;
-      explain="Trek de prijs af van het betaalde bedrag. Noteer euro's en centen.";
-    } else {
-      const total=[24,32,40][Math.floor(Math.random()*3)], den=[4,8][Math.floor(Math.random()*2)];
-      answer=total/den; prompt=`Een team verdeelt ${total} bidons eerlijk over ${den} kratten. Hoeveel bidons zitten in elk krat?`;
-      explain=`Dit is ${total} ÷ ${den}. Controleer met vermenigvuldigen.`;
-    }
-  } else {
-    if(level<=2) {
-      const pct=[10,20,25,50][Math.floor(Math.random()*4)]; a=[80,120,160,240][Math.floor(Math.random()*4)];
-      answer=a*pct/100; prompt=`Hoeveel is ${pct}% van ${a}?`; explain="Zet het percentage om naar een handige breuk of bereken eerst 10%.";
-    } else if(level===3) {
-      a=[36,48,60][Math.floor(Math.random()*3)]; const num=[1,2,3][Math.floor(Math.random()*3)]; const den=[4,6,8][Math.floor(Math.random()*3)];
-      answer=a*num/den; prompt=`Bereken ${num}/${den} van ${a}.`; explain=`Deel eerst door ${den} en vermenigvuldig daarna met ${num}.`;
-    } else if(level===4) {
-      const old=[60,80,120][Math.floor(Math.random()*3)], pct=[15,20,25][Math.floor(Math.random()*3)];
-      answer=(old*(1-pct/100)).toFixed(2).replace(",00","").replace(".",",");
-      prompt=`Een jas van € ${old.toFixed(2).replace(".",",")} krijgt ${pct}% korting. Wat is de nieuwe prijs?`;
-      explain="Bereken eerst de korting en trek die af van de oorspronkelijke prijs.";
-    } else {
-      a=3+Math.floor(Math.random()*7); b=8+Math.floor(Math.random()*13); answer=b-a;
-      prompt=`Los op: x + ${a} = ${b}. Welke waarde heeft x?`; explain=`Doe aan beide kanten de omgekeerde bewerking: ${b} − ${a}.`;
-    }
-  }
-  return {type:"input",subject:"math",level,title:"Rekenmissie",prompt,answer:String(answer),explain};
-}
+window.openSessionDetails=(id,sid)=>{const x=state.profiles[id].sessions.find(s=>s.id===sid);if(!x)return;modal(`<span class="eyebrow">${PROFILE_META[id].name} · ${fmtDate(x.date)}</span><h2>${esc(x.title)}</h2><div class="stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:15px"><div class="stat"><strong>${x.accuracy}%</strong><small>score</small></div><div class="stat"><strong>${x.avgSeconds}s</strong><small>per vraag</small></div><div class="stat"><strong>${x.fastWrong}</strong><small>snelle fouten</small></div></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Vraag</th><th>Gegeven</th><th>Juiste antwoord</th><th>Tijd</th></tr></thead><tbody>${(x.results||[]).map((r,i)=>`<tr><td>${i+1} ${r.correct?"✅":"❌"}</td><td>${esc(r.prompt)}</td><td>${esc(r.selected)}</td><td>${esc(r.answer)}</td><td>${r.seconds}s</td></tr>`).join("")}</tbody></table></div><button class="primary" style="margin-top:14px" onclick="closeModal()">Sluiten</button>`)};
+function renderParent(){const ids=["dani","zana","lena"],all=ids.flatMap(id=>state.profiles[id].sessions.map(x=>({...x,child:PROFILE_META[id].name,profile:id}))).sort((a,b)=>new Date(b.date)-new Date(a.date)),alerts=ids.flatMap(id=>state.profiles[id].alerts.map(x=>({...x,child:PROFILE_META[id].name,profile:id}))).sort((a,b)=>new Date(b.date)-new Date(a.date)),filtered=parentFilter==="all"?all:all.filter(x=>x.profile===parentFilter);const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Papa-dashboard</span><h1>Snel zien wat er echt gebeurt</h1></div><button class="ghost" onclick="closeParent()">Terug naar ${m().name}</button></div><div class="grid-3">${ids.map(parentChildCard).join("")}</div><section class="card" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Acties nodig</span><h2>Automatische signalen</h2></div><span class="pill">${alerts.filter(x=>!x.read&&x.severity!=="green").length} open aandachtspunten</span></div>${alerts.filter(x=>!x.read).slice(0,12).map(a=>`<div class="alert ${a.severity}"><i class="traffic"></i><div><strong>${a.child} · ${fmtDate(a.date)}</strong><p style="margin:3px 0 0">${esc(a.message)}</p></div><button class="ghost" onclick="parentReadAlert('${a.profile}','${a.id}')">Afhandelen</button></div>`).join("")||`<div class="alert green"><i class="traffic"></i><div><strong>Alles rustig</strong><p style="margin:3px 0 0">Geen open waarschuwingen.</p></div></div>`}</section><section class="card" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Volledig sessieoverzicht</span><h2>Scores, tijd en doorkliksignalen</h2></div><select onchange="setParentFilter(this.value)"><option value="all" ${parentFilter==="all"?"selected":""}>Alle kinderen</option>${ids.map(id=>`<option value="${id}" ${parentFilter===id?"selected":""}>${PROFILE_META[id].name}</option>`).join("")}</select></div>${sessionsTable(filtered.slice(0,80),true)}</section><div class="grid-2" style="margin-top:18px"><section class="card"><span class="eyebrow">Profielcodes</span><h2>Codes instellen</h2><div class="settings-grid">${ids.map(id=>`<label>${PROFILE_META[id].name}<input id="code-${id}" value="${esc(state.parent.codes[id])}" maxlength="8" inputmode="numeric"><small>De kinderen kunnen elkaars voortgang niet openen zonder code.</small></label>`).join("")}<label>Oudercode<input id="parent-pin" value="${esc(state.parent.pin)}" maxlength="8" inputmode="numeric"></label><label>Rapport e-mail<input id="parent-email" type="email" value="${esc(state.parent.email)}"></label></div><button class="primary" style="margin-top:14px" onclick="saveParentSettings()">Codes en instellingen opslaan</button></section><section class="card"><span class="eyebrow">Rapportage</span><h2>Export en waarschuwingen</h2><label>Optionele webhook-URL<input id="parent-webhook" value="${esc(state.parent.webhook)}" placeholder="https://..."><small>Voor automatische e-mail via Make, Zapier of eigen endpoint.</small></label><div class="toggle" style="margin:13px 0"><div><strong>Automatische waarschuwing</strong><small class="muted" style="display:block">Bij doorklikken of minder dan 50% goed</small></div><input id="auto-alert" type="checkbox" ${state.parent.autoAlerts?"checked":""}></div><div class="tag-row"><button class="ghost" onclick="emailReport()">✉ E-mailrapport</button><button class="ghost" onclick="exportCSV()">⬇ CSV</button><button class="ghost" onclick="exportBackup()">⬇ Back-up</button><button class="ghost" onclick="restoreBackup()">↥ Terugzetten</button></div></section></div><section class="card" style="margin-top:18px"><span class="eyebrow">Beveiliging</span><h2>Mislukte profielpogingen</h2>${state.security.failures.length?`<div class="table-wrap"><table><thead><tr><th>Tijd</th><th>Profiel</th><th>Ingevoerde code</th></tr></thead><tbody>${state.security.failures.slice(0,30).map(x=>`<tr><td>${new Date(x.date).toLocaleString("nl-NL")}</td><td>${x.target==="parent"?"Ouder":PROFILE_META[x.target]?.name}</td><td>${esc(x.entered)}</td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">Geen foute codepogingen geregistreerd.</p>`}</section>`;$("#app").innerHTML=shell(body,"none")}
+function parentChildCard(id){const pr=state.profiles[id],recent=pr.sessions.slice(0,10),avg=recent.length?Math.round(recent.reduce((a,b)=>a+b.accuracy,0)/recent.length):0,susp=recent.filter(x=>x.suspicious).length;ensureDaily(id);return`<section class="card"><span class="eyebrow">${PROFILE_META[id].grade}</span><h2>${PROFILE_META[id].icon} ${PROFILE_META[id].name}</h2><div class="stat-grid" style="grid-template-columns:1fr 1fr"><div class="stat"><strong>${pr.daily.completed.length}/${pr.daily.plan.length}</strong><small>dagminimum</small></div><div class="stat"><strong>${avg}%</strong><small>laatste 10</small></div><div class="stat"><strong>${susp}</strong><small>doorkliksignalen</small></div><div class="stat"><strong>${pr.coins}</strong><small>coins</small></div></div><div class="mini-chart">${recent.reverse().map(x=>`<i style="--h:${Math.max(5,x.accuracy)}%" data-v="${x.accuracy}%"></i>`).join("")}</div></section>`}
+window.closeParent=()=>{state.parentOpen=false;save();render()};window.setParentFilter=x=>{parentFilter=x;renderParent()};window.parentReadAlert=(id,aid)=>{const a=state.profiles[id].alerts.find(x=>x.id===aid);if(a)a.read=true;save();renderParent()};
+window.saveParentSettings=()=>{for(const id of ["dani","zana","lena"]){const v=$("#code-"+id).value.trim();if(v.length<4)return toast("Gebruik minimaal vier cijfers per kindcode.");state.parent.codes[id]=v}state.parent.pin=$("#parent-pin").value.trim()||state.parent.pin;state.parent.email=$("#parent-email").value.trim()||state.parent.email;state.parent.webhook=$("#parent-webhook").value.trim();state.parent.autoAlerts=$("#auto-alert").checked;save();toast("Ouderinstellingen opgeslagen.")};
+function reportText(){const lines=["LEVELUP LEREN — OUDERRAPPORT",new Date().toLocaleString("nl-NL"),""];for(const id of ["dani","zana","lena"]){const pr=state.profiles[id],recent=pr.sessions.slice(0,10),avg=recent.length?Math.round(recent.reduce((a,b)=>a+b.accuracy,0)/recent.length):0;lines.push(`${PROFILE_META[id].name}: dagminimum ${pr.daily.completed.length}/${pr.daily.plan.length}; gemiddelde laatste sessies ${avg}%; open waarschuwingen ${pr.alerts.filter(x=>!x.read&&x.severity!=="green").length}.`);recent.slice(0,5).forEach(x=>lines.push(`- ${fmtDate(x.date)} ${subjectName(id,x.subject)}: ${x.accuracy}% (${x.correct}/${x.questions}), ${x.avgSeconds}s/vraag${x.suspicious?" — MOGELIJK DOORKLIKKEN":""}`));lines.push("")}return lines.join("\n")}
+window.emailReport=()=>{location.href=`mailto:${encodeURIComponent(state.parent.email)}?subject=${encodeURIComponent("LevelUp Leren voortgangsrapport")}&body=${encodeURIComponent(reportText())}`};
+window.exportCSV=()=>{const rows=[["datum","kind","onderdeel","score_pct","goed","vragen","tijd_sec","sec_per_vraag","snelle_fouten","langste_foutreeks","doorkliksignaal"]];for(const id of ["dani","zana","lena"])state.profiles[id].sessions.forEach(x=>rows.push([x.date,PROFILE_META[id].name,subjectName(id,x.subject),x.accuracy,x.correct,x.questions,x.seconds,x.avgSeconds,x.fastWrong,x.longWrong,x.suspicious?"JA":"NEE"]));download(`levelup-resultaten-${today()}.csv`,rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")).join("\n"),"text/csv;charset=utf-8")};
+window.exportBackup=()=>download(`levelup-backup-${today()}.json`,JSON.stringify(state,null,2),"application/json");
+window.restoreBackup=()=>{const input=document.createElement("input");input.type="file";input.accept=".json";input.onchange=()=>{const rd=new FileReader();rd.onload=()=>{try{const s=JSON.parse(rd.result);if(!s.profiles)throw Error();state=s;save();render();toast("Back-up hersteld.")}catch(e){alert("Geen geldige LevelUp-back-up.")}};rd.readAsText(input.files[0])};input.click()};
+function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+async function sendWebhook(session){try{await fetch(state.parent.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({to:state.parent.email,child:m().name,session,report:reportText()})})}catch(e){console.warn(e)}}
 
-function renderTask() {
-  const t=state.activeTask;
-  const elapsed=Math.floor((Date.now()-t.startedAt)/1000);
-  const total = t.type==="reading" ? t.questions.length+1 : 1;
-  const progress = t.type==="reading" ? (t.readConfirmed?1+t.questionIndex:0)/total*100 : (t.answered?100:20);
-  const content=`
-    <div class="task-shell">
-      <div class="task-top">
-        <button class="icon-btn" onclick="leaveTask()" aria-label="Sluiten">✕</button>
-        <div class="progress"><span style="--w:${progress}%"></span></div>
-        <strong id="taskTimer">${formatTime(elapsed)}</strong>
-      </div>
-      <section class="card task-card">
-        <div class="focus-banner"><span style="font-size:28px">${state.currentProfile==="dani"?"👾":"🎯"}</span><div><strong>${state.currentProfile==="dani"?"Afleidings-Alien alarm":"Focus sprint actief"}</strong><small id="focusText">Eén opdracht. Rustig lezen. Dan pas antwoorden.</small></div></div>
-        <div class="task-meta"><span class="pill">${meta().subjectIcons[t.subject]} ${categoryName(t.subject)}</span><span class="pill">Niveau ${t.level}</span><span class="pill">${ratingLabel(profile().skills[t.subject].rating)}</span></div>
-        ${t.type==="reading"?readingTaskHtml(t):standardTaskHtml(t)}
-      </section>
-    </div>`;
-  document.getElementById("app").innerHTML=content;
-  focusInterval=setInterval(updateTimer,1000);
-}
-function updateTimer() {
-  const el=document.getElementById("taskTimer");
-  if(el && state.activeTask) el.textContent=formatTime(Math.floor((Date.now()-state.activeTask.startedAt)/1000));
-}
-function readingTaskHtml(t) {
-  if(!t.readConfirmed) return `
-    <span class="eyebrow">Hardop leesmissie</span><h1 style="font-size:clamp(30px,5vw,48px)">${esc(t.title)}</h1>
-    <div class="story">${t.story.split("\n\n").map(p=>`<p>${esc(p)}</p>`).join("")}</div>
-    <div class="read-tools">
-      <button class="ghost-btn" onclick="readStoryAloud()">🔊 Voorbeeld voorlezen</button>
-      <button class="ghost-btn" onclick="startSpeechCheck()">🎙️ Probeer meelezen</button>
-      <button class="primary-btn" onclick="confirmRead()">✅ Ik heb het hardop gelezen</button>
-    </div>
-    <p class="hint" id="speechStatus">Lees rustig, let op punten en maak je stem levendig. Spraakcontrole werkt alleen in ondersteunde browsers; de vragen controleren het begrip.</p>`;
-  const q=t.questions[t.questionIndex];
-  const selected=t.selected;
-  return `
-    <span class="eyebrow">Vraag ${t.questionIndex+1} van ${t.questions.length}</span>
-    <h2>${esc(q.q)}</h2>
-    <div class="answer-grid">${q.options.map((o,i)=>`<button class="answer-btn ${selected===i?"selected":""} ${t.answered&&i===q.a?"correct":""} ${t.answered&&selected===i&&i!==q.a?"wrong":""}" onclick="selectReadingAnswer(${i})" ${t.answered?"disabled":""}>${String.fromCharCode(65+i)}. ${esc(o)}</button>`).join("")}</div>
-    ${t.answered?`<div class="feedback ${selected===q.a?"good":"try"}"><strong>${selected===q.a?"Goed gezien!":"Bijna — kijk naar het bewijs in de tekst."}</strong><br>${esc(q.explain)}</div>`:""}
-    <div class="task-actions"><span class="hint">Zoek bij twijfel de zin of aanwijzing terug.</span>${t.answered?`<button class="primary-btn" onclick="nextReadingQuestion()">${t.questionIndex===t.questions.length-1?"Missie afronden":"Volgende vraag"}</button>`:""}</div>`;
-}
-function standardTaskHtml(t) {
-  return `
-    <span class="eyebrow">${esc(t.title)}</span>
-    <h1 style="font-size:clamp(30px,5vw,48px)">${esc(t.prompt)}</h1>
-    ${t.type==="choice"
-      ? `<div class="answer-grid">${t.choices.map(o=>`<button class="answer-btn ${t.selected===o?"selected":""} ${t.answered&&o===t.answer?"correct":""} ${t.answered&&t.selected===o&&o!==t.answer?"wrong":""}" onclick="selectChoice(decodeURIComponent('${encodeURIComponent(o)}'))" ${t.answered?"disabled":""}>${esc(o)}</button>`).join("")}</div>`
-      : `<input id="answerInput" class="answer-input" inputmode="${t.subject==="math"?"decimal":"text"}" autocomplete="off" placeholder="Typ je antwoord" value="${esc(t.selected||"")}" oninput="state.activeTask.selected=this.value">`
-    }
-    ${t.answered?`<div class="feedback ${t.correct?"good":"try"}"><strong>${t.correct?"Sterk!":"Goede poging — leer van de uitleg."}</strong><br>${esc(t.explain)}${!t.correct?` Het juiste antwoord is <strong>${esc(t.answer)}</strong>.`:""}</div>`:""}
-    <div class="task-actions"><span class="hint">${t.answered?"Controleer waarom het antwoord klopt.":"Werk rustig en controleer vóór je bevestigt."}</span>
-      ${t.answered?`<button class="primary-btn" onclick="finishTask()">Missie afronden</button>`:`<button class="primary-btn" onclick="checkStandardAnswer()">Controleer</button>`}
-    </div>`;
-}
-window.confirmRead=()=>{state.activeTask.readConfirmed=true;state.activeTask.questionIndex=0;saveState();render();};
-window.readStoryAloud=()=>speak(state.activeTask.story);
-window.selectReadingAnswer=i=>{
-  const t=state.activeTask;if(t.answered)return;
-  t.selected=i;t.answered=true;t.attempts++;if(i===t.questions[t.questionIndex].a)t.score++;
-  saveState();render();
-};
-window.nextReadingQuestion=()=>{
-  const t=state.activeTask;
-  if(t.questionIndex<t.questions.length-1){t.questionIndex++;t.answered=false;t.selected=null;saveState();render();}
-  else finishTask();
-};
-window.selectChoice=o=>{if(state.activeTask.answered)return;state.activeTask.selected=o;saveState();render();};
-window.checkStandardAnswer=()=>{
-  const t=state.activeTask;
-  if(t.type==="input") {
-    const input=document.getElementById("answerInput");
-    t.selected=(input?.value||t.selected||"").trim();
-  }
-  if(!String(t.selected||"").trim()){showToast("Vul eerst een antwoord in.");return;}
-  const normalize=x=>String(x).trim().toLowerCase().replace(/\s/g,"").replace(".",",");
-  t.correct=normalize(t.selected)===normalize(t.answer);t.answered=true;t.attempts++;
-  saveState();render();
-};
-window.leaveTask=()=>{
-  if(confirm("Missie pauzeren? Je voortgang in deze opdracht wordt niet opgeslagen.")){state.activeTask=null;state.view="home";saveState();render();}
-};
-
-function startSpeechCheck() {
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  const status=document.getElementById("speechStatus");
-  if(!SR){status.textContent="Deze browser ondersteunt geen spraakherkenning. Lees hardop en gebruik daarna de begripvragen.";return;}
-  recognition=new SR();recognition.lang="nl-NL";recognition.interimResults=true;recognition.continuous=true;
-  let words=new Set();
-  recognition.onresult=e=>{
-    for(let i=e.resultIndex;i<e.results.length;i++) e.results[i][0].transcript.toLowerCase().split(/\W+/).filter(Boolean).forEach(w=>words.add(w));
-    const storyWords=new Set(state.activeTask.story.toLowerCase().split(/\W+/).filter(w=>w.length>3));
-    const coverage=[...words].filter(w=>storyWords.has(w)).length/Math.max(1,storyWords.size);
-    status.textContent=`Meelezen actief · ongeveer ${Math.min(100,Math.round(coverage*220))}% herkend. Dit is alleen een hulpmiddel, geen cijfer.`;
-  };
-  recognition.onerror=()=>status.textContent="Spraakcontrole stopte. Lees gewoon verder; de begripvragen blijven leidend.";
-  recognition.start();status.textContent="Microfoon actief. Begin rustig hardop te lezen.";
-}
-window.startSpeechCheck=startSpeechCheck;
-
-async function finishTask() {
-  const t=state.activeTask,p=profile(),skill=p.skills[t.subject];
-  const elapsed=Math.max(1,Math.round((Date.now()-t.startedAt)/1000));
-  let score;
-  if(t.type==="reading") score=t.score/t.questions.length;
-  else score=t.correct?1:0;
-  const oldRating=skill.rating;
-  updateSkill(skill,score,elapsed,t.level);
-  const xp=Math.round(35+score*35+t.level*5);
-  const coins=Math.round(2+score*3);
-  p.xp+=xp;p.coins+=coins;p.completed++;
-  p.buildStage=Math.min(meta().worldPieces.length,p.buildStage+1);
-  updateDayStreak(p);
-  if(!p.daily.completed.includes(t.dailyIndex)) p.daily.completed.push(t.dailyIndex);
-  const session={
-    date:new Date().toISOString(),subject:t.subject,title:t.title||t.prompt,level:t.level,
-    score:Math.round(score*100),seconds:elapsed,ratingBefore:+oldRating.toFixed(2),ratingAfter:+skill.rating.toFixed(2)
-  };
-  p.sessions.unshift(session);p.sessions=p.sessions.slice(0,250);
-  checkAchievements(p);
-  state.activeTask=null;state.view="home";saveState();
-  if(state.parent.autoReport && state.parent.webhook) sendWebhookReport(session);
-  showReward({xp,coins,score,subject:t.subject,newPiece:p.buildStage});
-}
-function updateSkill(skill,score,seconds,taskLevel) {
-  skill.attempts++;if(score>=.67)skill.correct++;
-  skill.recent.push(score);skill.recent=skill.recent.slice(-6);
-  if(score>=.85){skill.streak++;skill.rating+=skill.streak>=2?.18:.1;}
-  else if(score>=.55){skill.streak=0;skill.rating+=.02;}
-  else {skill.streak=0;skill.rating-=.16;}
-  const recentAvg=skill.recent.reduce((a,b)=>a+b,0)/skill.recent.length;
-  if(skill.recent.length>=4 && recentAvg>.9) skill.rating+=.12;
-  if(skill.recent.length>=3 && recentAvg<.45) skill.rating-=.12;
-  skill.rating=clamp(skill.rating,1,5);
-}
-function updateDayStreak(p) {
-  const today=todayKey();
-  if(!p.lastActive){p.streakDays=1;}
-  else if(p.lastActive!==today){
-    const diff=Math.round((new Date(today)-new Date(p.lastActive))/86400000);
-    p.streakDays=diff===1?p.streakDays+1:1;
-  }
-  p.lastActive=today;
-}
-function checkAchievements(p) {
-  const add=(id)=>{if(!p.achievements.includes(id))p.achievements.push(id);};
-  if(p.completed>=1)add("first");
-  if(p.completed>=10)add("ten");
-  if(p.completed>=25)add("builder");
-  if(p.streakDays>=3)add("focus3");
-  if(Object.values(p.skills).some(s=>s.rating>=4.5))add("master");
-}
-function showReward(r) {
-  const overlay=document.createElement("div");overlay.className="celebration";
-  const perfect=r.score>=.99;
-  overlay.innerHTML=`<div class="card reward-modal">
-    <div class="reward-icon">${perfect?"🏆":"⭐"}</div>
-    <span class="eyebrow">Missie voltooid</span>
-    <h1>${perfect?"Perfect gespeeld!":"Sterke vooruitgang!"}</h1>
-    <p class="lead">+${r.xp} XP · +${r.coins} bouwmunten<br>Je hebt een nieuw onderdeel toegevoegd aan ${meta().theme}.</p>
-    <button class="primary-btn" id="rewardContinue">Bekijk je bouwwerk</button>
-  </div>`;
-  document.body.appendChild(overlay);confetti();
-  speak(perfect?"Missie voltooid. Perfect gespeeld!":"Missie voltooid. Sterke vooruitgang!");
-  document.getElementById("rewardContinue").onclick=()=>{overlay.remove();render();};
-}
-function confetti() {
-  for(let i=0;i<38;i++){
-    const c=document.createElement("i");c.className="confetti";
-    c.style.left=Math.random()*100+"vw";c.style.background=`hsl(${Math.random()*360} 90% 65%)`;
-    c.style.animationDelay=Math.random()*.5+"s";c.style.animationDuration=1.3+Math.random()*1.2+"s";
-    document.body.appendChild(c);setTimeout(()=>c.remove(),2800);
-  }
-}
-
-function worldScene() {
-  const pieces=meta().worldPieces, stage=profile().buildStage;
-  return `<div class="world-scene ${state.currentProfile==="zana"?"future":""}">
-    <div class="build-grid">${pieces.map((p,i)=>`<span class="build-piece ${i<stage?"unlocked":""}" title="Onderdeel ${i+1}">${p}</span>`).join("")}</div>
-    <div class="world-caption"><span>${stage}/${pieces.length} onderdelen</span><span>${stage===pieces.length?"WERELD COMPLEET 🏆":`Nog ${pieces.length-stage} te bouwen`}</span></div>
-  </div>`;
-}
-
-function renderWorldPage() {
-  const p=profile(), pieces=meta().worldPieces;
-  const content=`
-    <div class="section-title" style="margin-top:0"><div><span class="eyebrow">Bouwmodus</span><h1>${meta().theme}</h1></div><p>Iedere afgeronde missie plaatst één onderdeel</p></div>
-    <section class="card world-card">${worldScene()}</section>
-    <div class="grid-3" style="margin-top:18px">
-      ${pieces.map((piece,i)=>`<div class="card" style="text-align:center;opacity:${i<p.buildStage?1:.48}"><div style="font-size:52px">${i<p.buildStage?piece:"🔒"}</div><strong>Onderdeel ${i+1}</strong><p style="color:var(--muted)">${i<p.buildStage?"Vrijgespeeld":"Voltooi nog een missie"}</p></div>`).join("")}
-    </div>`;
-  document.getElementById("app").innerHTML=shell(content,"world");
-}
-
-function renderProgress() {
-  const p=profile(), total=p.sessions.length, avg=total?Math.round(p.sessions.reduce((a,b)=>a+b.score,0)/total):0;
-  const achievements=[
-    ["first","🚀","Eerste missie"],["ten","🔟","Tien missies"],["builder","🏗️","Meesterbouwer"],
-    ["focus3","🔥","Drie dagen sterk"],["master","🧠","Niveaumeester"]
-  ];
-  const content=`
-    <div class="section-title" style="margin-top:0"><div><span class="eyebrow">Groei-overzicht</span><h1>${meta().name}'s ontwikkeling</h1></div></div>
-    <div class="report-grid">
-      <div class="report-stat"><strong>${p.completed}</strong><small>missies</small></div>
-      <div class="report-stat"><strong>${avg}%</strong><small>gemiddeld goed</small></div>
-      <div class="report-stat"><strong>${p.streakDays}</strong><small>actieve dagen</small></div>
-      <div class="report-stat"><strong>${xpLevel(p.xp)}</strong><small>heldenlevel</small></div>
-    </div>
-    <div class="grid-2" style="margin-top:18px">
-      <section class="card"><span class="eyebrow">Vaardigheden</span><h2>Adaptief niveau</h2><div class="skill-list">${meta().subjects.map(skillRow).join("")}</div></section>
-      <section class="card"><span class="eyebrow">Bekers</span><h2>Prestaties</h2><div class="grid-3">${achievements.map(([id,ic,n])=>`<div style="text-align:center;opacity:${p.achievements.includes(id)?1:.25}"><div style="font-size:43px">${ic}</div><small>${n}</small></div>`).join("")}</div></section>
-    </div>
-    <section class="card" style="margin-top:18px"><span class="eyebrow">Laatste missies</span><h2>Resultaten</h2>${sessionsTable(p.sessions.slice(0,12))}</section>`;
-  document.getElementById("app").innerHTML=shell(content,"progress");
-}
-
-function sessionsTable(sessions) {
-  if(!sessions.length)return `<div class="empty">Nog geen resultaten. De eerste missie vult dit overzicht.</div>`;
-  return `<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Onderdeel</th><th>Opdracht</th><th>Score</th><th>Niveau</th><th>Tijd</th></tr></thead><tbody>
-    ${sessions.map(s=>`<tr><td>${formatDate(s.date)}</td><td>${esc(categoryNameFor(s.subject))}</td><td>${esc(s.title)}</td><td><strong>${s.score}%</strong></td><td>${s.ratingBefore} → ${s.ratingAfter}</td><td>${formatTime(s.seconds)}</td></tr>`).join("")}
-  </tbody></table></div>`;
-}
-function categoryNameFor(subject){
-  for(const id of ["dani","zana"]) if(PROFILE_META[id].subjectLabels[subject]) return PROFILE_META[id].subjectLabels[subject];
-  return subject;
-}
-
-window.openParent=()=> {
-  const pin=prompt("Voer de oudercode in:");
-  if(pin===state.parent.pin){state.view="parent";render();} else if(pin!==null) showToast("De code klopt niet.");
-};
-window.openParentFromProfiles=()=> {
-  const pin=prompt("Voer de oudercode in:");
-  if(pin===state.parent.pin){state.currentProfile="dani";state.view="parent";render();} else if(pin!==null) showToast("De code klopt niet.");
-};
-
-function renderParent() {
-  const all=[...state.profiles.dani.sessions.map(x=>({...x,child:"Dani"})),...state.profiles.zana.sessions.map(x=>({...x,child:"Zana"}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const content=`
-    <div class="section-title" style="margin-top:0"><div><span class="eyebrow">Ouderomgeving</span><h1>Leer- en voortgangsrapport</h1></div></div>
-    <div class="tabs">
-      <button class="ghost-btn tab active">Overzicht</button>
-      <button class="ghost-btn tab" onclick="exportCSV()">⬇ CSV</button>
-      <button class="ghost-btn tab" onclick="exportJSON()">⬇ Back-up</button>
-      <button class="ghost-btn tab" onclick="emailReport()">✉ E-mailrapport</button>
-    </div>
-    <div class="grid-2">
-      ${parentChildCard("dani")}
-      ${parentChildCard("zana")}
-    </div>
-    <section class="card" style="margin-top:18px">
-      <span class="eyebrow">Alle activiteit</span><h2>Recente resultaten</h2>
-      ${parentSessionsTable(all.slice(0,30))}
-    </section>
-    <section class="card" style="margin-top:18px">
-      <span class="eyebrow">Rapportage & privacy</span><h2>Instellingen</h2>
-      <div class="settings-grid">
-        <label>Rapportadres<input class="settings-input" id="parentEmail" type="email" value="${esc(state.parent.email)}"><small>Voor de e-mailknop en rapportinstellingen.</small></label>
-        <label>Oudercode<input class="settings-input" id="parentPin" inputmode="numeric" value="${esc(state.parent.pin)}"><small>Lokale toegangscode; geen echte serverbeveiliging.</small></label>
-        <label style="grid-column:1/-1">Optionele webhook-URL<input class="settings-input" id="webhook" type="url" placeholder="https://..." value="${esc(state.parent.webhook)}"><small>Voor automatisch e-mailen via bijvoorbeeld Make, Zapier of Formspree. Zonder externe dienst blijven gegevens veilig lokaal opgeslagen.</small></label>
-        <div class="toggle-line" style="grid-column:1/-1"><div><strong>Automatisch rapport na iedere missie</strong><small style="display:block;color:var(--muted)">Werkt alleen wanneer een webhook is ingevuld.</small></div><input id="autoReport" type="checkbox" ${state.parent.autoReport?"checked":""}></div>
-      </div>
-      <div class="task-actions"><span class="hint">Gegevens staan standaard alleen op dit apparaat in localStorage.</span><button class="primary-btn" onclick="saveParentSettings()">Instellingen opslaan</button></div>
-    </section>
-    <section class="card" style="margin-top:18px">
-      <span class="eyebrow">Onderhoud</span><h2>Gegevensbeheer</h2>
-      <div class="tag-row"><button class="ghost-btn" onclick="restoreBackup()">Back-up terugzetten</button><button class="ghost-btn" onclick="resetToday()">Dagmissie opnieuw maken</button><button class="ghost-btn" style="color:var(--danger)" onclick="resetAll()">Alle gegevens wissen</button></div>
-    </section>`;
-  document.getElementById("app").innerHTML=shell(content,"parent");
-}
-function parentChildCard(id) {
-  const p=state.profiles[id],m=PROFILE_META[id],avg=p.sessions.length?Math.round(p.sessions.reduce((a,b)=>a+b.score,0)/p.sessions.length):0;
-  return `<section class="card"><span class="eyebrow">${m.grade}</span><h2>${m.icon} ${m.name}</h2>
-    <div class="report-grid" style="grid-template-columns:1fr 1fr">
-      <div class="report-stat"><strong>${p.completed}</strong><small>missies</small></div>
-      <div class="report-stat"><strong>${avg}%</strong><small>gemiddeld</small></div>
-    </div>
-    <div class="skill-list" style="margin-top:16px">${m.subjects.map(s=>{
-      const sk=p.skills[s];return `<div class="skill-row"><span>${m.subjectLabels[s]}</span><div class="progress"><span style="--w:${(sk.rating-1)/4*100}%"></span></div><span class="skill-level">${sk.rating.toFixed(1)}</span></div>`;
-    }).join("")}</div>
-  </section>`;
-}
-function parentSessionsTable(sessions){
-  if(!sessions.length)return `<div class="empty">Nog geen resultaten.</div>`;
-  return `<div class="table-wrap"><table><thead><tr><th>Datum</th><th>Kind</th><th>Onderdeel</th><th>Score</th><th>Niveaubeweging</th><th>Tijd</th></tr></thead><tbody>
-  ${sessions.map(s=>`<tr><td>${formatDate(s.date)}</td><td>${s.child}</td><td>${categoryNameFor(s.subject)}</td><td>${s.score}%</td><td>${s.ratingBefore} → ${s.ratingAfter}</td><td>${formatTime(s.seconds)}</td></tr>`).join("")}
-  </tbody></table></div>`;
-}
-window.saveParentSettings=()=>{
-  state.parent.email=document.getElementById("parentEmail").value.trim()||state.parent.email;
-  state.parent.pin=document.getElementById("parentPin").value.trim()||state.parent.pin;
-  state.parent.webhook=document.getElementById("webhook").value.trim();
-  state.parent.autoReport=document.getElementById("autoReport").checked;
-  saveState();showToast("Instellingen opgeslagen.");
-};
-function reportText() {
-  const lines=["LEERHELDEN VOORTGANGSRAPPORT",`Gegenereerd: ${new Date().toLocaleString("nl-NL")}`,""];
-  for(const id of ["dani","zana"]){
-    const p=state.profiles[id],m=PROFILE_META[id];
-    lines.push(`${m.name} — ${m.grade}`,`Missies: ${p.completed} | XP: ${p.xp} | Actieve dagen: ${p.streakDays}`);
-    m.subjects.forEach(s=>lines.push(`- ${m.subjectLabels[s]}: niveau ${p.skills[s].rating.toFixed(1)} (${ratingLabelFor(id,p.skills[s].rating)})`));
-    const recent=p.sessions.slice(0,5);
-    recent.forEach(x=>lines.push(`  ${formatDate(x.date)} | ${m.subjectLabels[x.subject]} | ${x.score}% | ${formatTime(x.seconds)}`));
-    lines.push("");
-  }
-  return lines.join("\n");
-}
-function ratingLabelFor(id,r){const old=state.currentProfile;state.currentProfile=id;const x=ratingLabel(r);state.currentProfile=old;return x;}
-window.emailReport=()=>{
-  const subject=encodeURIComponent(`LeerHelden rapport ${new Date().toLocaleDateString("nl-NL")}`);
-  const body=encodeURIComponent(reportText());
-  location.href=`mailto:${encodeURIComponent(state.parent.email)}?subject=${subject}&body=${body}`;
-};
-window.exportJSON=()=>{
-  downloadFile(`leerhelden-backup-${todayKey()}.json`,JSON.stringify(state,null,2),"application/json");
-};
-window.exportCSV=()=>{
-  const rows=[["datum","kind","onderdeel","opdracht","score_pct","tijd_seconden","niveau_voor","niveau_na"]];
-  for(const id of ["dani","zana"]) state.profiles[id].sessions.forEach(s=>rows.push([s.date,PROFILE_META[id].name,categoryNameFor(s.subject),s.title,s.score,s.seconds,s.ratingBefore,s.ratingAfter]));
-  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")).join("\n");
-  downloadFile(`leerhelden-resultaten-${todayKey()}.csv`,csv,"text/csv;charset=utf-8");
-};
-function downloadFile(name,content,type){
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-window.restoreBackup=()=>{
-  const input=document.createElement("input");input.type="file";input.accept=".json,application/json";
-  input.onchange=()=>{const f=input.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{
-    try{const restored=JSON.parse(reader.result);if(!restored.profiles)throw new Error();state=restored;saveState();showToast("Back-up teruggezet.");render();}
-    catch{alert("Dit bestand is geen geldige LeerHelden-back-up.");}
-  };reader.readAsText(f);};input.click();
-};
-window.resetToday=()=>{if(confirm("De dagmissie van het gekozen profiel opnieuw maken?")){profile().daily.date="";saveState();render();}};
-window.resetAll=()=>{if(confirm("Alle voortgang van Dani en Zana definitief wissen op dit apparaat?")){localStorage.removeItem(STORAGE_KEY);state=initialState();render();}};
-async function sendWebhookReport(session){
-  try{
-    await fetch(state.parent.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      to:state.parent.email,subject:`LeerHelden: ${meta().name} voltooide een missie`,child:meta().name,session,report:reportText()
-    })});
-  }catch(e){console.warn("Automatisch rapport mislukt",e);}
-}
-
-function resetInactivity(){
-  clearTimeout(inactivityTimer);
-  inactivityTimer=setTimeout(()=>{
-    const el=document.getElementById("focusText");
-    if(el) {
-      el.textContent=state.currentProfile==="dani"
-        ?"👾 De Afleidings-Alien is gesignaleerd! Noem nu hardop je eerstvolgende stap."
-        :"Korte reset: wat is precies de vraag, en welk bewijs of welke berekening heb je nodig?";
-      speak(state.currentProfile==="dani"?"Afleidings alien alarm. Kies je volgende stap.":"Focus reset. Kies je volgende stap.");
-    }
-  },45000);
-}
-["click","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,()=>{if(state.view==="task")resetInactivity();},{passive:true}));
-
-if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();window.deferredInstallPrompt=e;});
-
+if("serviceWorker"in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 render();

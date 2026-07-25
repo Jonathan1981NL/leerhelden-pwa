@@ -1,43 +1,30 @@
 @echo off
 setlocal
-title LeerHelden publiceren op GitHub
+cd /d "%~dp0"
+title LevelUp Leren publiceren
 
-set "APPDIR=C:\Users\Admin\Downloads\LeerHelden-v1.0\leerhelden-pwa"
-
-if not exist "%APPDIR%\index.html" (
-  echo FOUT: de LeerHelden-map is niet gevonden:
-  echo %APPDIR%
+echo.
+echo Repositorynaam: levelup-leren
+echo.
+where gh >nul 2>nul
+if %errorlevel%==0 (
+  echo GitHub CLI gevonden. GitHub kan nu om inloggen vragen.
+  if not exist ".git" git init
+  git branch -M main
+  git add .
+  git commit -m "Publiceer LevelUp Leren 3.0"
+  gh repo create levelup-leren --public --source=. --remote=origin --push
+  for /f %%O in ('gh api user --jq .login') do set "GHOWNER=%%O"
+  gh api -X POST repos/%GHOWNER%/levelup-leren/pages -f build_type=workflow >nul 2>nul
+  start "" "https://github.com"
+  echo Klaar. Controleer de Actions- en Pages-tab op GitHub.
   pause
-  exit /b 1
+  exit /b
 )
 
-where git >nul 2>nul
-if not %errorlevel%==0 (
-  echo Git is niet gevonden.
-  echo Installeer eerst GitHub Desktop of Git for Windows.
-  pause
-  exit /b 1
-)
-
-cd /d "%APPDIR%"
-
+echo GitHub CLI is niet gevonden.
+echo Open GitHub Desktop, voeg deze map toe als Local Repository en publiceer hem als:
+echo levelup-leren
 echo.
-echo Deze stap maakt lokaal een Git-repository.
-echo Daarna kun je de map in GitHub Desktop publiceren.
-echo.
-
-if not exist ".git" git init
-git add .
-git commit -m "Publiceer LeerHelden v1.1"
-
-echo.
-echo Klaar.
-echo Open nu GitHub Desktop en kies:
-echo File ^> Add local repository
-echo Selecteer:
-echo %APPDIR%
-echo.
-echo Klik daarna op Publish repository.
-echo Zet vervolgens GitHub Pages aan via Settings ^> Pages.
-echo.
+start "" "https://github.com/new"
 pause
