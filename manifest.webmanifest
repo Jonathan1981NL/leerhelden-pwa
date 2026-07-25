@@ -1,0 +1,17 @@
+{
+  "name": "LeerHelden",
+  "short_name": "LeerHelden",
+  "description": "Adaptieve huiswerkavonturen voor Dani en Zana.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#08142e",
+  "theme_color": "#10224a",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
