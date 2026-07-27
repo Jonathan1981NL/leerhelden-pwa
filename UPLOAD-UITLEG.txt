@@ -1,0 +1,13 @@
+NEXUS LEARNING WORLDS V4.0 — GITHUB UPLOAD
+
+1. Download the ZIP.
+2. Right-click it in Downloads and choose “Alles uitpakken”.
+3. Open the extracted folder “leerhelden-pwa”.
+4. Open your GitHub repository in the browser.
+5. Choose Add file > Upload files.
+6. Upload ONLY index.html to the root of the repository.
+7. Commit the change.
+8. Under Settings > Pages, use branch main and folder /root.
+9. Open the Pages link and press Ctrl+F5 to bypass the old browser cache.
+
+Existing progress remains available when you use the same GitHub Pages URL and browser. Export a backup from the parent dashboard before updating.
