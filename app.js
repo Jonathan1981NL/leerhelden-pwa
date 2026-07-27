@@ -163,4 +163,5 @@ function download(name,text,type){const a=document.createElement("a");a.href=URL
 async function sendWebhook(session){try{await fetch(state.parent.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({to:state.parent.email,child:m().name,session,report:reportText()})})}catch(e){console.warn(e)}}
 
 if("serviceWorker"in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-render();
+// Initial rendering is performed by app-v4.js after migrations and overrides.
+

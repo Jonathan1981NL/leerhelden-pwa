@@ -1,7 +1,7 @@
 {
-  "name": "LevelUp Leren",
+  "name": "LevelUp Leren 4.0",
   "short_name": "LevelUp",
-  "description": "Een adaptieve educatieve gamewereld voor Dani, Zana en Lena.",
+  "description": "Adaptieve leerwerelden, verhalen, uitlegmodules, spellen, skins en oudermonitoring voor Dani, Zana en Lena.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -9,6 +9,11 @@
   "theme_color": "#0b1535",
   "orientation": "any",
   "icons": [
-    {"src":"icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }

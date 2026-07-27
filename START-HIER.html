@@ -1,14 +1,13 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1535">
-  <meta name="description" content="LevelUp Leren: adaptief leren, verhalen, spellen, avatars en een ouderdashboard voor Dani, Zana en Lena.">
-  <title>LevelUp Leren</title>
-  
-  
-  <style>:root{
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1535">
+<meta name="description" content="LevelUp Leren 4.0 standalone">
+<title>LevelUp Leren 4.0</title>
+<style>
+:root{
  --bg:#071129;--bg2:#10265a;--panel:rgba(17,36,78,.94);--panel2:#173773;--ink:#f7fbff;--muted:#b9caea;
  --gold:#ffd75a;--mint:#56e2c1;--pink:#ff7eb3;--purple:#8f7cff;--orange:#ff984f;--red:#ff6f7f;
  --line:rgba(255,255,255,.11);--shadow:0 22px 70px rgba(0,0,0,.34);--r:24px;--nav:86px;
@@ -34,14 +33,54 @@
 .activity-card strong,.activity-card small{display:block}
 @media(max-width:720px){.section-head{flex-direction:column;align-items:flex-start}.section-head>p{max-width:100%}}
 @media(max-width:430px){.bottom-nav .nav-btn:nth-child(5){display:block}.bottom-nav{grid-template-columns:repeat(6,1fr)}.nav-btn{font-size:8px;padding-left:1px;padding-right:1px}.nav-btn span{font-size:18px}}
+
+/* LevelUp Leren 4.0 visual and interaction layer */
+:root{--v4-glow:0 0 28px rgba(101,209,255,.25)}
+body{overflow-x:hidden}
+#ambient:before,#ambient:after{content:"";position:fixed;pointer-events:none;z-index:-1;border-radius:50%;filter:blur(5px);animation:ambientFloat 14s ease-in-out infinite alternate}
+#ambient:before{width:38vw;height:38vw;left:-12vw;top:12vh;background:radial-gradient(circle,rgba(79,205,255,.14),transparent 70%)}
+#ambient:after{width:34vw;height:34vw;right:-10vw;top:34vh;background:radial-gradient(circle,rgba(255,114,207,.12),transparent 70%);animation-delay:-5s}
+@keyframes ambientFloat{to{transform:translate(8vw,-5vh) scale(1.12)}}
+.v4-profile .profile-tile{position:relative;isolation:isolate}
+.profile-art-v4{position:relative;overflow:hidden}
+.profile-art-v4:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.5),transparent 35%);animation:pulseAura 3.5s ease-in-out infinite}
+.profile-orbit{position:absolute;width:130px;height:130px;border:2px dashed rgba(255,255,255,.45);border-radius:50%;animation:spin 14s linear infinite}
+.profile-orbit:after{content:"⭐";position:absolute;right:-9px;top:45px;font-size:24px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulseAura{50%{transform:scale(1.18);opacity:.65}}
+.parent-entry{font-size:16px}
+.v4-hero{position:relative}.floating-shapes i{position:absolute;font-style:normal;font-size:28px;opacity:.3;animation:floatShape 4s ease-in-out infinite}.floating-shapes i:nth-child(1){right:15%;top:14%}.floating-shapes i:nth-child(2){right:5%;top:45%;animation-delay:-1.1s}.floating-shapes i:nth-child(3){right:22%;bottom:8%;animation-delay:-2.2s}@keyframes floatShape{50%{transform:translateY(-14px) rotate(10deg)}}
+.world-window{position:relative;min-height:300px;border-radius:24px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(#6fcaff 0 58%,#6ec66f 58%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.world-window:after{content:"";position:absolute;inset:auto 0 0;height:48%;background:linear-gradient(transparent,rgba(0,0,0,.12));pointer-events:none}
+.world-window .avatar-bubble{z-index:2}.cloud{position:absolute;font-size:42px;opacity:.8;animation:cloudMove 9s linear infinite}.cloud.c1{top:15%;left:-20%}.cloud.c2{top:28%;left:-35%;animation-delay:-4.5s}@keyframes cloudMove{to{left:115%}}
+.story-universe{position:relative;overflow:hidden}.story-universe:after{content:"📚 ✨ 🗺️ ✨ 📖";position:absolute;right:-10px;bottom:-12px;font-size:32px;opacity:.12;transform:rotate(-8deg)}
+.learn-tabs,.world-tabs{display:flex;gap:9px;overflow:auto;padding:4px 0 14px}.learn-tabs button{white-space:nowrap}.lesson-tile{position:relative;overflow:hidden}.lesson-tile:after{content:"";position:absolute;inset:auto -25% -60% -25%;height:70%;border-radius:50%;background:rgba(255,255,255,.08);transition:.3s}.lesson-tile:hover:after{transform:translateY(-20px)}.lesson-tile.mastered{border-color:rgba(79,229,176,.6)}
+.roadmap{overflow:auto}.roadmap-line{display:flex;align-items:stretch;gap:0;min-width:800px;margin-top:22px}.road-stop{position:relative;flex:1;padding:18px 14px 16px;text-align:center;background:rgba(255,255,255,.05);border-top:4px solid rgba(255,255,255,.15)}.road-stop:before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#647798;top:-11px;left:calc(50% - 9px)}.road-stop.active{border-color:var(--accent)}.road-stop.active:before{background:var(--accent);box-shadow:0 0 18px var(--accent)}.road-stop.next{border-color:var(--accent-2)}.road-stop.next:before{background:var(--accent-2)}.road-stop strong,.road-stop span{display:block}.road-stop span{color:var(--muted);font-size:13px;margin-top:5px}
+.skill-dashboard{display:grid;gap:12px}.skill-v4{display:grid;grid-template-columns:minmax(170px,1.25fr) minmax(180px,2fr) auto;gap:13px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}.skill-v4:last-child{border-bottom:0}.skill-v4 small{display:block;color:var(--muted);margin-top:3px}
+.horn{animation:hornPulse 2.2s ease-in-out infinite}.task-horn{flex:0 0 auto}@keyframes hornPulse{50%{transform:scale(1.09);box-shadow:0 0 0 7px rgba(255,211,76,.08)}}
+.mega-horn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:0;border-radius:20px;padding:17px;background:linear-gradient(135deg,#ffd54d,#ff9a45);color:#16213e;font-weight:950;font-size:19px;box-shadow:0 12px 28px rgba(255,164,55,.28);cursor:pointer;margin:12px 0}.mega-horn span{font-size:34px;animation:hornWiggle 1.6s ease-in-out infinite}.mega-horn.small{max-width:430px;margin:12px auto}.mega-horn:hover{transform:translateY(-2px)}@keyframes hornWiggle{30%{transform:rotate(-10deg)}60%{transform:rotate(8deg)}}
+.lena-task .task-card{background:linear-gradient(145deg,rgba(64,38,110,.97),rgba(37,52,112,.97));border:2px solid rgba(255,255,255,.16)}.lena-question{font-size:clamp(27px,5vw,42px)!important;text-align:center;line-height:1.24}.question-icon{display:block;font-size:clamp(48px,9vw,90px);margin-bottom:8px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.22));animation:bob 2.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-7px) rotate(3deg)}}
+.lena-answers{grid-template-columns:1fr 1fr;gap:15px}.lena-answers .answer{min-height:112px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:clamp(20px,4vw,30px);border-radius:25px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.08))}.lena-option-icon{font-size:36px;margin-bottom:5px}.lena-answers .answer:nth-child(1){border-color:rgba(255,111,166,.34)}.lena-answers .answer:nth-child(2){border-color:rgba(80,218,255,.34)}.lena-answers .answer:nth-child(3){border-color:rgba(255,218,72,.34)}.lena-answers .answer:nth-child(4){border-color:rgba(95,235,166,.34)}
+.story.lena{font-size:clamp(23px,4.5vw,32px);line-height:1.75;border:4px solid rgba(255,213,86,.45);background:#fffdf6}.reading-coach-status{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:14px 0;padding:13px 16px;border-radius:16px;background:rgba(70,214,189,.1);border:1px solid rgba(70,214,189,.3)}.reading-coach-status span{color:var(--muted)}
+.smart-input-wrap{display:grid;gap:10px}.quick-keys{display:flex;flex-wrap:wrap;gap:8px}.quick-keys button{border:0;border-radius:13px;background:rgba(255,255,255,.1);color:var(--text);padding:10px 15px;font-weight:900;cursor:pointer}.quick-keys button:hover{background:rgba(255,255,255,.18)}
+.inline-help{margin-top:9px;padding:8px 12px}.level-change{margin:13px 0;padding:13px;border-radius:15px;font-weight:900;background:rgba(255,255,255,.08)}.level-change small{display:block;font-weight:500;color:var(--muted);margin-top:4px}.level-change.up{border:1px solid rgba(71,228,174,.45)}.level-change.down{border:1px solid rgba(255,195,66,.4)}
+.lesson-visual{min-height:220px;display:grid;place-items:center;padding:25px;border-radius:24px;background:radial-gradient(circle at 50% 25%,rgba(91,197,255,.17),rgba(255,255,255,.045));overflow:hidden}.lesson-text{font-size:clamp(19px,3vw,25px);line-height:1.65;margin:22px 0}.lesson-equation{font-size:clamp(32px,8vw,72px);font-weight:950;letter-spacing:2px;text-align:center;filter:drop-shadow(0 8px 10px rgba(0,0,0,.23))}.frac{display:inline-grid;vertical-align:middle;margin:0 8px}.frac b:first-child{border-bottom:3px solid;padding:0 9px}.lesson-pitch{position:relative;width:min(530px,100%);min-height:190px;border:5px solid white;border-radius:16px;background:linear-gradient(90deg,#45a758 50%,#3e9b50 50%);display:grid;grid-template-columns:repeat(3,1fr);align-items:center;justify-items:center;font-size:40px}.lesson-pitch:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:4px solid white}.lesson-pitch i{position:absolute;width:74px;height:74px;border:3px dashed #ffd64a;border-radius:50%;bottom:10px}.lesson-pitch i:nth-of-type(1){left:23%}.lesson-pitch i:nth-of-type(2){right:23%}.fraction-circle{width:220px;height:220px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:8px solid #fff;transform:rotate(45deg);animation:slowPulse 3s ease-in-out infinite}.fraction-circle i{background:#ffb954;border:3px solid white}.fraction-circle i:nth-child(2),.fraction-circle i:nth-child(3){background:#55d5c0}@keyframes slowPulse{50%{transform:rotate(45deg) scale(1.05)}}.digital-clock{font-family:ui-monospace,monospace;font-size:clamp(55px,12vw,105px);background:#07101e;color:#75ff9e;border:8px solid #394559;border-radius:22px;padding:20px 32px;box-shadow:inset 0 0 20px #000,0 14px 35px rgba(0,0,0,.3)}.digital-clock b{color:#ffe06c}.time-line{display:flex;align-items:center;gap:20px;font-size:clamp(24px,5vw,48px);font-weight:900}.time-line i{font-size:18px;color:var(--accent);font-style:normal}.balance{display:flex;align-items:center;gap:25px;font-size:clamp(27px,6vw,58px);font-weight:950}.balance i{font-style:normal;font-size:70px}.source-cards{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}.source-cards span{padding:18px;border-radius:18px;background:rgba(255,255,255,.1);font-size:22px;font-weight:900}.checklist,.bias-lens{font-size:clamp(24px,5vw,48px);line-height:1.5;font-weight:850}.letter-stage{display:flex;flex-direction:column;align-items:center}.letter-stage b{font-size:140px;line-height:1}.letter-stage span{font-size:46px;color:var(--accent)}.picture-row,.compare-groups{font-size:clamp(28px,6vw,58px);text-align:center}.compare-groups{display:flex;gap:24px;align-items:center}.compare-groups b{color:var(--accent)}
+.animated-game{position:relative;overflow:hidden}.animated-game:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.09);right:-40px;top:-40px;transition:.4s}.animated-game:hover:before{transform:scale(2.6)}.duo-badge{display:inline-block;margin-top:8px;padding:6px 9px;border-radius:99px;background:rgba(81,218,196,.15);font-size:12px;font-weight:850;color:var(--accent-2)}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.game-mode{border:1px solid rgba(255,255,255,.14);border-radius:20px;background:rgba(255,255,255,.07);color:var(--text);padding:22px;cursor:pointer;text-align:center}.game-mode span{display:block;font-size:60px}.game-mode strong,.game-mode small{display:block}.game-mode small{color:var(--muted);margin-top:5px}.game-controls{text-align:center;display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}.connect-arrows{display:grid;grid-template-columns:repeat(7,1fr);width:min(560px,100%);margin:0 auto 5px;gap:4px}.connect-arrows button{border:0;background:transparent;color:var(--accent);font-size:22px;cursor:pointer}.simon-board{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(440px,100%);margin:24px auto}.simon-board button{min-height:130px;border:0;border-radius:28px;background:rgba(255,255,255,.1);font-size:60px;cursor:pointer;transition:.15s}.simon-board button.flash{transform:scale(1.08);background:#fff;box-shadow:0 0 55px rgba(255,255,255,.75)}.tap-duel{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:320px}.tap-duel button{border:0;border-radius:26px;background:linear-gradient(145deg,#2d64cf,#172e68);color:white;font-size:45px;font-weight:950;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer}.tap-duel.go button{background:linear-gradient(145deg,#24c978,#18814f);animation:goPulse .5s infinite alternate}.tap-duel.done button{opacity:.6}@keyframes goPulse{to{filter:brightness(1.35)}}.maze{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:2px;width:min(570px,100%);margin:18px auto;background:#111a34;padding:6px;border-radius:16px}.maze i{aspect-ratio:1;display:grid;place-items:center;font-style:normal;font-size:clamp(15px,4vw,28px);border-radius:3px}.maze .wall{background:#274d8b;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}.maze .path{background:#d8ecff}.maze-controls{display:grid;grid-template-columns:repeat(3,70px);justify-content:center;gap:7px}.maze-controls button{width:70px;height:58px;border:0;border-radius:14px;background:rgba(255,255,255,.1);font-size:28px;cursor:pointer}.maze-controls button:nth-child(1){grid-column:2}.maze-controls button:nth-child(2){grid-column:1}.maze-controls button:nth-child(3){grid-column:3}.maze-controls button:nth-child(4){grid-column:2}.word-answer{font-size:clamp(32px,8vw,70px);font-weight:950;letter-spacing:7px;text-align:center;margin:25px}.letter-bank,.pattern-buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.letter-bank button,.pattern-buttons button{width:70px;height:70px;border:0;border-radius:17px;background:rgba(255,255,255,.11);color:var(--text);font-size:30px;font-weight:950;cursor:pointer}.pattern-input{text-align:center;min-height:70px;font-size:42px;margin:20px}.center-result{text-align:center}
+.coin-wallet{padding:12px 17px;border-radius:18px;background:linear-gradient(135deg,#ffd750,#ffa845);color:#1a2440;font-weight:950;box-shadow:0 9px 25px rgba(255,176,66,.25)}.avatar-panel,.shop-panel{overflow:hidden}.avatar-studio.premium{background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.19),rgba(255,255,255,.035));border-radius:25px}.v4-shop{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}.shop-art{animation:shopFloat 3s ease-in-out infinite}@keyframes shopFloat{50%{transform:translateY(-6px) rotate(3deg)}}.shop-item em{display:block;font-style:normal;font-size:16px;margin-top:4px}.world-tabs{padding:0 0 13px}.world-tab{border:1px solid rgba(255,255,255,.12);border-radius:17px;background:rgba(255,255,255,.06);color:var(--text);padding:11px 15px;white-space:nowrap;cursor:pointer;font-weight:850}.world-tab span{font-size:24px;margin-right:5px}.world-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#14203d}.world-builder{padding:14px}.world-scene-v4{position:relative;min-height:620px;border-radius:26px;overflow:hidden;background:linear-gradient(#79cfff 0 58%,#67b965 58%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.25),0 20px 45px rgba(0,0,0,.25)}.sky-sunset{background:linear-gradient(#7654ba 0,#ff9c77 48%,#80b96a 49%)}.sky-neon{background:linear-gradient(#071731 0,#1b285f 58%,#373b58 59%)}.sky-space{background:radial-gradient(circle at 70% 15%,#5a6cd4,#080e25 55%)}.sky-night{background:linear-gradient(#0a1534 0,#28356c 58%,#2c6648 59%)}.sky-rainbow{background:linear-gradient(#78ceff 0 42%,#f8c4f0 43%,#9ed66c 60%)}.sky-ocean{background:linear-gradient(#7bd4ff 0 32%,#1e9bd2 33%,#075c9c 100%)}.sky-jungle{background:linear-gradient(#4ea8c4 0 45%,#337d47 46%)}.sun-moon{position:absolute;right:8%;top:7%;width:90px;height:90px;border-radius:50%;background:#ffe46e;box-shadow:0 0 60px rgba(255,228,110,.7)}.sky-night .sun-moon,.sky-space .sun-moon{background:#e8ecff;box-shadow:0 0 45px rgba(217,226,255,.55)}.world-cloud{position:absolute;font-size:55px;opacity:.72;animation:worldCloud 18s linear infinite}.wc1{top:11%;left:-15%}.wc2{top:24%;left:-25%;animation-delay:-9s}@keyframes worldCloud{to{left:110%}}.world-spark{position:absolute;font-size:27px;animation:spark 1.8s ease-in-out infinite}.s1{left:12%;top:15%}.s2{right:22%;top:29%;animation-delay:-.8s}@keyframes spark{50%{transform:scale(1.7) rotate(35deg);opacity:.45}}.world-avatar{position:absolute;left:2%;bottom:3%;z-index:4;transform:scale(.72);transform-origin:bottom left}.world-grid-v4{position:absolute;inset:17% 4% 6%;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:5px;align-items:end}.world-cell-v4{border:1px dashed rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.025);min-width:0;cursor:pointer;display:grid;place-items:center;transition:.2s}.world-cell-v4:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}.world-cell-v4 span{font-size:clamp(25px,4vw,52px);filter:drop-shadow(0 8px 5px rgba(0,0,0,.28));animation:worldObject 3.5s ease-in-out infinite}.world-cell-v4:nth-child(3n) span{animation-delay:-1.3s}.world-cell-v4:nth-child(4n) span{animation-delay:-2.1s}@keyframes worldObject{50%{transform:translateY(-5px) rotate(2deg)}}.world-vehicle{position:absolute;left:-15%;bottom:7%;font-size:64px;animation:vehicleMove 12s linear infinite}@keyframes vehicleMove{to{left:110%}}.world-builder-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 5px}.world-builder-bottom p{margin:4px 0 0}.v4-inventory{display:flex;gap:10px;overflow:auto;padding:12px 3px}.v4-inventory button{min-width:105px;display:flex;flex-direction:column;align-items:center;gap:5px}.v4-inventory button span{font-size:38px}.v4-inventory button small{font-size:11px}.empty-inventory{width:100%;text-align:center;padding:20px}.empty-inventory>span{font-size:50px}
+.pin-character{font-size:75px;animation:bob 2s infinite}.parent-child-v4{position:relative}.parent-child-head{display:flex;align-items:center;gap:12px}.parent-child-head>span{font-size:48px}.parent-child-head h2{margin:0}.status-dot{margin-left:auto;width:17px;height:17px;border-radius:50%;background:#43d99c;box-shadow:0 0 15px currentColor}.status-dot.amber{background:#ffc652}.status-dot.red{background:#ff6b7c}.parent-insight{padding:10px 12px;border-radius:13px;background:rgba(255,255,255,.06);margin-top:10px;font-size:13px}.parent-priority .alert p{margin:3px 0 0}.error-clusters{display:grid;gap:9px}.error-clusters>div{display:grid;grid-template-columns:35px 1fr auto;gap:8px;align-items:center;padding:10px;border-radius:13px;background:rgba(255,255,255,.06)}.error-clusters i{font-style:normal;color:var(--muted)}.curriculum-row{display:grid;grid-template-columns:95px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07)}.curriculum-row div{display:flex;gap:7px;flex-wrap:wrap}.curriculum-row span{font-size:12px;padding:5px 7px;border-radius:9px;background:rgba(255,255,255,.05);color:var(--muted)}.curriculum-row span.on{background:rgba(66,221,165,.13);color:var(--text)}.reading-score{display:flex;align-items:center;gap:13px;margin-top:18px;padding:14px;border-radius:17px;background:rgba(89,205,255,.1)}.reading-score>span{font-size:38px}.reading-score strong,.reading-score small{display:block}.reading-legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.reading-legend span{padding:6px 9px;border-radius:9px;font-size:12px}.reading-legend .good,.reading-word-map .good{background:rgba(48,204,127,.18);color:#a7ffd0}.reading-legend .wrong,.reading-word-map .wrong{background:rgba(255,112,123,.18);color:#ffd0d5}.reading-legend .missed,.reading-word-map .missed{background:rgba(255,192,72,.16);color:#ffe4aa}.reading-word-map{font-family:Georgia,serif;font-size:19px;line-height:2;padding:18px;border-radius:16px;background:#0a1a3b}.reading-word-map span{padding:3px 4px;border-radius:5px}.reading-word-map .unknown{opacity:.7}.big-chart{min-height:190px}.v4-stats{grid-template-columns:repeat(4,1fr)}.unlock-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.unlock-grid>div{padding:12px;border-radius:13px;background:rgba(77,223,166,.1);display:flex;gap:8px;align-items:center}
+@media(max-width:850px){.skill-v4{grid-template-columns:1fr auto}.skill-v4 .progress{grid-column:1/-1}.world-scene-v4{min-height:520px}.world-grid-v4{grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(6,1fr)}.v4-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.lena-answers{grid-template-columns:1fr}.lena-answers .answer{min-height:92px}.reading-coach-status,.world-builder-bottom{align-items:stretch;flex-direction:column}.mode-grid{grid-template-columns:1fr}.tap-duel{min-height:250px}.tap-duel button{font-size:30px}.world-scene-v4{min-height:460px}.world-grid-v4{inset:20% 3% 5%;grid-template-columns:repeat(5,1fr)}.world-cell-v4 span{font-size:29px}.world-avatar{transform:scale(.48)}.skill-v4{grid-template-columns:1fr}.skill-v4 .pill{justify-self:start}.v4-stats{grid-template-columns:1fr 1fr}.unlock-grid{grid-template-columns:1fr}.curriculum-row{grid-template-columns:1fr}.simon-board button{min-height:100px}.lesson-visual{min-height:170px}.time-line{gap:8px}.time-line i{font-size:13px}.reading-word-map{font-size:16px}.top-actions{gap:4px}.top-actions .icon-btn{width:39px;height:39px}}
+@media(prefers-reduced-motion:reduce){.profile-orbit,.floating-shapes i,.cloud,.horn,.question-icon,.world-cloud,.world-spark,.world-cell-v4 span,.world-vehicle,.shop-art{animation:none!important}}
+
 </style>
 </head>
 <body>
-  <div id="ambient" aria-hidden="true"></div>
-  <div id="app"></div>
-  <div id="modal-root"></div>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script>"use strict";
+<div id="ambient" aria-hidden="true"></div>
+<div id="app"></div>
+<div id="modal-root"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
 (function(){
 const hash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
 const rng=seed=>()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
@@ -335,8 +374,403 @@ const shopItems=[
 
 window.LEVELUP_CONTENT={PROFILE_META,ACTIVITY_META,hash,rng,pick,shuffle,daniStory,zanaStory,lenaStory,makeSpelling,makeMath,makeBankQuiz,shopItems};
 })();
-</script>
-  <script>"use strict";
+
+"use strict";
+(function(){
+const C=window.LEVELUP_CONTENT;
+const {hash,rng,pick,shuffle,PROFILE_META,ACTIVITY_META,shopItems}=C;
+const unique=(arr)=>[...new Set(arr)];
+const q=(r,prompt,answer,wrong,explain,kind="begrip",extra={})=>({
+  q:prompt,prompt,answer:String(answer),options:shuffle(r,unique([String(answer),...wrong.map(String)]).slice(0,4)),explain,kind,...extra
+});
+
+// ---------- Uitgebreide profielen en leerlijnen ----------
+PROFILE_META.dani.worldZones=[
+  {id:"stadium",name:"Voetbalwereld",icon:"🏟️",sky:"day"},{id:"home",name:"Droomhuis",icon:"🏡",sky:"sunset"},
+  {id:"garage",name:"Supercar Garage",icon:"🏎️",sky:"neon"},{id:"space",name:"Ruimtestation",icon:"🚀",sky:"space"},
+  {id:"adventure",name:"Avonturenpark",icon:"🦖",sky:"jungle"},{id:"dojo",name:"Kracht & Dojo",icon:"🥋",sky:"night"}
+];
+PROFILE_META.zana.worldZones=[
+  {id:"campus",name:"Future Campus",icon:"🎓",sky:"day"},{id:"city",name:"CEO City",icon:"🌆",sky:"neon"},
+  {id:"fashion",name:"Fashion District",icon:"🛍️",sky:"sunset"},{id:"hockey",name:"Hockey Arena",icon:"🏑",sky:"day"},
+  {id:"travel",name:"World Traveller",icon:"✈️",sky:"space"},{id:"beach",name:"Beach & Pool",icon:"🏖️",sky:"sunset"}
+];
+PROFILE_META.lena.worldZones=[
+  {id:"unicorn",name:"Unicornland",icon:"🦄",sky:"rainbow"},{id:"fairy",name:"Feeënbos",icon:"🧚",sky:"night"},
+  {id:"animals",name:"Dierenstad",icon:"🐶",sky:"day"},{id:"candy",name:"Snoepkasteel",icon:"🍭",sky:"sunset"},
+  {id:"hockey",name:"Mini Hockey",icon:"🏑",sky:"day"},{id:"ocean",name:"Zeemeerminbaai",icon:"🧜‍♀️",sky:"ocean"}
+];
+PROFILE_META.dani.free=unique([...PROFILE_META.dani.free,"learn-division","learn-fractions","learn-time","wordhunt"]);
+PROFILE_META.zana.free=unique([...PROFILE_META.zana.free,"learn-algebra","learn-sources","wordhunt","strategy"]);
+PROFILE_META.lena.free=unique([...PROFILE_META.lena.free,"learn-alphabet","learn-numbers","patternpop"]);
+Object.assign(ACTIVITY_META,{
+  "learn-division":{icon:"🍕",title:"Delen leren",desc:"Verdelen met voetbalteams, pizza en blokken"},
+  "learn-fractions":{icon:"⚽",title:"Breuken leren",desc:"Delen van een veld en een pizza begrijpen"},
+  "learn-time":{icon:"⏰",title:"Klokkijken",desc:"Tijdlijnen, trainingen en digitale tijden"},
+  "learn-algebra":{icon:"🧩",title:"Algebra Lab",desc:"Onbekenden stap voor stap oplossen"},
+  "learn-sources":{icon:"🔎",title:"Bronnencheck",desc:"Feit, mening, bias en bewijs onderscheiden"},
+  "learn-alphabet":{icon:"🔤",title:"Alfabetavontuur",desc:"Letters zien, horen en samenvoegen"},
+  "learn-numbers":{icon:"🌟",title:"Getallenwereld",desc:"Tellen, hoeveelheden en kleine sommen"},
+  wordhunt:{icon:"🔎",title:"Woordjacht",desc:"Zoek woorden en kraak lettercodes"},
+  strategy:{icon:"♟️",title:"Strategie Lab",desc:"Plannen, patronen en vooruitdenken"},
+  patternpop:{icon:"🎈",title:"Patroon Pop",desc:"Tik kleuren en vormen in de goede volgorde"}
+});
+
+// ---------- Verhalenuniversum: ruim meer dan 1.000 combinaties per kind ----------
+const daniMatches=[
+  ["een zinderende bekerfinale","een verdediging die Dani dubbel dekte","de back aan de andere kant telkens ruimte liet"],
+  ["een avondwedstrijd onder enorme lichtmasten","de keeper ieder schot leek te raden","de keeper vóór ieder schot naar één hoek leunde"],
+  ["een internationaal jeugdtoernooi in Barcelona","het team door de hitte slordig werd","korte passes en rustig ademhalen de controle terugbrachten"],
+  ["een straatvoetbaltoernooi tussen hoge gebouwen","de bal vaak tegen de boarding terugkaatste","Dani de kaats juist als extra medespeler kon gebruiken"],
+  ["een wedstrijd in een kasteelstadion","een smalle gracht vlak naast de zijlijn lag","spelen door het midden veiliger en slimmer was"],
+  ["de beslissende wedstrijd om promotie","iedereen zelf wilde scoren","de vrije speler steeds aan de tweede paal opdook"],
+  ["een sneeuwfinale in de bergen","de bal veel verder doorschoof","kleine passen en zachte balcontacten meer grip gaven"],
+  ["een nachtwedstrijd tijdens een stroomstoring","alleen noodverlichting bleef branden","de witte lijnen in het zwakke licht nog goed zichtbaar waren"],
+  ["een trainingswedstrijd tegen oudere spelers","de tegenstander fysiek sterker was","snel handelen belangrijker bleek dan duwen en trekken"],
+  ["een Oranje-talentendag","Dani te graag indruk wilde maken","een eenvoudige pass vaak de beste keuze was"],
+  ["een finale op een drijvend voetbalveld","golven het veld zacht lieten bewegen","het ritme van het water voorspelbaar werd"],
+  ["een toernooi op Mars","de lage zwaartekracht iedere sprong verlengde","lage passes minder last van de zwaartekracht hadden"],
+  ["een wedstrijd tegen een team van voetbalrobots","de robots patronen razendsnel herkenden","onverwachte positiewissels hun berekening verstoorden"],
+  ["een wedstrijd in een tropisch avonturenpark","een mechanische dinosaurus na ieder fluitsignaal brulde","het gebrul als vast startsignaal gebruikt kon worden"],
+  ["een strandvoetbalduel","het zand iedere sprint zwaar maakte","eerder positie kiezen energie bespaarde"],
+  ["een zaalvoetbalfinale","de ruimte klein en het tempo hoog was","de muurpass sneller was dan een dribbel"],
+  ["een wedstrijd op het dak van een supercarfabriek","harde wind de hoge bal meenam","lage diagonale passes betrouwbaar bleven"],
+  ["een benefietwedstrijd met beroemde oud-spelers","Dani onder de indruk raakte","de oud-spelers vooral vóór ontvangst al keken"],
+  ["een geheime oefenwedstrijd voor Oranje","de coach niets tijdens het spel mocht zeggen","het team vooraf drie simpele signalen had afgesproken"],
+  ["een finale tegen zijn sterkste rivaal","de tegenstander Dani probeerde te irriteren","rust bewaren de tegenstander juist onzeker maakte"]
+];
+const daniAdventures=[
+  ["een verdwenen kampioensbeker","moddersporen naar het materiaalhok","de aanwijzingen in tijdsvolgorde leggen"],
+  ["een onbekende drone boven de training","de drone steeds dezelfde looplijn volgde","afstand houden en een volwassene waarschuwen"],
+  ["een haaienschaduw bij het trainingskamp","de schaduw groter leek door de golven","veilig observeren en feiten controleren"],
+  ["een alien die alleen afleidende vragen stelde","Dani's gedachten alle kanten op schoten","zijn focusknop gebruiken: stop, adem, volgende stap"],
+  ["een defecte Lamborghini op de testbaan","één veiligheidssensor een blinde hoek had","drie sensoren in een waaier plaatsen"],
+  ["een geheime tunnel onder het stadion","oude pijlen naar verschillende uitgangen wezen","een kaart tekenen en iedere keuze markeren"],
+  ["een karatekamp met een mysterieuze meester","kracht zonder beheersing niets oploste","rust, balans en timing trainen"],
+  ["een gestrande ruimtemodule","zuurstof en batterij beperkt waren","eerst de belangrijkste systemen herstellen"],
+  ["een uitvinderswedstrijd voor kinderen","zijn eerste prototype te ingewikkeld was","de oplossing kleiner en duidelijker maken"],
+  ["een storm die Lena's hockeystick meenam","de windrichting veranderde tussen de huizen","zoeken vanaf de laatste zekere plek"],
+  ["een mechanische T-rex die los leek te lopen","het dier op sensoren reageerde","niet wild rennen maar rustig buiten bereik blijven"],
+  ["een raadselkamer in een oud clubhuis","ieder raadsel een deel van een code gaf","taken verdelen tussen Dani, Zana en Lena"],
+  ["een onderwaterrobot met een kapotte camera","de robot nog wel afstand kon meten","werken met de informatie die nog betrouwbaar was"],
+  ["een nepbericht over een afgelaste finale","het bericht geen officiële afzender had","de clubsite en coach controleren"],
+  ["een verloren hond vlak voor de wedstrijd","de halsband een telefoonnummer bevatte","eerst veiligheid regelen en daarna pas verder gaan"]
+];
+const daniCompanions=["Zana","Lena","papa Jonathan","moeder Lana","coach Sam","zijn keeper","zijn beste teamgenoot","een jonge Oranje-speler"];
+const daniTwists=[
+  "de eerste oplossing werkte juist averechts","een onverwachte tegenstander hulp aanbood","de tijd plotseling nog maar tien minuten bedroeg",
+  "iedereen door elkaar begon te roepen","Dani merkte dat hij zelf te snel een conclusie had getrokken","Lena precies het detail zag dat de anderen misten",
+  "Zana een hockeytactiek gebruikte om het probleem anders te bekijken","de Afleidings-Alien in Dani's hoofd ineens weer verscheen",
+  "een regenbui alle zichtbare sporen uitwiste","het belangrijkste voorwerp op een heel andere plek bleek te zijn"
+];
+const focusTools=["stop – adem – kies","kijk – denk – doe","bal – ruimte – team","één vraag – één stap – één antwoord","rust – richting – actie"];
+function daniStoryV4(seed,level=3){
+  const r=rng(hash("dani-v4-"+seed)),match=pick(r,daniMatches),adv=pick(r,daniAdventures),comp=pick(r,daniCompanions),twist=pick(r,daniTwists),focus=pick(r,focusTools);
+  const code=hash(seed+"dani").toString(36).toUpperCase();
+  const title=`Dani en ${match[0]}`;
+  const paragraphs=[
+    `Missie ${code} begon op de ochtend van ${match[0]}. Dani was vroeg wakker. Hij deed een korte serie nette push-ups, at rustig zijn ontbijt en controleerde daarna zelf zijn tas. Zijn voetbalschoenen, bidon en scheenbeschermers zaten erin. “Sterk zijn is mooi,” zei moeder Lana, “maar voorbereid zijn is minstens zo sterk.” Dani glimlachte. Vandaag wilde hij niet alleen hard spelen. Hij wilde slim spelen.`,
+    `In de warming-up merkte Dani al het grootste probleem: ${match[1]}. Eerst probeerde hij dat op te lossen door harder te rennen. Dat kostte veel energie en leverde weinig op. Toen herinnerde hij zich de woorden van de coach: wie alleen naar de bal kijkt, ziet de oplossing vaak te laat. Dani keek daarom vóór iedere pass over zijn schouder en ontdekte dat ${match[2]}.`,
+    `De wedstrijd begon fel. Dani kreeg twee kansen, maar bij de eerste schoot hij te snel en bij de tweede wilde hij langs drie spelers tegelijk. De Afleidings-Alien sprong in gedachten op zijn schouder en riep: “Scoor nu! Kijk naar de tribune! Denk aan een Ferrari! Hoeveel haaien passen in een zwembad?” Dani voelde hoe zijn aandacht versprong. Hij drukte met zijn duim tegen zijn wijsvinger en zei in zichzelf: “${focus}.”`,
+    `Vanaf dat moment veranderde zijn spel. Hij liet de bal soms bewust naar een teamgenoot gaan, liep daarna zonder bal weg uit de drukte en verscheen op een plek waar niemand hem verwachtte. ${comp} zag het gebeuren en gaf hem een teken. Niet iedere goede actie stond op het scorebord, maar iedere slimme loopactie maakte het team gevaarlijker.`,
+    `Tijdens de rust ontstond bovendien een tweede probleem: ${adv[0]}. De belangrijkste aanwijzing was dat ${adv[1]}. Sommige kinderen wilden meteen overal tegelijk zoeken. Dani wilde eerst ook wegrennen, maar hij stopte. Samen met ${comp} besloot hij ${adv[2]}. Daardoor verloren ze geen tijd aan wilde ideeën die nergens op gebaseerd waren.`,
+    `Halverwege het onderzoek gebeurde iets onverwachts: ${twist}. Dani voelde irritatie opkomen. Hij had zin om te zeggen dat het niet eerlijk was. In plaats daarvan beschreef hij hardop wat hij zeker wist, wat hij alleen vermoedde en wat nog gecontroleerd moest worden. Dat verschil bleek belangrijk. Een vermoeden kan een goede richting geven, maar het is nog geen bewijs.`,
+    `Ze losten het probleem op tijd op en keerden terug naar het veld. In de laatste minuten stond de stand gelijk. Dani zag opnieuw dezelfde ruimte die hij in de warming-up had ontdekt. Hij maakte eerst een korte beweging naar de bal, trok twee verdedigers mee en draaide toen diep. De pass kwam precies goed. Dani kon zelf schieten, maar zag een teamgenoot nog vrijer staan. Hij legde de bal breed: doelpunt.`,
+    `Na afloop kreeg Dani niet alleen complimenten voor de assist. De coach prees vooral zijn keuzes. “Je was vandaag sterk omdat je bleef kijken wanneer het spannend werd,” zei hij. Thuis tekende Dani een nieuw idee voor een polsband die spelers met één zachte trilling herinnert om om zich heen te kijken. Misschien zou hij er ooit miljonair mee worden. Maar eerst schreef hij bovenaan zijn ontwerp: goede uitvindingen beginnen met een echt probleem, niet met een dure auto.`
+  ];
+  const story=paragraphs.join("\n\n");
+  const questions=[
+    q(r,"Waarom hielp harder rennen Dani aanvankelijk niet?","Het kostte energie zonder het tactische probleem op te lossen.",["Hij had zijn schoenen niet aan.","De wedstrijd was al afgelopen.","De coach verbood hem te rennen."],"Het probleem ging over ruimte en keuzes, niet over een gebrek aan snelheid."),
+    q(r,"Welke informatie ontdekte Dani door vóór ontvangst om zich heen te kijken?",match[2],[match[1],adv[0],twist],"De tekst noemt dit als de tactische aanwijzing die zijn aanpak veranderde."),
+    q(r,"Wat stelt de Afleidings-Alien vooral voor?","Gedachten en prikkels die Dani van zijn taak wegtrekken.",["Een echte mascotte van de tegenstander.","Een robot van de scheidsrechter.","Een nieuwe speler van Oranje."],"De alien verschijnt in Dani's gedachten wanneer zijn aandacht verspringt."),
+    q(r,"Waarom beschreef Dani wat hij zeker wist en wat hij alleen vermoedde?","Om bewijs te scheiden van een mogelijke verklaring.",["Om het verhaal langer te maken.","Omdat hij alle antwoorden al kende.","Om geen hulp te hoeven vragen."],"Een vermoeden kan richting geven, maar is nog geen bewezen feit."),
+    q(r,"Welke eigenschap laat Dani zien wanneer hij de bal breed legt?","Teamgericht beslissen.",["Alleen willen opvallen.","Bang zijn om te schieten.","Niet weten waar het doel staat."],"Hij kiest de kans met de grootste kans op succes voor het team."),
+    q(r,"Welke zin vat het verhaal het best samen?","Sterke prestaties ontstaan door aandacht, bewijs en slimme samenwerking.",["Wie het hardst rent, wint altijd.","Een uitvinding is alleen goed wanneer zij duur is.","Afleiding verdwijnt vanzelf wanneer je haar negeert."],"Voetbal, onderzoek en uitvinden draaien allemaal om gericht waarnemen en kiezen."),
+    q(r,"Waarom is de laatste zin over een 'echt probleem' belangrijk?","Dani leert dat een uitvinding eerst nuttig moet zijn.",["Hij besluit nooit een sportauto te kopen.","Hij wil zijn tekening weggooien.","Hij vindt techniek niet meer interessant."],"De waarde van een ontwerp begint bij het probleem dat het oplost."),
+    q(r,"Welke aanpak kan Dani de volgende keer gebruiken wanneer hij afdwaalt?",focus,["sneller klikken zonder lezen","de opdracht overslaan","wachten tot iemand het antwoord zegt"],"De korte focuscode maakt de volgende stap concreet.","focus")
+  ];
+  return{title,genre:"Voetbalavontuur · spanning · slim handelen",story,questions,estimatedWords:story.split(/\s+/).length,storyId:`D-${code}`,level};
+}
+
+const zanaCases=[
+  {title:"de verdwenen uitnodiging",setting:"een exclusief schoolgala",spark:"een digitale uitnodiging was aangepast en screenshots rondgingen",stakes:"vriendschappen, reputaties en de veiligheid van leerlingen",evidence:"de tijdstempels niet overeenkwamen met het verhaal dat online werd verteld",bias:"iedereen vooral berichten deelde die bij zijn eigen vriendengroep pasten",decision:"de bronbestanden veiligstellen en eerst afzonderlijk met betrokkenen spreken",theme:"sociale druk en digitale sporen"},
+  {title:"de selectie achter gesloten deuren",setting:"een nationaal hockeytoernooi",spark:"een verrassende speelster buiten de selectie viel",stakes:"sportieve kansen, teamvertrouwen en eerlijke beoordeling",evidence:"de gebruikte statistiek acties zonder bal nauwelijks meetelde",bias:"de trainer vooral recente wedstrijden herinnerde",decision:"data, video, observaties en een transparante herkansing combineren",theme:"meetbaarheid en rechtvaardigheid"},
+  {title:"het geheim van de populaire huidcrème",setting:"een jonge beauty-start-up",spark:"een influencer beweerde dat een nieuw product wonderen deed",stakes:"gezondheid, vertrouwen en de toekomst van het bedrijf",evidence:"de advertentie kleine letters en geselecteerde voor-en-nafoto's gebruikte",bias:"de oprichters verkoopgroei belangrijker vonden dan onzekerheid over claims",decision:"claims intrekken, ingrediënten laten testen en openlijk uitleg geven",theme:"marketing, wetenschap en verantwoordelijkheid"},
+  {title:"de nachtelijke boodschap uit Londen",setting:"een internationale scholenuitwisseling",spark:"Zana een anoniem bericht kreeg over mogelijke fraude bij een beursselectie",stakes:"studiekansen, privacy en de reputatie van onschuldige kandidaten",evidence:"het bericht één controleerbaar detail bevatte maar verder vooral aannames",bias:"Zana de boodschap graag wilde geloven omdat zij al twijfels had",decision:"een vertrouwelijke verificatieroute gebruiken zonder namen online te zetten",theme:"broncontrole en zorgvuldigheid"},
+  {title:"de juwelenpop-up met een verborgen rekening",setting:"een tijdelijke sieradenwinkel",spark:"de verkoop fantastisch leek terwijl er toch geld verdween",stakes:"de toekomst van het team, leveranciers en klanten",evidence:"retouren, betaaltermijnen en voorraad niet in de snelle winstgrafiek stonden",bias:"de bedenker alleen omzet liet zien en kosten later wilde bespreken",decision:"een kasstroomoverzicht maken en de lancering gefaseerd voortzetten",theme:"ondernemerschap en financiële realiteit"},
+  {title:"het zwembadfeest dat uit de hand dreigde te lopen",setting:"een vakantiehotel aan de Adriatische kust",spark:"een privéfilmpje zonder toestemming werd gedeeld",stakes:"vertrouwen, privacy en groepsdruk",evidence:"meerdere doorgestuurde versies verschillende bijschriften hadden",bias:"populariteit werd aangezien voor toestemming",decision:"verspreiding stoppen, de maker steunen en volwassenen gericht inschakelen",theme:"grenzen, loyaliteit en online gedrag"},
+  {title:"de verkiezing voor schoolvoorzitter",setting:"een ambitieuze scholencampus",spark:"een kandidaat plotseling werd beschuldigd van plagiaat",stakes:"democratisch vertrouwen, reputatie en een eerlijke verkiezing",evidence:"delen van de speech overeenkwamen maar de bron eerder samen met een team was geschreven",bias:"tegenstanders alleen de meest verdachte zinnen deelden",decision:"auteurschap reconstrueren en duidelijke campagneregels invoeren",theme:"leiderschap en procedurele eerlijkheid"},
+  {title:"de geheime deal in CEO City",setting:"een simulatie van een internationale onderneming",spark:"een overname fantastisch leek maar een bijlage ontbrak",stakes:"banen, schulden en langetermijngroei",evidence:"de winstverwachting steunde op besparingen die nog niet waren uitgewerkt",bias:"de verkoper het optimistische scenario als basisscenario presenteerde",decision:"de deal uitstellen en drie onafhankelijke scenario's laten toetsen",theme:"macht, risico en onderhandeling"},
+  {title:"de crush, het gerucht en de verkeerde conclusie",setting:"een drukke brugklasoriëntatie",spark:"een privégesprek werd verkeerd samengevat en doorverteld",stakes:"vriendschap, gevoelens en iemands reputatie",evidence:"niemand het volledige gesprek had gehoord",bias:"mensen lege plekken invulden met wat zij spannend vonden",decision:"rechtstreeks en rustig met de betrokken persoon spreken",theme:"relaties, respect en interpretatie"},
+  {title:"de verdwenen ontwerpmap",setting:"een fashion challenge in Parijs",spark:"Zana's teamontwerp vlak voor de presentatie online verscheen",stakes:"creatief eigendom, samenwerking en de finaleplaats",evidence:"het bestand vanaf een gedeeld account was geopend",bias:"de groep de nieuwkomer direct verdacht",decision:"toegangslogs controleren en beschuldigingen uitstellen",theme:"creativiteit, bewijs en groepsdynamiek"},
+  {title:"de campus onder water",setting:"een toekomstige universiteit in Oxford",spark:"een extreem zware regenbui het terrein bedreigde",stakes:"veiligheid, kosten en klimaatbestendigheid",evidence:"een oud model zeldzame buien onderschatte",bias:"iedere afdeling vooral haar eigen budget beschermde",decision:"noodmaatregelen nemen en daarna het volledige watersysteem herontwerpen",theme:"wetenschap, bestuur en klimaat"},
+  {title:"de mysterieuze blessuregolf",setting:"een nationale hockeyacademie",spark:"meerdere speelsters tegelijk klachten kregen",stakes:"gezondheid, selectie en prestatiedruk",evidence:"trainingsbelasting was verhoogd terwijl slaap en herstel daalden",bias:"korte prestaties zwaarder telden dan duurzame ontwikkeling",decision:"belasting verlagen en individuele hersteldata meenemen",theme:"topsport en welzijn"},
+  {title:"het virale filmpje uit New York",setting:"een jongerenredactie",spark:"een spectaculair filmpje miljoenen keren werd bekeken",stakes:"waarheid, snelheid en mogelijke schade aan betrokkenen",evidence:"locatie, datum en maker niet onafhankelijk bevestigd waren",bias:"redacteuren bang waren om als laatste te publiceren",decision:"publicatie uitstellen tot twee bronnen het materiaal bevestigden",theme:"journalistiek en verificatie"},
+  {title:"de beurs met een onzichtbare prijs",setting:"een Amerikaanse universiteitsbeurs",spark:"de meest prestigieuze opleiding financieel aantrekkelijker leek dan zij was",stakes:"studiedroom, schuld en welzijn",evidence:"woonlasten, verzekeringen en wisselkoersrisico niet in de brochure stonden",bias:"ranglijsten vooral reputatie maten",decision:"totale kosten en dagelijkse studentervaring vergelijken",theme:"ambitie en realistische planning"},
+  {title:"de AI die te overtuigend schreef",setting:"een debatwedstrijd",spark:"een team een foutloos klinkend dossier presenteerde",stakes:"eerlijkheid, leren en betrouwbaarheid",evidence:"twee bronverwijzingen niet bestonden",bias:"mooie formuleringen als bewijs werden gezien",decision:"alle claims terugbrengen naar controleerbare bronnen",theme:"technologie en kritisch denken"},
+  {title:"de vakantieclub met twee gezichten",setting:"een luxe resort",spark:"personeel online een heel ander verhaal vertelde dan de brochure",stakes:"arbeidsomstandigheden, toerisme en reputatie",evidence:"getuigenissen overeenkwamen maar anoniem waren",bias:"zowel bedrijf als critici extreme voorbeelden selecteerden",decision:"meerdere onafhankelijke interviews en documenten combineren",theme:"ethiek en bronkwaliteit"},
+  {title:"de sponsor die het team wilde sturen",setting:"een groot hockeyevenement",spark:"een sponsor invloed vroeg op de selectie",stakes:"sportieve integriteit, geld en teamvertrouwen",evidence:"de afspraak vaag in een bijlage stond",bias:"bestuurders financiële nood als reden gebruikten om risico's kleiner te maken",decision:"de voorwaarde weigeren en alternatieve financiering zoeken",theme:"integriteit en macht"},
+  {title:"de verdwenen medische gegevens",setting:"een health-tech wedstrijd",spark:"testgegevens van deelnemers niet volledig vindbaar waren",stakes:"privacy, onderzoekskwaliteit en vertrouwen",evidence:"back-ups bestonden maar toegangsrechten onduidelijk waren",bias:"de ontwikkelaar vooral wilde bewijzen dat het product werkte",decision:"de test pauzeren en eerst databeheer herstellen",theme:"privacy en onderzoek"},
+  {title:"de vriendengroep met een geheime regel",setting:"een zomerkamp",spark:"nieuwe deelnemers systematisch buiten plannen vielen",stakes:"erbij horen, traditie en verantwoordelijkheid",evidence:"niemand de regel officieel had afgesproken",bias:"oude deelnemers dachten dat 'het altijd zo ging' voldoende reden was",decision:"de ongeschreven regel bespreekbaar maken en activiteiten anders organiseren",theme:"sociale normen en leiderschap"},
+  {title:"de raketlancering met een haastige deadline",setting:"een internationaal science-team",spark:"een cruciale test werd overgeslagen",stakes:"veiligheid, reputatie en miljoenen aan investeringen",evidence:"het defect zeldzaam maar mogelijk ernstig was",bias:"de geplande lanceringsdatum als onveranderlijk werd behandeld",decision:"de lancering uitstellen en transparant communiceren",theme:"risico, wetenschap en moed"}
+];
+const zanaRoles=["teamcaptain","junior-directeur","onderzoeker","kritische verslaggever","onderhandelaar","projectleider","vertrouwenspersoon","data-analist"];
+const zanaComplications=[
+  "een vriendin haar in vertrouwen iets vertelde dat niet zomaar gedeeld mocht worden","de deadline onverwacht naar voren werd gehaald",
+  "een nieuwe dataset de voorlopige conclusie onderuit haalde","een populaire leerling de discussie persoonlijk maakte",
+  "de belangrijkste getuige zijn eerdere verklaring nuanceerde","een journalist al publiceerde voordat het onderzoek klaar was",
+  "Zana ontdekte dat haar eigen voorkeur haar beoordeling beïnvloedde","een volwassene snel wilde beslissen om gezichtsverlies te voorkomen",
+  "de groep in twee kampen uiteenviel","een anoniem account nieuwe maar onvolledige informatie plaatste"
+];
+function zanaStoryV4(seed,level=5){
+  const r=rng(hash("zana-v4-"+seed)),c=pick(r,zanaCases),role=pick(r,zanaRoles),comp=pick(r,zanaComplications),code=hash(seed+"zana").toString(36).toUpperCase();
+  const title=`Zana en ${c.title}`;
+  const advanced=level>=7;
+  const paras=[
+    `Het dossier met code ${code} begon in ${c.setting}. Zana was daar als ${role}. Op het eerste gezicht leek de situatie vooral spannend: ${c.spark}. Binnen een uur had bijna iedereen een mening. Sommige mensen spraken alsof hun versie van het verhaal al vaststond. Zana voelde dezelfde neiging. Ze wilde snel begrijpen wie gelijk had, maar wist dat een snelle conclusie vaak vooral prettig voelt omdat onzekerheid ongemakkelijk is.`,
+    `De gevolgen waren groter dan een gewone schoolruzie of zakelijke fout. Op het spel stonden ${c.stakes}. Zana schreef daarom drie aparte vragen op: wat is er feitelijk gebeurd, welke uitleg past het best bij de feiten en welke actie is nu verantwoord? Die vragen lijken op elkaar, maar zijn niet hetzelfde. Een feit kan vaststaan terwijl de oorzaak nog onzeker is. En zelfs wanneer de oorzaak waarschijnlijk is, moet een maatregel proportioneel blijven.`,
+    `De eerste belangrijke aanwijzing was dat ${c.evidence}. Dit bewijs was relevant, maar niet beslissend. Zana controleerde wie het had verzameld, wanneer dat was gebeurd en of het materiaal volledig was. Ze vroeg ook welke gegevens ontbraken. Afwezige informatie bewijst niets, maar kan wel laten zien waarom een stellige conclusie te vroeg komt.`,
+    `Daarna onderzocht ze de belangen. Niet iedereen loog; toch presenteerde bijna iedereen het verhaal vanuit een eigen positie. De duidelijkste vertekening was dat ${c.bias}. Zana noemde dit geen bewijs van kwade bedoelingen. Bias kan bewust zijn, maar ontstaat ook doordat mensen vooral zien wat aansluit bij hun verwachtingen, loyaliteit of angst.`,
+    `Toen ${comp}, werd de druk groter. Een deel van de groep wilde namen openbaar maken. Een ander deel wilde alles stilhouden. Zana wees erop dat beide reacties schade konden veroorzaken. Openbaarmaking kon onschuldige mensen raken; volledige stilte kon een echt probleem laten voortbestaan. Ze stelde een tussenroute voor: informatie veiligstellen, toegang beperken en concrete claims onafhankelijk laten controleren.`,
+    `Zana formuleerde vervolgens het sterkste argument tégen haar eigen aanpak. Misschien, zo zei ze, maakte haar zorgvuldigheid de groep te traag. Wanneer veiligheid direct in gevaar is, moet je soms handelen voordat ieder detail bekend is. Ze voegde daarom een drempel toe: bij acuut risico eerst beschermen, bij reputatieschade eerst verifiëren. Zo werd twijfel geen excuus om niets te doen, maar informatie voor de keuze van de maatregel.`,
+    `Het gesprek verschoof van “wie wint?” naar “welke procedure is eerlijk?”. Zana stelde voor om rollen te scheiden. De persoon die bewijs verzamelde, mocht niet alleen beslissen over de uitkomst. Betrokkenen kregen gelegenheid om feitelijke fouten te corrigeren, maar konden het onderzoek niet blokkeren. Ook moest na afloop worden uitgelegd welke informatie doorslaggevend was en welke onzekerheden bleven bestaan.`,
+    `Op basis daarvan koos de groep voor deze aanpak: ${c.decision}. Niet iedereen was tevreden. Toch was het besluit sterker dan de eerste emotionele reacties, omdat het controleerbaar, omkeerbaar waar mogelijk en gericht op het echte risico was. Zana merkte dat leiderschap soms juist betekent dat je een minder spectaculaire oplossing verdedigt tegen mensen die onmiddellijke zekerheid beloven.`,
+    `Later die avond ontving Zana een bericht van iemand die eerst boos op haar was geweest. Die persoon gaf toe dat de situatie ingewikkelder bleek dan online werd voorgesteld. Zana antwoordde niet triomfantelijk. Ze schreef dat van mening veranderen geen zwakte is wanneer nieuwe informatie daar reden toe geeft. Zelf noteerde zij ook wat ze eerder verkeerd had ingeschat.`,
+    `In haar eindverslag koppelde ze de gebeurtenis aan ${c.theme}. Ze maakte onderscheid tussen bewijssterkte, waarschijnlijkheid en morele verantwoordelijkheid. ${advanced?"Daarnaast beschreef ze hoe selectiebias, tijdsdruk en ongelijke machtsposities de uitkomst konden beïnvloeden. Ze voegde een gevoeligheidsanalyse toe: zou het besluit veranderen wanneer één belangrijke aanname onjuist bleek?":"Ze beschreef welke bron het meest betrouwbaar was, welke mening het gesprek beïnvloedde en welke stap later opnieuw gecontroleerd moest worden."}`,
+    `Zana besteedde ook aandacht aan de menselijke kant. In dossiers lijken mensen soms alleen namen, functies of statistieken, terwijl een besluit hun dagelijkse leven kan veranderen. Ze vroeg daarom niet alleen wat juridisch of financieel mogelijk was, maar ook wie het minst gemakkelijk voor zichzelf kon opkomen. Dat betekende niet dat gevoel bewijs verving. Het betekende dat de verdeling van risico en stem onderdeel werd van de analyse.`,
+    `Voor de presentatie bouwde ze een beslismatrix met vier scenario’s: niets doen, direct hard ingrijpen, beperkt ingrijpen met extra onderzoek, en een gefaseerde oplossing met vaste evaluatiemomenten. Bij ieder scenario noteerde ze de verwachte winst, mogelijke schade, omkeerbaarheid en informatie die nog ontbrak. Toen één jurylid vroeg welk scenario “gewoon het beste” was, antwoordde Zana dat de keuze afhing van de waarde die men het zwaarst liet wegen. Transparantie betekende juist zichtbaar maken waar die normatieve keuze zat.`,
+    `De volgende ochtend ging Zana trainen. Op het hockeyveld werkte hetzelfde principe verrassend goed. Een speelster ziet nooit het hele veld tegelijk, maar kan wel vóór ontvangst scannen, informatie delen en haar beslissing aanpassen. Zana besefte dat haar droom om later een groot bedrijf te leiden niet alleen draait om zelfvertrouwen. Het vraagt ook intellectuele eerlijkheid: sterk genoeg zijn om te beslissen, en veilig genoeg om te erkennen wanneer het besluit moet veranderen.`
+  ];
+  const story=paras.join("\n\n");
+  const questions=[
+    q(r,"Waarom splitst Zana de situatie op in feiten, verklaring en actie?","Omdat die drie vragen verschillende soorten bewijs en afweging vragen.",["Omdat zij drie presentaties wil geven.","Omdat een feit altijd automatisch de oorzaak bewijst.","Omdat actie nooit van feiten afhankelijk is."],"De tekst benadrukt dat vaststellen, verklaren en handelen niet hetzelfde zijn."),
+    q(r,"Welke beperking heeft de eerste aanwijzing?","Zij is relevant, maar zonder context en volledigheidscontrole niet beslissend.",["Zij heeft helemaal geen verband met de zaak.","Zij is alleen bruikbaar wanneer zij online populair is.","Zij bewijst direct wie schuld heeft."],"Zana controleert herkomst, tijdstip, volledigheid en ontbrekende informatie."),
+    q(r,"Hoe gebruikt de tekst het begrip bias?","Als mogelijke vertekening die ook zonder bewuste leugen kan ontstaan.",["Als synoniem voor bewezen fraude.","Als reden om alle informatie te negeren.","Als een meeteenheid voor winst."],"Bias kan voortkomen uit verwachtingen, loyaliteit of belangen."),
+    q(r,"Waarom formuleert Zana een argument tegen haar eigen aanpak?","Om te testen waar zorgvuldigheid kan omslaan in schadelijke vertraging.",["Om haar eigen plan expres te laten mislukken.","Omdat zij geen voorkeur heeft.","Om de anderen niet te hoeven horen."],"Een sterk tegenargument maakt zichtbaar welke grens of waarborg nodig is."),
+    q(r,"Welke waarde staat centraal in de scheiding van rollen?","Procedurele onafhankelijkheid.",["Populariteit.","Geheimhouding zonder controle.","Snelheid boven alles."],"Wie bewijs verzamelt, hoort niet als enige de uitkomst te bepalen."),
+    q(r,"Wat maakt de uiteindelijke aanpak sterker dan de eerste reacties?","Zij is controleerbaar, proportioneel en waar mogelijk omkeerbaar.",["Zij maakt iedereen direct blij.","Zij belooft volledige zekerheid.","Zij gebruikt de meeste moeilijke woorden."],"De kwaliteit zit in bewijs, procedure en passende maatregelen."),
+    q(r,"Welke functie heeft de hockeyvergelijking in de laatste alinea?","Zij verbindt besluitvorming met scannen, communiceren en bijsturen.",["Zij introduceert een nieuw losstaand hoofdonderwerp.","Zij bewijst dat hockey belangrijker is dan onderzoek.","Zij laat zien dat beslissingen altijd snel moeten zijn."],"De vergelijking brengt de abstracte les terug naar een herkenbare vaardigheid."),
+    q(r,"Welke conclusie past het best bij de houding van Zana?","Goed leiderschap combineert besluitvaardigheid met bereidheid om te herzien.",["Een leider mag nooit twijfelen.","Een leider moet vooral de populairste mening kiezen.","Een leider laat moeilijke beslissingen altijd aan anderen over."],"De tekst presenteert herziening op basis van nieuwe informatie als kracht."),
+    q(r,"Welke aanvullende bron zou de zaak het meest versterken?","Een onafhankelijke bron die de kerngegevens en tijdlijn kan verifiëren.",["Een anoniem account dat dezelfde mening herhaalt.","Een reclamevideo van een belanghebbende.","Een peiling onder mensen die het dossier niet hebben gelezen."],"Onafhankelijke verificatie vermindert afhankelijkheid van één perspectief."),
+    q(r,"Wat betekent 'proportioneel' in deze context?","Dat de maatregel past bij de ernst en zekerheid van het risico.",["Dat iedereen precies dezelfde mening moet hebben.","Dat de langste tekst automatisch het beste is.","Dat iedere fout dezelfde maximale straf krijgt."],"Een passende reactie houdt rekening met ernst, bewijs en mogelijke schade."),
+    q(r,"Wat is de hoofdgedachte van het verhaal?","Spannende situaties vragen om bewijs, eerlijke procedures en moed om bij te sturen.",["Online populariteit is de beste bron van waarheid.","Een snelle beslissing is altijd beter dan een zorgvuldige.","Persoonlijke relaties mogen nooit een rol spelen in keuzes."],"Dit verbindt de sociale, sportieve en bestuurlijke lagen van de tekst.")
+  ];
+  return{title,genre:"Young-adult mystery · school · ambitie · ethiek",story,questions,estimatedWords:story.split(/\s+/).length,storyId:`Z-${code}`,level};
+}
+
+const lenaWorlds=[
+  ["Unicornland","een glinsterende regenboogbrug","🦄","een verdwaalde ster","de kleuren op volgorde leggen"],
+  ["het Feeënbos","een boom met zilveren blaadjes","🧚","een fee haar belletje kwijt was","luisteren waar het zachte geluid vandaan kwam"],
+  ["Dierenstad","een plein vol pratende dieren","🐶","een puppy zijn rode bal zocht","de pootafdrukken volgen"],
+  ["Snoepkasteel","een kasteel van koek en fruit","🍭","de deur alleen met een klankcode openging","woorden zoeken die hetzelfde begonnen"],
+  ["Zeemeerminbaai","een blauwe zee met lichtgevende vissen","🧜‍♀️","een schelp niet meer zong","rustig luisteren naar hoge en lage klanken"],
+  ["Mini Hockeyland","een veld met kleine gekleurde goals","🏑","alle sticks door elkaar lagen","sorteren op kleur en lengte"],
+  ["Wolkenwereld","een dorp boven de wolken","☁️","een regenboog drie kleuren miste","de juiste kleuren terugvinden"],
+  ["Dino-eiland","een vriendelijk eiland met babydino's","🦕","een ei uit het nest was gerold","tellen hoeveel stappen terug nodig waren"],
+  ["Maanpaleis","een paleis met sterrenlampjes","🌙","de sterren in een patroon knipperden","het patroon afmaken"],
+  ["Knuffelstad","een dorp waar knuffels konden praten","🧸","de kleinste beer niet durfde mee te doen","hem stap voor stap helpen"],
+  ["Bloemenland","een tuin met zingende bloemen","🌸","een bloem haar naam vergat","de eerste letter herkennen"],
+  ["Treinenland","een station met regenboogtreinen","🚂","drie wagonnetjes verkeerd stonden","de goede volgorde maken"],
+  ["IJsprinsessenland","een glanzend bevroren meer","❄️","de ijskristallen verschillende vormen hadden","de vorm zonder hoeken zoeken"],
+  ["Hondenhotel","een hotel met vrolijke puppy's","🐕","iedere hond een eigen mand nodig had","evenveel manden als honden tellen"],
+  ["Sterrenkermis","een kermis in de nacht","🎠","de lampjes steeds om en om aangingen","voorspellen welk lampje volgde"]
+];
+function lenaStoryV4(seed,level=1){
+  const r=rng(hash("lena-v4-"+seed)),w=pick(r,lenaWorlds),helper=pick(r,["Dani","Zana","mama Lana","papa Jonathan","een kleine draak","een lachende unicorn"]),code=hash(seed+"lena").toString(36).toUpperCase().padStart(7,"0");
+  const title=`Lena in ${w[0]}`;
+  const story=`Lena stapte door een deur met code ${code}. Daar zag ze ${w[1]}. Naast haar liep ${w[2]}. “Kom,” zei ${helper}. “We hebben een vriendelijke missie.”\n\n${w[3]}. Lena keek goed. Ze wilde meteen rennen, maar eerst luisterde ze naar de uitleg. Daarna besloot ze ${w[4]}.\n\nOnderweg telde Lena langzaam mee. Eén, twee, drie. Ze wees ieder ding aan dat ze telde. Toen ze een foutje maakte, begon ze gewoon opnieuw. Dat was niet erg. Opnieuw proberen maakte haar juist slimmer.\n\nSamen vonden ze de oplossing. Iedereen klapte en ${w[2]} maakte een heel gek gezicht. Lena moest lachen. Ze kreeg een fonkelende ster en zei: “Ik keek, ik luisterde en ik probeerde het nog een keer!”`;
+  const questions=[
+    q(r,"Waar was Lena?",w[0],["in de supermarkt","op een snelweg","in een donker kantoor"],`Lena stapte binnen in ${w[0]}.`,"luisteren",{audio:true,icon:"🌈"}),
+    q(r,"Wie ging met Lena mee?",helper,["niemand","een boze piraat","een onbekende robot"],`${helper} hielp Lena tijdens de missie.`,"luisteren",{audio:true,icon:w[2]}),
+    q(r,"Wat deed Lena toen ze een foutje maakte?","Ze begon rustig opnieuw.",["Ze stopte voor altijd.","Ze gooide alles weg.","Ze werd boos op iedereen."],"Opnieuw proberen is precies wat leren sterker maakt.","sociaal",{audio:true,icon:"🔁"}),
+    q(r,"Welke drie dingen hielpen Lena?","Kijken, luisteren en opnieuw proberen.",["Rennen, roepen en raden.","Slapen, wachten en vergeten.","Alleen heel snel klikken."],"De laatste zin noemt de drie helpende stappen.","begrip",{audio:true,icon:"⭐"})
+  ];
+  return{title,genre:"Magisch luisterverhaal",story,questions,estimatedWords:story.split(/\s+/).length,storyId:`L-${code}`,level};
+}
+
+C.daniStory=daniStoryV4;C.zanaStory=zanaStoryV4;C.lenaStory=lenaStoryV4;
+
+// ---------- Heldere spelling en taal ----------
+const daniSpellingV4=[
+  ["Dani speelt morgen een belangrijke ___. Welk woord maakt de zin goed?","wedstrijd",["wedstrijt","wedstrijd","wedstreid","wedstrijt"],"Wedstrijd eindigt op d en bevat ij."],
+  ["De keeper ___ de bal stevig vast.","vangt",["vangt","vangd","vankt","vang"],"Bij hij/de keeper komt bij de stam vang een t: vangt."],
+  ["Welke zin is helemaal goed geschreven?","Dani kijkt op, geeft een pass en sprint door.",["dani kijkt op geeft een pas en sprint door","Dani kijkt op, geeft een pass en sprint door.","Dani kijkt op geeft een pass, en sprint door","Dani kijkt op, geeft een pas en sprint door"],"Een zin begint met een hoofdletter, krijgt passende komma's en eindigt met een punt."],
+  ["De trainer legt de oefening ___. Kies het juiste woord.","duidelijk",["duideluk","duidelijk","duidelijkk","duidelijck"],"Duidelijk schrijf je met ij en één k."],
+  ["Welke spelling past? De spelers waren meteen ___.","enthousiast",["entousiast","enthousiast","enthousiastt","antousiast"],"Enthousiast begint met enth- en eindigt op -iast."],
+  ["Dani heeft twee snelle ___. Kies het juiste meervoud.","auto's",["autos","auto's","auto,s","autoos"],"Na de lange klinker o gebruik je een apostrof: auto's."],
+  ["Welke samenstelling is juist?","voetbalstadion",["voetbal stadion","voetbalstadion","voetballstadion","voetbal-stadion"],"Samenstellingen schrijf je meestal aan elkaar."],
+  ["Gisteren ___ Dani drie strafschoppen.","scoorde",["scoorde","scoorden","skoorde","scoorte"],"De verleden tijd van scoren is scoorde."],
+  ["De uitvinding werkte ___. Welk woord past en is goed gespeld?","onmiddellijk",["onmiddelijk","onmiddellijk","onmidelijk","onmiddelijkk"],"Onmiddellijk heeft dubbel d en dubbel l."],
+  ["Welke zin heeft een vraagteken nodig?","Waar ligt mijn voetbal?",["Waar ligt mijn voetbal?","Mijn voetbal ligt hier.","Wat een hard schot!","Dani pakt de bal."],"Een directe vraag eindigt met een vraagteken."],
+  ["De scheidsrechter ___ voor een vrije trap.","fluit",["fluit","fluyt","fluitd","fluitte"],"In de tegenwoordige tijd is het: de scheidsrechter fluit."],
+  ["Kies het woord dat logisch én goed gespeld is: De donkere wolken maakten het veld ___.","gevaarlijk",["gevaarlijk","gevaarelijk","gevaarlek","gevaarleik"],"Gevaarlijk schrijf je met -lijk."],
+  ["Welke zin gebruikt 'word' of 'wordt' goed?","Dani wordt steeds sterker.",["Dani word steeds sterker.","Dani wordt steeds sterker.","Wordt jij ook sterker?","Dani wort steeds sterker."],"Bij Dani/hij komt er een t achter de stam: wordt."],
+  ["Na de wedstrijd ___ het team de kleedkamer op.","ruimde",["ruimde","ruimden","ruimtte","ruimdeh"],"Het onderwerp is enkelvoud: het team ruimde op."],
+  ["Welke vorm is juist? Dani heeft de bal goed ___.","aangenomen",["aangeneemt","aangenomen","aan genomen","aangenoomen"],"Het voltooid deelwoord van aannemen is aangenomen."]
+];
+const zanaSpellingV4=[
+  ["De commissie heeft het voorstel zorgvuldig ___.","geanalyseerd",["geanalyseert","geanalyseerd","geanaliseerd","geanalyzeerd"],"Het voltooid deelwoord is geanalyseerd en eindigt op d."],
+  ["Welke zin is grammaticaal en stilistisch het sterkst?","Hoewel de cijfers overtuigend lijken, blijft de steekproef te klein voor een algemene conclusie.",["Hoewel de cijfers overtuigend lijken blijft, de steekproef klein.","Hoewel de cijfers overtuigend lijken, blijft de steekproef te klein voor een algemene conclusie.","De cijfers zijn overtuigend maar de steekproef dus niet algemeen.","Hoewel cijfers, is de steekproef te klein en overtuigend."],"Deze zin gebruikt een correcte bijzin en benoemt de beperking precies."],
+  ["De directie ___ het besluit nadat nieuwe informatie verscheen.","herzag",["herziede","herzag","herziende","herzagt"],"De verleden tijd van herzien is herzag."],
+  ["De uitkomsten zijn onafhankelijk ___.","geverifieerd",["geverifiëerd","geverifieerd","geverifiseerd","geverifieert"],"Geverifieerd schrijf je zonder trema en eindigt op d."],
+  ["Welke zin gebruikt de verwijswoorden correct?","Het bedrijf wijzigde zijn strategie omdat die niet langer werkte.",["Het bedrijf wijzigde haar strategie omdat hij niet werkte.","Het bedrijf wijzigde zijn strategie omdat die niet langer werkte.","Het bedrijf wijzigde hun strategie omdat deze niet werkte.","Het bedrijf wijzigde zijn strategie omdat het niet werkte."],"Bedrijf is een het-woord; strategie is een de-woord."],
+  ["Het plan is kostbaar; ___ kan het op lange termijn veel besparen.","desondanks",["desondanks","daardoor","omdat","eveneens"],"Desondanks geeft een tegenstelling aan."],
+  ["Welke schrijfwijze is correct?","De ideeën zijn financieel onderbouwd.",["De ideëen zijn financieel onderbouwt.","De ideeën zijn financieel onderbouwd.","De ideeën zijn financiëel onderbouwd.","De ideeën zijn financieel onderbouwt."],"Ideeën krijgt een trema; onderbouwd eindigt op d."],
+  ["De onderzoeker vroeg zich af ___ de grafiek werkelijk aantoonde.","wat",["wat","dat","als","ofdat"],"Na 'zich afvragen' past hier het vraagwoord wat."],
+  ["Welke zin bevat geen onnodige herhaling?","De resultaten bevestigen de eerdere conclusie.",["De resultaten bevestigen opnieuw weer de eerdere conclusie.","De resultaten bevestigen de eerdere conclusie.","De resultaten bevestigen de conclusie nogmaals opnieuw.","De resultaten zijn een bevestiging die bevestigt."],"Deze formulering is bondig en precies."],
+  ["De voorzitter verwacht dat iedereen de stukken vooraf ___.","leest",["leest","leesd","leestt","gelezen"],"Bij iedereen als onderwerp in de bijzin hoort leest."],
+  ["De maatregelen worden ieder kwartaal ___.","geëvalueerd",["geevalueerd","geëvalueerd","geëvaluteerd","geëvalueert"],"Het trema geeft aan dat ge-e afzonderlijk wordt uitgesproken."],
+  ["Welke interpunctie is correct?","Zana noteerde drie criteria: betrouwbaarheid, haalbaarheid en eerlijkheid.",["Zana noteerde drie criteria, betrouwbaarheid haalbaarheid en eerlijkheid.","Zana noteerde drie criteria: betrouwbaarheid, haalbaarheid en eerlijkheid.","Zana noteerde: drie criteria betrouwbaarheid, haalbaarheid, en eerlijkheid", "Zana noteerde drie criteria; betrouwbaarheid haalbaarheid en eerlijkheid."],"Na een aankondiging van een opsomming past een dubbele punt."],
+  ["De bron lijkt betrouwbaar, ___ de methode transparant is beschreven.","omdat",["omdat","ondanks","echter","tenzij"],"Omdat geeft hier de reden voor het oordeel."],
+  ["Welke zin vermijdt een vage formulering?","Drie van de twintig deelnemers stopten vóór het einde van het onderzoek.",["Sommige mensen stopten een beetje vroeg.","Drie van de twintig deelnemers stopten vóór het einde van het onderzoek.","Een paar mensen deden niet helemaal mee.","Er waren mensen die ongeveer stopten."],"Concrete aantallen en timing maken de zin controleerbaar."],
+  ["De journalist citeerde de bron correct en gaf de context volledig ___.","weer",["weer","wer","weder","weêr"],"De vaste uitdrukking is 'weergeven': hij gaf de context weer."],
+  ["Welke zin is correct?","Noch de trainer, noch de speelsters waren op de hoogte.",["Noch de trainer, noch de speelsters was op de hoogte.","Noch de trainer, noch de speelsters waren op de hoogte.","Nog de trainer, nog de speelsters waren op de hoogte.","Noch de trainer noch, de speelsters waren op de hoogte."],"Bij het meervoudige laatste deel hoort waren; de vaste combinatie is noch...noch."],
+  ["De conclusie is aannemelijk, maar nog niet definitief ___.","bewezen",["beweest","bewezen","bewijsd","bewezend"],"Het voltooid deelwoord van bewijzen is bewezen."],
+  ["De onderneming publiceert jaarlijks haar financiële ___.","prognoses",["prognozes","prognoses","prognosen's","prochnozes"],"Prognoses schrijf je met g en s."],
+  ["Welke formulering maakt duidelijk wie handelt?","De onderzoeksgroep controleerde de ruwe gegevens opnieuw.",["De ruwe gegevens werden opnieuw gecontroleerd.","Er werd opnieuw naar gegevens gekeken.","De onderzoeksgroep controleerde de ruwe gegevens opnieuw.","De gegevens hadden een controle."],"De actieve zin noemt de handelende partij expliciet."],
+  ["Zana pleitte voor een besluit dat later kon worden ___.","herzien",["herzient","herzien","herzienen","herziend"],"Na kon worden staat het voltooid deelwoord: herzien."]
+];
+function lenaSpellingGenerated(r,i){
+ const letters=[['b','bal','⚽'],['m','maan','🌙'],['s','slang','🐍'],['k','kat','🐱'],['v','vis','🐟'],['h','hond','🐶'],['l','leeuw','🦁'],['p','pop','🪆'],['r','roos','🌹'],['t','trein','🚂']];
+ const [letter,word,icon]=pick(r,letters),mode=i%6;
+ if(mode===0)return{prompt:`Welke letter hoor je vooraan in ${word}?`,answer:letter,options:shuffle(r,[letter,...shuffle(r,letters.map(x=>x[0]).filter(x=>x!==letter)).slice(0,3)]),explain:`${word} begint met de klank ${letter}.`,icon,audio:true};
+ if(mode===1)return{prompt:`Welk plaatje hoort bij het woord ${word}?`,answer:icon,options:shuffle(r,[icon,...shuffle(r,letters.map(x=>x[2]).filter(x=>x!==icon)).slice(0,3)]),explain:`Dit plaatje laat ${word} zien.`,icon:"👀",audio:true};
+ if(mode===2){const rhyme={kat:'mat',maan:'haan',vis:'mis',roos:'doos',bal:'hal',hond:'mond'};const base=pick(r,Object.keys(rhyme));return{prompt:`Welk woord rijmt op ${base}?`,answer:rhyme[base],options:shuffle(r,[rhyme[base],'boom','fiets','kip']),explain:`${base} en ${rhyme[base]} klinken aan het einde hetzelfde.`,icon:"🎵",audio:true};}
+ if(mode===3)return{prompt:`Tik op de hoofdletter van ${letter}.`,answer:letter.toUpperCase(),options:shuffle(r,[letter.toUpperCase(),letter,...shuffle(r,letters.map(x=>x[0].toUpperCase()).filter(x=>x!==letter.toUpperCase())).slice(0,2)]),explain:`De hoofdletter van ${letter} is ${letter.toUpperCase()}.`,icon:"🔤",audio:true};
+ if(mode===4){const words=['voetbal','regenboog','olifant','kat'];const answer='olifant';return{prompt:'Welk woord heeft de meeste klapstukjes?',answer,options:shuffle(r,words),explain:'O-li-fant heeft drie klapstukjes.',icon:'👏',audio:true};}
+ return{prompt:`Welke twee klanken maken samen ${word}?`,answer:word,options:shuffle(r,[word,word.replace(letter,'p'),word+'s','boom']),explain:`Luister langzaam: ${word.split('').join(' - ')}.`,icon,audio:true};
+}
+function makeSpellingV4(profile,seed,count=15,level=3){
+ const r=rng(hash(profile+seed+"spelling-v4"));
+ if(profile==="lena")return Array.from({length:Math.max(12,count)},(_,i)=>({id:i,...lenaSpellingGenerated(r,i),kind:"letters"}));
+ const bank=profile==="dani"?daniSpellingV4:zanaSpellingV4;
+ let arr=shuffle(r,bank);while(arr.length<count)arr=arr.concat(shuffle(r,bank));
+ return arr.slice(0,count).map((x,i)=>({id:i,prompt:x[0],answer:x[1],options:shuffle(r,x[2]),explain:x[3],kind:profile==="zana"?"taal":"spelling",speakText:`${x[0]} Antwoorden: ${x[2].join(', ')}`}));
+}
+C.makeSpelling=makeSpellingV4;
+
+// ---------- Slimmere en gevarieerdere rekensets ----------
+function mathQ(prompt,answer,explain,extra={}){return{prompt,answer:String(answer).replace('.',','),explain,kind:"rekenen",...extra};}
+function makeMathV4(profile,seed,count=20,level=3,curriculum={}){
+ const r=rng(hash(`${profile}-${seed}-math-v4`)),items=[];
+ const add=(x)=>items.push({...x,id:items.length});
+ if(profile==="lena"){
+  const animals=['🐶','🦄','🐱','🐸','⭐','🌸','🏑'];
+  for(let i=0;i<count;i++){
+   const mode=i%10;
+   if(mode===0){const n=2+Math.floor(r()*9),ic=pick(r,animals);add(mathQ(`Hoeveel zie je? ${ic.repeat(n)}`,n,'Wijs ieder plaatje aan en tel rustig één voor één.',{options:shuffle(r,[n,Math.max(1,n-1),n+1,n+2]),icon:'👆',audio:true}));}
+   else if(mode===1){const a=Math.floor(r()*6),b=Math.floor(r()*(6-a));add(mathQ(`${a} + ${b} = ?`,a+b,'Maak beide groepjes met je vingers en tel ze daarna samen.',{options:shuffle(r,[a+b,Math.max(0,a+b-1),a+b+1,a+b+2]),icon:'➕',audio:true}));}
+   else if(mode===2){const a=4+Math.floor(r()*7),b=1+Math.floor(r()*Math.min(4,a));add(mathQ(`${a} − ${b} = ?`,a-b,'Begin met het eerste aantal en haal er één voor één af.',{options:shuffle(r,[a-b,Math.max(0,a-b-1),a-b+1,a]),icon:'➖',audio:true}));}
+   else if(mode===3){const a=1+Math.floor(r()*10),b=1+Math.floor(r()*10);add(mathQ(`Welke hoeveelheid is groter: ${a} of ${b}?`,Math.max(a,b),'Het grootste getal hoort bij de grootste hoeveelheid.',{options:shuffle(r,[a,b]),icon:'🐘',audio:true}));}
+   else if(mode===4){const start=1+Math.floor(r()*5);add(mathQ(`Wat komt hierna? ${start}, ${start+1}, ${start+2}, ...`,start+3,'Tel één stap verder.',{options:shuffle(r,[start+3,start+2,start+4,start+5]),icon:'🚂',audio:true}));}
+   else if(mode===5){const forms=[['cirkel','⚪',0],['driehoek','🔺',3],['vierkant','🟦',4]],f=pick(r,forms);add(mathQ(`Welke vorm is dit? ${f[1]}`,f[0],`${f[0]} is de naam van deze vorm.`,{options:shuffle(r,['cirkel','driehoek','vierkant']),icon:f[1],audio:true}));}
+   else if(mode===6){const a=pick(r,animals),b=pick(r,animals.filter(x=>x!==a));add(mathQ(`Wat komt daarna? ${a} ${b} ${a} ${b} ...`,a,'Het patroon wisselt steeds tussen twee plaatjes.',{options:shuffle(r,[a,b,'🌈']),icon:'🧩',audio:true}));}
+   else if(mode===7){const n=2+Math.floor(r()*8);add(mathQ(`Welk getal staat vlak vóór ${n}?`,n-1,'Tel één stap terug.',{options:shuffle(r,[n-1,n,n+1,Math.max(0,n-2)]),icon:'⬅️',audio:true}));}
+   else if(mode===8){const n=1+Math.floor(r()*9);add(mathQ(`Welk getal staat vlak ná ${n}?`,n+1,'Tel één stap verder.',{options:shuffle(r,[n+1,n,n+2,Math.max(0,n-1)]),icon:'➡️',audio:true}));}
+   else{const red=1+Math.floor(r()*5),blue=1+Math.floor(r()*5);add(mathQ(`Er zijn ${'🔴'.repeat(red)} en ${'🔵'.repeat(blue)}. Hoeveel zijn er samen?`,red+blue,'Tel eerst rood en daarna blauw door.',{options:shuffle(r,[red+blue,red,blue,red+blue+1]),icon:'🎈',audio:true}));}
+  }
+  return items;
+ }
+ if(profile==="dani"){
+  const division=!!curriculum.division, fractions=!!curriculum.fractions;
+  const baseModes=['add','subtract','multiply','money','time','measure','area','sequence','word','tablemix','estimate','clock','perimeter','difference','logic'];
+  if(division)baseModes.push('divide','divideStory');
+  if(fractions)baseModes.push('fraction','fractionPicture');
+  for(let i=0;i<count;i++){
+   const mode=baseModes[i%baseModes.length];
+   if(mode==='add'){const a=120+Math.floor(r()*780),b=25+Math.floor(r()*375);add(mathQ(`${a} + ${b} = ?`,a+b,'Tel eerst de honderdtallen, daarna tientallen en eenheden.',{answerType:'number'}));}
+   else if(mode==='subtract'){const a=450+Math.floor(r()*500),b=35+Math.floor(r()*350);add(mathQ(`${a} − ${b} = ?`,a-b,'Trek in handige stappen af en controleer met optellen.',{answerType:'number'}));}
+   else if(mode==='multiply'){const a=pick(r,[3,4,6,7,8,9]),b=2+Math.floor(r()*10);add(mathQ(`${a} × ${b} = ?`,a*b,`Gebruik de tafel van ${a}.`,{answerType:'number'}));}
+   else if(mode==='money'){const paid=pick(r,[20,25,30,50]),price=pick(r,[7.5,12.75,18.4,23.9]);const ans=+(paid-price).toFixed(2);add(mathQ(`Een voetbalartikel kost € ${String(price.toFixed(2)).replace('.',',')}. Je betaalt € ${paid}. Hoeveel krijg je terug?`,ans,'Trek de prijs af van het betaalde bedrag.',{answerType:'money',accepted:[String(ans).replace('.',','),`€ ${String(ans).replace('.',',')}`],inputHint:'Bijvoorbeeld 7,25'}));}
+   else if(mode==='time'){const h=pick(r,[14,15,16,17]),min=pick(r,[0,10,20,25,35,40]),dur=pick(r,[20,30,45,60,75]);const total=h*60+min+dur,hh=Math.floor(total/60)%24,mm=total%60,ans=`${hh}:${String(mm).padStart(2,'0')}`;add(mathQ(`De training start om ${h}:${String(min).padStart(2,'0')} en duurt ${dur} minuten. Hoe laat is hij klaar?`,ans,'Tel de minuten op. Bij 60 minuten begint een nieuw uur.',{answerType:'time',accepted:[ans,ans.replace(':','.'),ans.replace(':',''),`${hh} uur ${mm||''}`.trim()],inputHint:'Bijvoorbeeld 16:00'}));}
+   else if(mode==='measure'){const cm=pick(r,[125,230,345,350,480]);const met=Math.floor(cm/100),rest=cm%100,ans=`${met} m ${rest} cm`;add(mathQ(`${cm} cm is hoeveel meter en centimeter?`,ans,'100 centimeter is 1 meter.',{answerType:'length',baseValueCm:cm,accepted:[ans,`${met}m${rest}cm`,`${cm} cm`,String(cm/100).replace('.',',')+' m'],inputHint:'Bijvoorbeeld 3 m 50 cm'}));}
+   else if(mode==='area'){const l=pick(r,[6,8,12,15]),w=pick(r,[4,5,7,9]);add(mathQ(`Een rechthoek is ${l} cm lang en ${w} cm breed. Wat is de oppervlakte?`,l*w,'Oppervlakte = lengte × breedte.',{answerType:'area',accepted:[String(l*w),`${l*w} cm2`,`${l*w} cm²`],inputHint:'Je mag alleen het getal typen'}));}
+   else if(mode==='perimeter'){const l=pick(r,[5,7,9,12]),w=pick(r,[3,4,6,8]),ans=2*l+2*w;add(mathQ(`Een voetbalveldje is ${l} m lang en ${w} m breed. Hoeveel meter is de rand rondom?`,ans,'Omtrek = lang + breed + lang + breed.',{answerType:'lengthM',accepted:[String(ans),`${ans} m`]}));}
+   else if(mode==='sequence'){const start=2+Math.floor(r()*9),step=pick(r,[2,3,4,5,10]);add(mathQ(`Welk getal volgt? ${start}, ${start+step}, ${start+2*step}, ${start+3*step}, ...`,start+4*step,`Er komt steeds ${step} bij.`,{answerType:'number'}));}
+   else if(mode==='word'){const rows=pick(r,[4,5,7]),seats=pick(r,[6,8,9]);add(mathQ(`Er zijn ${rows} rijen met ${seats} stoelen. Hoeveel stoelen zijn er samen?`,rows*seats,'Vermenigvuldig rijen met stoelen per rij.',{answerType:'number'}));}
+   else if(mode==='tablemix'){const a=pick(r,[4,6,7,8,9]),ans=a*10;add(mathQ(`Dani maakt ${a} rondes van 10 push-ups. Hoeveel push-ups zijn dat?`,ans,'Vermenigvuldig het aantal rondes met 10.',{answerType:'number'}));}
+   else if(mode==='estimate'){const a=pick(r,[187,243,398,612]),b=pick(r,[48,73,109]);const exact=a+b,estimate=Math.round(exact/10)*10;add(mathQ(`Schat ${a} + ${b} af op het dichtstbijzijnde tiental.`,estimate,'Bereken of rond eerst af en kies het dichtstbijzijnde tiental.',{answerType:'number',accepted:[String(estimate)]}));}
+   else if(mode==='clock'){const h=pick(r,[3,4,7,8]),min=pick(r,[0,15,30,45]),ans=`${h}:${String(min).padStart(2,'0')}`;add(mathQ(`Schrijf de digitale tijd: ${h} uur en ${min} minuten.`,ans,'Zet uren vóór de dubbele punt en minuten erachter.',{answerType:'time',accepted:[ans,ans.replace(':','.'),ans.replace(':','')],inputHint:'Bijvoorbeeld 07:30'}));}
+   else if(mode==='difference'){const a=pick(r,[640,725,850]),b=pick(r,[235,418,560]);add(mathQ(`Team Oranje heeft ${a} punten en team Blauw ${b}. Hoe groot is het verschil?`,a-b,'Verschil betekent: grootste min kleinste.',{answerType:'number'}));}
+   else if(mode==='divide'){const d=pick(r,[2,3,4,5,10]),ans=2+Math.floor(r()*10),total=d*ans;add(mathQ(`${total} ÷ ${d} = ?`,ans,`Verdeel ${total} eerlijk over ${d} gelijke groepjes.`,{answerType:'number',lessonKey:'division'}));}
+   else if(mode==='divideStory'){const teams=pick(r,[2,4,5]),per=pick(r,[3,4,6,8]),total=teams*per;add(mathQ(`${total} spelers worden eerlijk verdeeld over ${teams} teams. Hoeveel spelers per team?`,per,'Eerlijk verdelen is delen.',{answerType:'number',lessonKey:'division'}));}
+   else if(mode==='fraction'){const den=pick(r,[2,4,5,8]),total=den*pick(r,[4,6,8]),ans=total/den;add(mathQ(`Wat is 1/${den} van ${total}?`,ans,`Verdeel ${total} in ${den} gelijke delen. Eén deel is het antwoord.`,{answerType:'number',lessonKey:'fractions'}));}
+   else if(mode==='fractionPicture'){const den=pick(r,[2,4]),ans=1;add(mathQ(`Een voetbalveld is in ${den} gelijke stukken verdeeld. Hoeveel stuk is 1/${den}?`,ans,'De teller 1 betekent één van de gelijke stukken.',{options:shuffle(r,['1 stuk',`${den} stukken`,'geen stuk']),answer:'1 stuk',lessonKey:'fractions'}));}
+   else{const a=pick(r,[12,15,18]),b=pick(r,[3,5,6]);add(mathQ(`${a} + ? = ${a+b}`,b,'Zoek het verschil tussen de uitkomst en het bekende getal.',{answerType:'number'}));}
+  }
+  return items;
+ }
+ // Zana: schaalbaar van groep 8 tot bovenbouw, met huidige focus op groep 8/brugklas.
+ const modes=level<6?['percent','fraction','decimal','ratio','money','average','scale','algebra1','geometry','speed','probability','data']:
+   level<9?['algebra2','linear','percentGrowth','pythagoras','probability2','formula','ratio','statistics','interest','units','geometry2','functions']:
+   ['quadratic','systems','exponent','statistics2','probability2','functions','chemRatio','physicsSpeed','financeGrowth','geometry2','algebra2','formula'];
+ for(let i=0;i<count;i++){
+  const mode=modes[i%modes.length];
+  if(mode==='percent'){const base=pick(r,[80,120,160,240,360]),pct=pick(r,[10,15,20,25,30,40]);add(mathQ(`Hoeveel is ${pct}% van ${base}?`,base*pct/100,'Bereken 10% of gebruik percentage × totaal ÷ 100.',{answerType:'number'}));}
+  else if(mode==='fraction'){const den=pick(r,[4,5,8,10]),num=1+Math.floor(r()*(den-1)),total=den*pick(r,[6,8,12]);add(mathQ(`Bereken ${num}/${den} van ${total}.`,num*total/den,'Deel door de noemer en vermenigvuldig met de teller.',{answerType:'number'}));}
+  else if(mode==='decimal'){const a=pick(r,[1.25,2.4,3.75,6.8]),b=pick(r,[0.6,1.35,2.25,4.4]),ans=+(a+b).toFixed(2);add(mathQ(`${String(a).replace('.',',')} + ${String(b).replace('.',',')} = ?`,ans,'Zet de komma’s onder elkaar.',{answerType:'number'}));}
+  else if(mode==='ratio'){const [x,y]=pick(r,[[2,3],[3,5],[4,7]]),f=pick(r,[4,6,8]);add(mathQ(`De verhouding blauw : roze is ${x}:${y}. Er zijn ${x*f} blauwe. Hoeveel roze?`,y*f,'Bepaal de vermenigvuldigingsfactor.',{answerType:'number'}));}
+  else if(mode==='money'){const old=pick(r,[60,80,120,150]),pct=pick(r,[15,20,25,30]),ans=+(old*(1-pct/100)).toFixed(2);add(mathQ(`Een jas van € ${old} krijgt ${pct}% korting. Wat is de nieuwe prijs?`,ans,'Bereken de korting en trek die af.',{answerType:'money'}));}
+  else if(mode==='average'){const vals=shuffle(r,[6,8,10,12,14]).slice(0,4),ans=vals.reduce((a,b)=>a+b,0)/4;add(mathQ(`Wat is het gemiddelde van ${vals.join(', ')}?`,ans,'Tel alle waarden op en deel door vier.',{answerType:'number'}));}
+  else if(mode==='scale'){const scale=pick(r,[100,200,500]),cm=pick(r,[3,4,6,8]),ans=cm*scale/100;add(mathQ(`Schaal 1:${scale}. Op de kaart is de afstand ${cm} cm. Hoeveel meter echt?`,ans,'Vermenigvuldig met de schaal en zet cm om naar m.',{answerType:'lengthM',accepted:[String(ans),`${ans} m`]}));}
+  else if(mode==='algebra1'){const a=3+Math.floor(r()*9),b=a+7+Math.floor(r()*15);add(mathQ(`Los op: x + ${a} = ${b}.`,b-a,'Trek aan beide kanten hetzelfde getal af.',{answerType:'number',lessonKey:'algebra'}));}
+  else if(mode==='geometry'){const l=pick(r,[8,12,15]),w=pick(r,[4,6,9]);add(mathQ(`Een rechthoek is ${l} cm bij ${w} cm. Bereken de oppervlakte.`,l*w,'Oppervlakte = lengte × breedte.',{answerType:'area'}));}
+  else if(mode==='speed'){const t=pick(r,[2,3,4]),speed=pick(r,[30,45,60]);add(mathQ(`Een trein rijdt ${speed*t} km in ${t} uur. Gemiddelde snelheid?`,speed,'Snelheid = afstand ÷ tijd.',{answerType:'speed',accepted:[String(speed),`${speed} km/u`]}));}
+  else if(mode==='probability'){const red=pick(r,[2,3,4]),total=red+pick(r,[3,4,5]);add(mathQ(`In een zak zitten ${red} rode van in totaal ${total} ballen. Kans op rood als breuk?`,`${red}/${total}`,'Gunstige uitkomsten gedeeld door alle uitkomsten.',{answerType:'fraction',accepted:[`${red}/${total}`,String(red/total).replace('.',',')]}));}
+  else if(mode==='data'){const start=pick(r,[120,150,200]),end=start+pick(r,[30,50,80]);add(mathQ(`Een waarde stijgt van ${start} naar ${end}. Hoe groot is de absolute stijging?`,end-start,'Eindwaarde min beginwaarde.',{answerType:'number'}));}
+  else if(mode==='algebra2'){const a=pick(r,[2,3,4]),x=pick(r,[4,5,7]),b=pick(r,[3,6,9]),total=a*x+b;add(mathQ(`Los op: ${a}x + ${b} = ${total}.`,x,`Trek eerst ${b} af en deel daarna door ${a}.`,{answerType:'number',lessonKey:'algebra'}));}
+  else if(mode==='linear'){const a=pick(r,[2,3,4]),b=pick(r,[1,5,7]),x=pick(r,[2,3,5]);add(mathQ(`Voor y = ${a}x + ${b}, bereken y als x = ${x}.`,a*x+b,'Vul x in en voer vermenigvuldigen vóór optellen uit.',{answerType:'number'}));}
+  else if(mode==='percentGrowth'){const start=pick(r,[200,400,750]),pct=pick(r,[5,8,12]),ans=+(start*(1+pct/100)).toFixed(2);add(mathQ(`€ ${start} groeit één jaar met ${pct}%. Nieuwe waarde?`,ans,'Vermenigvuldig met 1 + het groeipercentage.',{answerType:'money'}));}
+  else if(mode==='pythagoras'){const tri=pick(r,[[3,4,5],[5,12,13],[6,8,10]]);add(mathQ(`Een rechthoekige driehoek heeft rechthoekszijden ${tri[0]} en ${tri[1]}. Schuine zijde?`,tri[2],'Gebruik a² + b² = c².',{answerType:'number'}));}
+  else if(mode==='probability2'){const p1=pick(r,[0.2,0.25,0.4]),p2=pick(r,[0.5,0.6,0.75]),ans=+(p1*p2).toFixed(3);add(mathQ(`Twee onafhankelijke kansen zijn ${String(p1).replace('.',',')} en ${String(p2).replace('.',',')}. Kans op beide?`,ans,'Bij onafhankelijke gebeurtenissen vermenigvuldig je de kansen.',{answerType:'number'}));}
+  else if(mode==='formula'){const u=pick(r,[12,15,18]),iAmp=pick(r,[2,3,4]);add(mathQ(`Gebruik P = U × I. U = ${u} V en I = ${iAmp} A. Bereken P.`,u*iAmp,'Vul de waarden in de formule in.',{answerType:'number'}));}
+  else if(mode==='statistics'){const vals=[4,7,7,8,9,10];add(mathQ(`Wat is de mediaan van ${vals.join(', ')}?`,7.5,'Bij zes waarden is de mediaan het gemiddelde van de twee middelste.',{answerType:'number'}));}
+  else if(mode==='interest'){const start=pick(r,[500,1000]),pct=pick(r,[4,5]),ans=+(start*(1+pct/100)**2).toFixed(2);add(mathQ(`€ ${start} groeit twee jaar met ${pct}% samengestelde rente. Waarde na twee jaar?`,ans,'Vermenigvuldig tweemaal met de groeifactor.',{answerType:'money'}));}
+  else if(mode==='units'){const km=pick(r,[1.2,2.5,3.75]);add(mathQ(`${String(km).replace('.',',')} km is hoeveel meter?`,km*1000,'Eén kilometer is 1.000 meter.',{answerType:'lengthM',accepted:[String(km*1000),`${km*1000} m`]}));}
+  else if(mode==='geometry2'){const r0=pick(r,[3,5,10]),ans=+(Math.PI*r0*r0).toFixed(1);add(mathQ(`Een cirkel heeft straal ${r0} cm. Oppervlakte met π ≈ 3,14?`,+(3.14*r0*r0).toFixed(1),'Gebruik π × r².',{answerType:'number',tolerance:.15}));}
+  else if(mode==='functions'){const x=pick(r,[-2,-1,2,3]),ans=x*x-2*x+1;add(mathQ(`Voor f(x)=x²−2x+1, bereken f(${x}).`,ans,'Vul x overal in en werk machten eerst uit.',{answerType:'number'}));}
+  else if(mode==='quadratic'){const root=pick(r,[2,3,4,5]);add(mathQ(`Los op voor de positieve oplossing: x² = ${root*root}.`,root,'Neem de positieve wortel.',{answerType:'number'}));}
+  else if(mode==='systems'){const x=pick(r,[2,3,4]),y=pick(r,[1,5,6]);add(mathQ(`x + y = ${x+y} en x − y = ${x-y}. Bereken x.`,x,'Tel de vergelijkingen op en deel door twee.',{answerType:'number'}));}
+  else if(mode==='exponent'){const base=pick(r,[2,3,5]),pow=pick(r,[3,4]);add(mathQ(`${base}^${pow} = ?`,base**pow,'Een macht is herhaald vermenigvuldigen.',{answerType:'number'}));}
+  else if(mode==='statistics2'){const vals=[2,4,6,8,10],mean=6;add(mathQ(`Wat is de gemiddelde afwijking van ${vals.join(', ')} ten opzichte van ${mean}?`,2.4,'Bereken absolute afstanden tot het gemiddelde en neem daarvan het gemiddelde.',{answerType:'number',tolerance:.05}));}
+  else if(mode==='chemRatio'){add(mathQ('Een reactie gebruikt 2 mol H₂ per 1 mol O₂. Hoeveel mol H₂ voor 3 mol O₂?',6,'Gebruik de verhouding 2:1.',{answerType:'number'}));}
+  else if(mode==='physicsSpeed'){const v=pick(r,[12,15,20]),t=pick(r,[4,5,6]);add(mathQ(`Een voorwerp beweegt ${t} s met ${v} m/s. Afstand?`,v*t,'Afstand = snelheid × tijd.',{answerType:'number'}));}
+  else if(mode==='financeGrowth'){const start=pick(r,[1000,2500]),pct=pick(r,[3,6]),yrs=3,ans=+(start*(1+pct/100)**yrs).toFixed(2);add(mathQ(`€ ${start} groeit ${yrs} jaar met ${pct}% per jaar. Eindwaarde?`,ans,'Gebruik samengestelde groei: begin × groeifactor^jaren.',{answerType:'money'}));}
+ }
+ return items;
+}
+C.makeMath=makeMathV4;
+
+// ---------- Shop-uitbreiding ----------
+const extraShop=[
+ {id:'hair-curly',cat:'hair',name:'Krullen',art:'🌀',price:180,value:'#5a3825'},{id:'hair-red',cat:'hair',name:'Rood haar',art:'🧡',price:170,value:'#a44228'},{id:'top-hockey',cat:'top',name:'Hockeytenue',art:'🏑',price:220,value:'#9b64e8'},{id:'top-unicorn',cat:'top',name:'Unicorn hoodie',art:'🦄',price:260,value:'#ef8fd1'},{id:'top-football',cat:'top',name:'Oranje voetbalshirt',art:'⚽',price:240,value:'#f47b25'},{id:'top-glitter',cat:'top',name:'Glitter outfit',art:'✨',price:300,value:'#dc78dc'},
+ {id:'acc-wings',cat:'accessory',name:'Feeënvleugels',art:'🪽',price:360,value:'🪽'},{id:'acc-tiara',cat:'accessory',name:'Tiara',art:'👸',price:320,value:'👑'},{id:'acc-karate',cat:'accessory',name:'Karateband',art:'🥋',price:230,value:'🥋'},{id:'acc-watch',cat:'accessory',name:'Slim horloge',art:'⌚',price:280,value:'⌚'},
+ {id:'pet-unicorn',cat:'pet',name:'Mini-unicorn',art:'🦄',price:520,value:'🦄'},{id:'pet-dino',cat:'pet',name:'Babydino',art:'🦕',price:520,value:'🦕'},{id:'pet-cat',cat:'pet',name:'Kat',art:'🐱',price:240,value:'🐱'},{id:'pet-fairy',cat:'pet',name:'Mini-fee',art:'🧚',price:560,value:'🧚'},
+ {id:'world-goal',cat:'world',name:'Voetbalgoal',art:'🥅',price:180,value:'🥅',zones:['stadium']},{id:'world-stands',cat:'world',name:'Tribune',art:'🎟️',price:450,value:'🎟️',zones:['stadium','hockey']},{id:'world-scoreboard',cat:'world',name:'Scorebord',art:'📺',price:350,value:'📺',zones:['stadium','hockey']},{id:'world-gym',cat:'world',name:'Sportschool',art:'🏋️',price:480,value:'🏋️',zones:['home','dojo','city']},{id:'world-dojo',cat:'world',name:'Karate Dojo',art:'🥋',price:600,value:'🥋',zones:['dojo']},
+ {id:'world-ferrari',cat:'world',name:'Rode supercar',art:'🏎️',price:900,value:'🏎️',zones:['garage','city']},{id:'world-workshop',cat:'world',name:'Uitvinderswerkplaats',art:'🛠️',price:620,value:'🛠️',zones:['garage','space']},{id:'world-alien',cat:'world',name:'Alienbasis',art:'🛸',price:750,value:'🛸',zones:['space']},{id:'world-moon',cat:'world',name:'Maanbasis',art:'🌕',price:700,value:'🌕',zones:['space']},
+ {id:'world-fashion',cat:'world',name:'Fashion Studio',art:'👗',price:600,value:'👗',zones:['fashion','city']},{id:'world-jewelry',cat:'world',name:'Sieradenatelier',art:'💎',price:580,value:'💎',zones:['fashion','city']},{id:'world-cafe',cat:'world',name:'Campus Café',art:'☕',price:380,value:'☕',zones:['campus','city']},{id:'world-library',cat:'world',name:'Bibliotheek',art:'📚',price:480,value:'📚',zones:['campus']},{id:'world-airport',cat:'world',name:'Airport',art:'🛫',price:760,value:'🛫',zones:['travel']},{id:'world-london',cat:'world',name:'London',art:'🇬🇧',price:700,value:'🇬🇧',zones:['travel','campus']},{id:'world-nyc',cat:'world',name:'New York',art:'🗽',price:800,value:'🗽',zones:['travel','city']},
+ {id:'world-unicorn',cat:'world',name:'Unicornstal',art:'🦄',price:420,value:'🦄',zones:['unicorn']},{id:'world-rainbow',cat:'world',name:'Regenboogbrug',art:'🌈',price:350,value:'🌈',zones:['unicorn','fairy']},{id:'world-fairyhome',cat:'world',name:'Feeënhuis',art:'🧚',price:480,value:'🧚',zones:['fairy']},{id:'world-candycastle',cat:'world',name:'Snoepkasteel',art:'🍭',price:650,value:'🍭',zones:['candy']},{id:'world-mermaid',cat:'world',name:'Zeemeerminpaleis',art:'🧜‍♀️',price:700,value:'🧜‍♀️',zones:['ocean']},{id:'world-puppypark',cat:'world',name:'Puppypark',art:'🐕',price:380,value:'🐕',zones:['animals']},
+ {id:'world-fountain',cat:'world',name:'Fontein',art:'⛲',price:300,value:'⛲',zones:['home','campus','city','unicorn']},{id:'world-tree',cat:'world',name:'Grote boom',art:'🌳',price:150,value:'🌳'},{id:'world-cloud',cat:'world',name:'Wolkenmachine',art:'☁️',price:250,value:'☁️'},{id:'world-lights',cat:'world',name:'Feestlichten',art:'🎇',price:320,value:'🎇'}
+];
+for(const item of extraShop)if(!shopItems.some(x=>x.id===item.id))shopItems.push(item);
+// Bestaande werelditems bruikbaar maken in logische zones.
+for(const i of shopItems.filter(x=>x.cat==='world')){
+ if(!i.zones){
+  if(i.id.includes('stadium'))i.zones=['stadium','hockey'];
+  else if(i.id.includes('campus')||i.id.includes('tower')||i.id.includes('shop'))i.zones=['campus','city','fashion'];
+  else if(i.id.includes('rocket'))i.zones=['space','travel'];
+  else if(i.id.includes('lambo'))i.zones=['garage','city'];
+  else if(i.id.includes('dino'))i.zones=['adventure','animals'];
+  else if(i.id.includes('beach')||i.id.includes('pool'))i.zones=['beach','ocean','home'];
+  else if(i.id.includes('hockey'))i.zones=['hockey'];
+  else i.zones=['home','city','unicorn','animals'];
+ }
+}
+
+C.storyUniverse={dani:daniMatches.length*daniAdventures.length*daniCompanions.length*daniTwists.length,zana:zanaCases.length*zanaRoles.length*zanaComplications.length,lena:lenaWorlds.length*6*20};
+})();
+
+"use strict";
 const C=window.LEVELUP_CONTENT;
 const {PROFILE_META,ACTIVITY_META,shopItems}=C;
 const STORAGE="levelup-leren-v3";
@@ -501,7 +935,478 @@ function download(name,text,type){const a=document.createElement("a");a.href=URL
 async function sendWebhook(session){try{await fetch(state.parent.webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({to:state.parent.email,child:m().name,session,report:reportText()})})}catch(e){console.warn(e)}}
 
 if("serviceWorker"in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+// Initial rendering is performed by app-v4.js after migrations and overrides.
+
+
+"use strict";
+/* LevelUp Leren 4.0 – major experience, curriculum, accessibility and monitoring upgrade. */
+
+const V4_DEFAULT_CODES={dani:"1231",zana:"1405",lena:"3441"};
+const V4_OLD_DEFAULT_CODES={dani:"2581",zana:"2582",lena:"2583"};
+const V4_MAX_LEVEL={lena:4,dani:7,zana:12};
+const V4_MIN_LEVEL={lena:1,dani:1,zana:1};
+let readingRecognition=null,readingTranscript="",readingRecognitionActive=false;
+let learnTab="missions",gameMode="robot";
+
+function migrateV4(){
+ state.version=4;
+ state.parent.codes=state.parent.codes||{};
+ for(const id of ["dani","zana","lena"]){
+  if(!state.parent.codes[id]||state.parent.codes[id]===V4_OLD_DEFAULT_CODES[id])state.parent.codes[id]=V4_DEFAULT_CODES[id];
+  const pr=state.profiles[id];
+  pr.curriculum={division:false,fractions:false,time:false,algebra:false,sources:false,alphabet:false,numbers:false,...(pr.curriculum||{})};
+  pr.settings={sound:true,timer:true,autoSpeak:id==="lena",focusMinutes:id==="lena"?5:id==="dani"?10:15,...(pr.settings||{})};
+  pr.readingAssessments=pr.readingAssessments||[];
+  pr.learningHistory=pr.learningHistory||[];
+  pr.activeWorld=pr.activeWorld||PROFILE_META[id].worldZones?.[0]?.id||"home";
+  pr.worlds=pr.worlds||{};
+  const zones=PROFILE_META[id].worldZones||[];
+  for(const z of zones)if(!Array.isArray(pr.worlds[z.id]))pr.worlds[z.id]=Array(30).fill(null);
+  if(Array.isArray(pr.world)&&pr.world.some(Boolean)){
+    const first=zones[0]?.id||"home";
+    pr.world.forEach((v,i)=>{if(v&&i<pr.worlds[first].length&&!pr.worlds[first][i])pr.worlds[first][i]=v});
+  }
+  for(const sk of Object.values(pr.skills||{})){
+    sk.mastery=Number.isFinite(sk.mastery)?sk.mastery:Math.round((sk.accuracy||0));
+    sk.confidence=Number.isFinite(sk.confidence)?sk.confidence:Math.min(1,(sk.attempts||0)/6);
+    sk.recent=Array.isArray(sk.recent)?sk.recent:[];
+  }
+ }
+ save();
+}
+
+ratingLabel=function(id,r){
+ if(id==="lena")return r<1.5?"groep 1/2 start":r<2.5?"groep 2":r<3.5?"eind groep 2":"groep 3-start";
+ if(id==="dani")return r<2?"begin groep 5":r<3?"midden groep 5":r<4?"eind groep 5":r<5?"groep 6-start":r<6?"groep 6":"plus groep 6/7";
+ if(r<2)return"groep 7";if(r<3)return"groep 8 basis";if(r<4)return"groep 8 plus";if(r<5)return"brugklas HAVO/VWO";if(r<6)return"2 HAVO/VWO";if(r<7)return"3 HAVO";if(r<8)return"3 VWO";if(r<9)return"4 HAVO";if(r<10)return"4/5 VWO";if(r<11)return"5 HAVO / 5 VWO";return"eind middelbare school";
+};
+function v4LevelPct(id,r){return clamp((r-V4_MIN_LEVEL[id])/(V4_MAX_LEVEL[id]-V4_MIN_LEVEL[id])*100,0,100)}
+function curriculumName(k){return{division:"Delen",fractions:"Breuken",time:"Klokkijken",algebra:"Algebra",sources:"Bronnen beoordelen",alphabet:"Alfabet",numbers:"Getallen"}[k]||k}
+
+function plainText(s){return String(s??"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[’']/g,"").replace(/[^a-z0-9,:./²%-]+/g," ").trim().replace(/\s+/g," ")}
+function parseDutchNumber(v){
+ let s=plainText(v).replace(/€/g,"").replace(/\s/g,"").replace(/\.(?=\d{3}(?:\D|$))/g,"").replace(",",".");
+ const n=Number(s.replace(/[^0-9+\-.]/g,""));return Number.isFinite(n)?n:null;
+}
+function parseTimeMinutes(v){
+ let s=plainText(v).replace(/uur/g,":").replace(/[u.]/g,":").replace(/\s/g,"");
+ if(/^\d{1,2}:$/.test(s))s=s.slice(0,-1);
+ if(/^\d{3,4}$/.test(s)){s=s.padStart(4,"0");const h=+s.slice(0,-2),m=+s.slice(-2);return h<24&&m<60?h*60+m:null}
+ if(/^\d{1,2}$/.test(s)){const h=+s;return h<24?h*60:null}
+ const m=s.match(/^(\d{1,2}):(\d{1,2})$/);if(!m)return null;const hh=+m[1],mm=+m[2];return hh<24&&mm<60?hh*60+mm:null;
+}
+function parseLengthCm(v){
+ const s=plainText(v).replace(/\s/g,"");
+ let m=s.match(/^(\d+(?:[.,]\d+)?)m(?:(\d+(?:[.,]\d+)?)cm)?$/);if(m)return Number(m[1].replace(',','.'))*100+(m[2]?Number(m[2].replace(',','.')):0);
+ m=s.match(/^(\d+(?:[.,]\d+)?)cm$/);if(m)return Number(m[1].replace(',','.'));
+ const n=parseDutchNumber(s);return n;
+}
+function parseFraction(v){
+ const s=plainText(v).replace(/\s/g,"");const m=s.match(/^(-?\d+)\/(\d+)$/);if(m)return +m[1]/+m[2];
+ if(s.endsWith('%'))return parseDutchNumber(s)/100;return parseDutchNumber(s);
+}
+function smartAnswer(q,selected){
+ const raw=String(selected??"").trim(),answer=String(q.answer??"").trim();
+ const accepted=[answer,...(q.accepted||[])];
+ if(q.options){const correct=plainText(raw)===plainText(answer);return{correct,interpretation:raw};}
+ if(accepted.some(x=>plainText(x)===plainText(raw)))return{correct:true,interpretation:raw};
+ const type=q.answerType||"text",tol=Number.isFinite(q.tolerance)?q.tolerance:0.011;
+ if(type==="time"){
+  const a=parseTimeMinutes(answer),b=parseTimeMinutes(raw);return{correct:a!==null&&b!==null&&a===b,interpretation:b===null?raw:`${Math.floor(b/60)}:${String(b%60).padStart(2,'0')}`};
+ }
+ if(type==="length"||type==="lengthM"){
+  const target=Number.isFinite(q.baseValueCm)?q.baseValueCm:(type==="lengthM"?parseDutchNumber(answer)*100:parseLengthCm(answer));
+  let got=parseLengthCm(raw);if(type==="lengthM"&&!/[a-z]/i.test(raw)&&got!==null)got*=100;
+  return{correct:target!==null&&got!==null&&Math.abs(target-got)<.51,interpretation:got===null?raw:`${got} cm`};
+ }
+ if(type==="fraction"){
+  const a=parseFraction(answer),b=parseFraction(raw);return{correct:a!==null&&b!==null&&Math.abs(a-b)<=tol,interpretation:b===null?raw:String(b).replace('.',',')};
+ }
+ if(["number","money","area","speed"].includes(type)){
+  const a=parseDutchNumber(answer),b=parseDutchNumber(raw);return{correct:a!==null&&b!==null&&Math.abs(a-b)<=tol,interpretation:b===null?raw:String(b).replace('.',',')};
+ }
+ return{correct:plainText(raw)===plainText(answer),interpretation:raw};
+}
+
+function v4InputMode(q){return["time","length","lengthM","fraction"].includes(q.answerType)?"text":q.answerType?"decimal":"text"}
+function v4QuickKeys(q){
+ if(q.answerType==="time")return[":","00","15","30","45"];
+ if(q.answerType==="length"||q.answerType==="lengthM")return[" m "," cm",","];
+ if(q.answerType==="fraction")return["/",","];
+ if(q.answerType==="money")return[","];
+ return[];
+}
+window.appendInput=x=>{const e=$("#answerInput");if(!e)return;e.value=(e.value||"")+x;e.focus();state.task.selected=e.value};
+
+renderProfiles=function(){
+ document.body.dataset.profile="";
+ $("#app").innerHTML=`<main class="profile-screen v4-profile"><section class="profile-wrap"><div class="brand" style="justify-content:center"><span class="brand-mark">⚡</span> LevelUp Leren 4</div><h1>Wie gaat er op avontuur?</h1><p class="lead">Veilige, persoonlijke leerwerelden met eigen code, niveau, skins, spellen en voortgang.</p><div class="profile-grid">${["dani","zana","lena"].map(profileTile).join("")}</div><button class="ghost parent-entry" style="margin-top:22px" onclick="openPin('parent')">🔐 Papa-dashboard</button><p class="muted" style="margin-top:13px;font-size:13px">Vraag papa om je persoonlijke code. Je kunt die daarna in je eigen profiel wijzigen.</p></section></main>`;
+};
+profileTile=function(id){const x=PROFILE_META[id],pr=state.profiles[id];return`<button class="profile-tile ${id}" onclick="openPin('${id}')"><div class="profile-art profile-art-v4"><span class="profile-orbit"></span>${x.icon}</div><div class="profile-body"><span class="eyebrow">${esc(x.grade)}</span><h2>${x.name}</h2><p class="muted">${x.subtitle}</p><div class="tag-row">${x.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div><div class="lock-note">🔒 Persoonlijke code · level ${level(pr.xp)} · 🪙 ${pr.coins}</div></div></button>`};
+
+shell=function(body,active){
+ document.body.dataset.profile=state.currentProfile;
+ return`<div class="app-shell ${state.currentProfile==='lena'?'lena-shell':''}"><header class="topbar"><div class="brand"><span class="brand-mark">⚡</span><span>LevelUp Leren</span></div><div class="top-actions"><span class="pill">🪙 ${p().coins}</span>${state.currentProfile==='lena'?`<button class="icon-btn horn" onclick="readCurrentScreen()" title="Lees dit scherm voor">📣</button>`:""}<button class="icon-btn" onclick="openOwnCode()" title="Mijn code wijzigen">🔑</button><button class="icon-btn" onclick="switchProfile()" title="Profiel wisselen">${m().icon}</button><button class="icon-btn" onclick="openPin('parent')" title="Papa-dashboard">🔐</button></div></header><main class="content">${body}</main><nav class="bottom-nav">${nav("home","🏠","Missies",active)}${nav("learn","📚","Leren",active)}${nav("games","🎮","Spellen",active)}${nav("market","🛍️","Shop",active)}${nav("world","🌍","Werelden",active)}${nav("progress","📈","Groei",active)}</nav></div>`;
+};
+window.readCurrentScreen=()=>{const main=document.querySelector("main");if(main)speak(main.innerText.replace(/\s+/g,' ').slice(0,1800))};
+
+renderHome=function(){
+ const pr=p(),done=pr.daily.completed.length,total=pr.daily.plan.length,next=pr.daily.plan.findIndex((_,i)=>!pr.daily.completed.includes(i)),universe=C.storyUniverse?.[state.currentProfile]||1000;
+ const body=`<section class="hero v4-hero"><div class="card hero-copy"><div class="floating-shapes"><i>⭐</i><i>⚽</i><i>🚀</i></div><span class="eyebrow">${new Intl.DateTimeFormat("nl-NL",{weekday:"long"}).format(new Date())} · dagmissie</span><h1>${greeting()}, ${m().name}!</h1><p class="lead">${done>=total?"Dagminimum gehaald. De bonuswerelden, spellen en leerstudio blijven onbeperkt open.":`Nog ${total-done} minimale opdracht${total-done===1?"":"en"}. Rustig goed maken levert meer op dan snel doorklikken.`}</p><div class="hero-stats"><div class="hero-stat"><span>🔥</span><div><strong>${pr.streakDays}</strong><small>actieve dagen</small></div></div><div class="hero-stat"><span>🪙</span><div><strong>${pr.coins}</strong><small>LevelCoins</small></div></div><div class="hero-stat"><span>🏆</span><div><strong>${pr.completed}</strong><small>missies</small></div></div></div></div><div class="card hero-avatar"><div class="world-window mini-world ${pr.activeWorld}"><span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><div class="avatar-bubble">${avatarHTML()}</div></div><h3>${m().subtitle}</h3><div class="tag-row" style="justify-content:center"><button class="ghost" onclick="setView('market')">Nieuwe skin</button><button class="ghost" onclick="setView('world')">Mijn wereld</button></div></div></section>
+ <div class="grid-2"><section class="card"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Dagminimum</span><h2>${done}/${total} klaar</h2></div><strong>${Math.round(done/total*100)}%</strong></div><div class="progress" style="margin-bottom:16px"><span style="--w:${done/total*100}%"></span></div><div class="daily-list">${pr.daily.plan.map((s,i)=>missionItem(s,i,pr.daily.completed.includes(i),i===next)).join("")}</div></section><section class="card"><span class="eyebrow">Vrije keuze</span><h2>Speel, leer of verdien coins</h2><p class="muted">Na het minimum mag je onbeperkt doorgaan. Kies wat nu bij je past.</p><div class="activity-strip">${m().free.slice(0,7).map(s=>activityCard(s)).join("")}</div><button class="primary" onclick="setView('learn')">Open de volledige leerstudio</button></section></div>
+ <div class="section-head"><div><span class="eyebrow">Story Universe</span><h2>Minstens 1.000 dagen nieuwe verhalen</h2></div><span class="pill">${universe.toLocaleString('nl-NL')}+ combinaties</span></div><section class="card story-universe"><div class="grid-3"><div class="glass"><h3>${state.currentProfile==='zana'?'Young-adult mysteries & dilemma’s':state.currentProfile==='dani'?'Voetbal, spanning en uitvinden':'Unicorns, dieren en magie'}</h3><p class="muted">Verhaalonderdelen, locaties, problemen en personages worden inhoudelijk gecombineerd.</p></div><div class="glass"><h3>${state.currentProfile==='zana'?'11 diepgaande vragen':state.currentProfile==='dani'?'8 inhoudelijke vragen':'4 luistervragen'}</h3><p class="muted">Feiten, verbanden, conclusie, bewijs en uitleg — niet alleen losse woordjes terugzoeken.</p></div><div class="glass"><h3>Persoonlijk niveau</h3><p class="muted">Het systeem beweegt sneller omhoog of omlaag en toont altijd waarom.</p></div></div></section>`;
+ $("#app").innerHTML=shell(body,"home");
+};
+
+renderLearn=function(){
+ const lessonCards=state.currentProfile==='dani'?[['learn-division','🍕','Delen vanaf nul'],['learn-fractions','⚽','Breuken met velden'],['learn-time','⏰','Klokkijken & tijden']]:state.currentProfile==='zana'?[['learn-algebra','🧩','Algebra stap voor stap'],['learn-sources','🔎','Bronnen, bias & bewijs']]:[['learn-alphabet','🔤','Alfabetavontuur'],['learn-numbers','🌟','Getallenwereld']];
+ const future=state.currentProfile==='zana'?['Biologie','Natuurkunde','Scheikunde','Economie','Wiskunde tot VWO-eindexamen']:state.currentProfile==='dani'?['Groep 6 rekenen','Wereldoriëntatie','Engels','Studievaardigheden']:['Groep 3 lezen','Kleine sommen','Schrijven','Wereld ontdekken'];
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Leerstudio</span><h1>Kies: oefenen of eerst begrijpen</h1></div><p class="muted">Nieuwe onderwerpen worden eerst visueel uitgelegd. Daarna pas getoetst.</p></div><div class="learn-tabs"><button class="${learnTab==='missions'?'primary':'ghost'}" onclick="setLearnTab('missions')">⚡ Oefenmissies</button><button class="${learnTab==='lessons'?'primary':'ghost'}" onclick="setLearnTab('lessons')">🎓 Uitleglab</button><button class="${learnTab==='roadmap'?'primary':'ghost'}" onclick="setLearnTab('roadmap')">🗺️ Leerroute</button></div>${learnTab==='missions'?`<div class="games-grid">${m().free.filter(s=>!s.startsWith('learn-')).map(s=>{const a=ACTIVITY_META[s];return`<button class="game-tile" onclick="startActivity('${s}',null)"><div class="big">${a.icon}</div><h3>${a.title}</h3><p class="muted">${a.desc}</p><span class="pill">${s==='math'?'20 gevarieerde vragen':s==='spelling'||s==='language'?'15 duidelijke vragen':s==='reading'||s==='story'?'nieuw verhaal':'adaptief'}</span></button>`}).join("")}</div>`:learnTab==='lessons'?`<div class="games-grid">${lessonCards.map(([s,ic,n])=>`<button class="game-tile lesson-tile ${p().curriculum[s.replace('learn-','')]?'mastered':''}" onclick="startActivity('${s}',null)"><div class="big">${p().curriculum[s.replace('learn-','')]?'✅':ic}</div><h3>${n}</h3><p class="muted">Geanimeerde uitleg, begeleide voorbeelden en een korte beheersingscheck.</p></button>`).join("")}</div>`:`<section class="card roadmap"><h2>Van nu tot einde middelbare school</h2><p class="lead">De architectuur kan doorlopen tot kader, mavo, havo en vwo. De actieve inhoud blijft bewust gericht op wat nu relevant is.</p><div class="roadmap-line"><div class="road-stop active"><strong>Nu</strong><span>${m().grade}</span></div>${future.map((x,i)=>`<div class="road-stop ${i===0?'next':''}"><strong>${i+2}</strong><span>${x}</span></div>`).join("")}</div></section>`}<div class="section-head"><div><span class="eyebrow">Adaptief niveau</span><h2>Per vaardigheid apart</h2></div></div><section class="card skill-dashboard">${Object.entries(p().skills).filter(([s])=>m().free.includes(s)||m().subjects.includes(s)).map(([s,sk])=>`<div class="skill-v4"><div><strong>${ACTIVITY_META[s]?.icon||'⚡'} ${subjectName(state.currentProfile,s)}</strong><small>${ratingLabel(state.currentProfile,sk.rating)} · vertrouwen ${Math.round((sk.confidence||0)*100)}%</small></div><div class="progress"><span style="--w:${v4LevelPct(state.currentProfile,sk.rating)}%"></span></div><span class="pill">${sk.rating.toFixed(1)}</span></div>`).join("")}</section>`;
+ $("#app").innerHTML=shell(body,"learn");
+};
+window.setLearnTab=x=>{learnTab=x;renderLearn()};
+
+// ---------- Activiteiten, uitlegmodules en toegankelijke taken ----------
+const LESSONS={
+ division:{title:"Delen is eerlijk verdelen",icon:"🍕",unlock:"division",steps:[
+  {title:"Maak gelijke teams",visual:"<div class='lesson-pitch'><span>⚽</span><span>⚽</span><span>⚽</span><span>⚽</span><span>⚽</span><span>⚽</span><i></i><i></i></div>",text:"Zes ballen eerlijk over twee teams betekent: ieder team krijgt evenveel. Leg om de beurt één bal bij elk team."},
+  {title:"Schrijf de deelsom",visual:"<div class='lesson-equation'>6 ÷ 2 = 3</div>",text:"Het eerste getal is wat je hebt. Het tweede getal is het aantal gelijke groepjes. De uitkomst zegt hoeveel er in ieder groepje komt."},
+  {title:"Controleer met keer",visual:"<div class='lesson-equation'>3 × 2 = 6 ✅</div>",text:"Je antwoord controleren is eenvoudig: aantal per groep × aantal groepen moet weer het totaal zijn."},
+  {title:"Jouw beurt",question:{prompt:"12 spelers worden verdeeld over 3 gelijke teams. Hoeveel per team?",answer:"4",options:["3","4","6","9"],explain:"Deel 12 één voor één over drie teams. Elk team krijgt 4 spelers."}}
+ ]},
+ fractions:{title:"Breuken zijn gelijke stukken",icon:"⚽",unlock:"fractions",steps:[
+  {title:"Eerst eerlijk verdelen",visual:"<div class='fraction-circle'><i></i><i></i><i></i><i></i></div>",text:"Een breuk werkt alleen wanneer het geheel in gelijke delen is verdeeld."},
+  {title:"Noemer onderaan",visual:"<div class='lesson-equation'><span class='frac'><b>1</b><b>4</b></span> = één van vier gelijke delen</div>",text:"Het getal onder de streep heet de noemer. Het vertelt in hoeveel gelijke delen het geheel is verdeeld."},
+  {title:"Teller bovenaan",visual:"<div class='lesson-equation'><span class='frac'><b>3</b><b>4</b></span> = drie delen gekozen</div>",text:"Het getal boven de streep heet de teller. Het zegt hoeveel delen je gebruikt."},
+  {title:"Jouw beurt",question:{prompt:"Een veld is in 4 gelijke stukken verdeeld. Dani gebruikt 1 stuk. Welke breuk is dat?",answer:"1/4",options:["1/4","4/1","1/2","4/4"],explain:"Eén gekozen stuk van vier gelijke stukken is 1/4."}}
+ ]},
+ time:{title:"Digitale tijd slim lezen",icon:"⏰",unlock:"time",steps:[
+  {title:"Uren vóór de dubbele punt",visual:"<div class='digital-clock'><b>16</b><span>:</span>00</div>",text:"Vóór de dubbele punt staan de uren. 16 betekent vier uur in de middag."},
+  {title:"Minuten erachter",visual:"<div class='digital-clock'>16:<b>30</b></div>",text:"Na de dubbele punt staan de minuten. 30 minuten is een half uur."},
+  {title:"Over het hele uur",visual:"<div class='time-line'><span>16:40</span><i>+30 min</i><span>17:10</span></div>",text:"Van 16:40 tot 17:00 is 20 minuten. Er blijven dan nog 10 minuten over: 17:10."},
+  {title:"Jouw beurt",question:{prompt:"Training begint om 15:30 en duurt 45 minuten. Hoe laat klaar?",answer:"16:15",options:["15:45","16:00","16:15","16:30"],explain:"30 minuten brengt je naar 16:00; nog 15 minuten geeft 16:15."}}
+ ]},
+ algebra:{title:"Algebra: de onbekende vinden",icon:"🧩",unlock:"algebra",steps:[
+  {title:"Een vergelijking is een balans",visual:"<div class='balance'><span>x + 3</span><i>⚖️</i><span>11</span></div>",text:"Links en rechts zijn evenveel waard. Wat je aan de ene kant doet, moet je ook aan de andere kant doen."},
+  {title:"Maak x vrij",visual:"<div class='lesson-equation'>x + 3 − 3 = 11 − 3</div>",text:"Trek aan beide kanten 3 af. Dan blijft x = 8 over."},
+  {title:"Controleer",visual:"<div class='lesson-equation'>8 + 3 = 11 ✅</div>",text:"Vul de oplossing terug in de oorspronkelijke vergelijking."},
+  {title:"Jouw beurt",question:{prompt:"Los op: 2x + 4 = 18",answer:"7",options:["5","6","7","11"],explain:"Trek 4 af: 2x=14. Deel door 2: x=7."}}
+ ]},
+ sources:{title:"Bronnen, bias en bewijs",icon:"🔎",unlock:"sources",steps:[
+  {title:"Wie zegt het?",visual:"<div class='source-cards'><span>📢 reclame</span><span>🧪 onderzoek</span><span>👤 ervaring</span></div>",text:"Iedere bron kan informatie geven, maar heeft een ander doel en andere beperkingen."},
+  {title:"Controleer de methode",visual:"<div class='checklist'>✓ steekproef<br>✓ datum<br>✓ definities<br>✓ volledige data</div>",text:"Een overtuigende conclusie is pas sterk wanneer je kunt zien hoe zij tot stand kwam."},
+  {title:"Let op bias",visual:"<div class='bias-lens'>👁️ → 🔍 → 🧠</div>",text:"Bias betekent niet automatisch liegen. Mensen selecteren soms onbewust vooral informatie die bij hun verwachting past."},
+  {title:"Jouw beurt",question:{prompt:"Een fabrikant zegt dat 9 van 10 gebruikers tevreden zijn, maar legt de steekproef niet uit. Wat moet je eerst vragen?",answer:"Hoe de gebruikers zijn gekozen en hoeveel mensen meededen.",options:["Welke kleur het logo heeft.","Hoe de gebruikers zijn gekozen en hoeveel mensen meededen.","Hoeveel likes de advertentie kreeg.","Of de directeur het product zelf gebruikt."],explain:"Selectie en omvang bepalen hoe sterk de claim is."}}
+ ]},
+ alphabet:{title:"Letters horen en zien",icon:"🔤",unlock:"alphabet",steps:[
+  {title:"Een letter heeft een naam en klank",visual:"<div class='letter-stage'><b>M</b><span>mmm</span></div>",text:"De letter heet em. De klank is mmm, zoals vooraan in maan."},
+  {title:"Luister naar het begin",visual:"<div class='picture-row'>🌙 maan · 🐭 muis · 🧤 muts</div>",text:"Maan, muis en muts beginnen allemaal met mmm."},
+  {title:"Groot en klein",visual:"<div class='lesson-equation'>M m</div>",text:"Een hoofdletter en kleine letter horen bij elkaar."},
+  {title:"Jouw beurt",question:{prompt:"Welk woord begint met mmm?",answer:"maan",options:["maan","vis","kat","roos"],explain:"Maan begint met de klank mmm."}}
+ ]},
+ numbers:{title:"Getallen zijn hoeveelheden",icon:"🌟",unlock:"numbers",steps:[
+  {title:"Wijs aan en tel",visual:"<div class='picture-row'>⭐ ⭐ ⭐ ⭐ ⭐</div>",text:"Wijs ieder plaatje één keer aan. Het laatste getal zegt hoeveel er zijn."},
+  {title:"Meer en minder",visual:"<div class='compare-groups'><span>🐶 🐶</span><b>&lt;</b><span>🐱 🐱 🐱 🐱</span></div>",text:"Vier is meer dan twee. De open kant van het teken wijst naar de grootste groep."},
+  {title:"Samenvoegen",visual:"<div class='lesson-equation'>2 ⭐ + 1 ⭐ = 3 ⭐</div>",text:"Bij optellen maak je twee groepjes samen."},
+  {title:"Jouw beurt",question:{prompt:"Hoeveel zijn er samen: 🦄🦄 + 🦄?",answer:"3",options:["2","3","4","5"],explain:"Twee unicorns en nog één unicorn zijn samen drie."}}
+ ]}
+};
+
+startActivity=function(subject,dailyIndex=null){
+ if(subject==="focus")return startFocus();if(subject==="memory")return startMemory();
+ if(subject.startsWith("learn-"))return startLesson(subject.replace("learn-",""),dailyIndex);
+ if(subject==="patternpop")return startPatternPop();if(subject==="wordhunt")return startWordHunt();if(subject==="strategy")return startSimon();
+ const id=state.currentProfile,pr=p(),serial=++pr.storySerial,seed=`${today()}-${serial}-${dailyIndex??"free"}-${Date.now()%100000}`;
+ let task={id:uid(),subject,dailyIndex,source:dailyIndex===null?"free":"daily",startedAt:Date.now(),questionStartedAt:Date.now(),index:0,results:[],answered:false,selected:null,readTranscript:"",readingAnalysis:null};
+ if(subject==="reading"||subject==="story"){
+  const sk=id==="lena"?pr.skills.story:pr.skills.reading,story=id==="dani"?C.daniStory(seed,Math.round(sk.rating)):id==="zana"?C.zanaStory(seed,Math.round(sk.rating)):C.lenaStory(seed,Math.round(sk.rating));
+  task={...task,type:"reading",story,readConfirmed:false,subject:id==="lena"?"story":"reading"};
+ }else if(subject==="math")task={...task,type:"quiz",items:C.makeMath(id,seed,20,Math.round(pr.skills.math.rating),pr.curriculum),title:"Rekenmix 20"};
+ else if(subject==="counting")task={...task,type:"quiz",items:C.makeMath("lena",seed,12,1,pr.curriculum),title:"Telavontuur"};
+ else if(["spelling","language","letters"].includes(subject))task={...task,type:"quiz",items:C.makeSpelling(id,seed,id==="lena"?12:15,Math.round((pr.skills[subject]||{}).rating||2)),title:subject==="language"?"Taalstudio 15":subject==="letters"?"Letterfeest":"Spellingarena 15"};
+ else if(subject==="shapes")task={...task,type:"quiz",items:shapeQuestions(seed).concat(C.makeMath("lena",seed+"shape",6,1,pr.curriculum)).slice(0,12),title:"Patroonpret"};
+ else task={...task,type:"quiz",items:C.makeBankQuiz(subject,id,seed,id==="zana"?12:10),title:ACTIVITY_META[subject]?.title||"Challenge"};
+ state.task=task;save();render();questionStarted=Date.now();
+};
+window.startActivity=startActivity;
+
+function startLesson(key,dailyIndex=null){
+ const lesson=LESSONS[key];if(!lesson)return toast("Deze uitleg wordt nog voorbereid.");
+ state.task={id:uid(),type:"lesson",subject:`learn-${key}`,lessonKey:key,lesson,dailyIndex,source:dailyIndex===null?"free":"daily",step:0,startedAt:Date.now(),answered:false,selected:null,results:[]};save();render();
+}
+window.startLesson=startLesson;
+
+renderTask=function(){
+ const t=state.task;
+ if(!t)return render();
+ $("#app").innerHTML=`<div class="task-shell ${state.currentProfile==='lena'?'lena-task':''}"><div class="task-top"><button class="icon-btn" onclick="leaveTask()">✕</button><div class="progress"><span style="--w:${t.type==='lesson'?((t.step+1)/t.lesson.steps.length*100):taskProgress(t)}%"></span></div><strong class="timer" id="timer">0:00</strong>${state.currentProfile==='lena'?`<button class="horn task-horn" onclick="speakTaskNow()">📣</button>`:""}</div><section class="card task-card">${t.type==='lesson'?lessonHTML(t):t.type==='reading'?readingHTML(t):quizHTML(t)}</section></div>`;
+ tick=setInterval(updateTimer,500);
+ if(state.currentProfile==="lena")setTimeout(autoSpeakLena,280);
+};
+
+function lessonHTML(t){
+ const st=t.lesson.steps[t.step];
+ if(st.question){
+  return`<div class="task-meta"><span class="pill">${t.lesson.icon} ${esc(t.lesson.title)}</span><span class="pill">Beheersingscheck</span></div><span class="eyebrow">Nu jij</span><h1>${esc(st.question.prompt)}</h1><div class="answer-grid lesson-answers">${st.question.options.map(o=>answerButton(o,st.question,t)).join("")}</div>${t.answered?feedbackHTML(t,st.question):""}<div class="task-actions"><span class="muted">Je mag terugdenken aan de voorbeelden.</span>${t.answered?`<button class="primary" onclick="finishLesson()">Les afronden</button>`:`<button class="primary" onclick="checkLessonAnswer()">Controleer</button>`}</div>`;
+ }
+ return`<div class="task-meta"><span class="pill">${t.lesson.icon} ${esc(t.lesson.title)}</span><span class="pill">Stap ${t.step+1}/${t.lesson.steps.length}</span></div><span class="eyebrow">Begrijpen vóór oefenen</span><h1>${esc(st.title)}</h1><div class="lesson-visual">${st.visual}</div><p class="lesson-text">${esc(st.text)}</p><div class="task-actions"><button class="ghost" onclick="speakLesson()">🔊 Lees uitleg voor</button><button class="primary" onclick="nextLessonStep()">Volgende stap</button></div>`;
+}
+window.speakLesson=()=>{const st=state.task.lesson.steps[state.task.step];speak(`${st.title}. ${st.text||st.question?.prompt||''}`)};
+window.nextLessonStep=()=>{const t=state.task;if(t.step<t.lesson.steps.length-1){t.step++;t.answered=false;t.selected=null;t.results=[];save();render()}};
+window.checkLessonAnswer=()=>{const t=state.task,q=t.lesson.steps[t.step].question;if(t.selected==null)return toast("Kies eerst een antwoord.");const result=smartAnswer(q,t.selected);t.results=[{prompt:q.prompt,selected:t.selected,answer:q.answer,correct:result.correct,seconds:1,kind:"uitleg",interpretation:result.interpretation}];t.answered=true;save();render()};
+window.finishLesson=()=>{const t=state.task,last=t.results[0],key=t.lessonKey;if(!last?.correct){toast("Bekijk de uitleg nog één keer; daarna kun je opnieuw proberen.");t.step=0;t.answered=false;t.selected=null;t.results=[];save();return render()}p().curriculum[t.lesson.unlock]=true;p().learningHistory.unshift({date:new Date().toISOString(),lesson:key,mastered:true});p().learningHistory=p().learningHistory.slice(0,100);p().coins+=35;p().xp+=50;state.task=null;save();modal(`<div class="reward-icon">🎓</div><span class="eyebrow">Nieuwe vaardigheid</span><h1>${esc(LESSONS[key].title)} beheerst</h1><p class="lead">Deze vraagsoort mag nu rustig in je oefenmix verschijnen. +35 coins.</p><button class="primary" onclick="closeModal();setView('learn')">Naar de leerstudio</button>`);confetti(35)};
+
+readingHTML=function(t){
+ const s=t.story;
+ if(!t.readConfirmed){
+  const coach=state.currentProfile!=="lena";
+  return`<div class="task-meta"><span class="pill">${subjectIcon(state.currentProfile,t.subject)} ${subjectName(state.currentProfile,t.subject)}</span><span class="pill">${s.estimatedWords} woorden</span><span class="pill">${esc(s.storyId||`Verhaal ${p().storySerial}`)}</span></div><span class="eyebrow">${esc(s.genre)}</span><h1>${esc(s.title)}</h1>${state.currentProfile==='lena'?`<button class="mega-horn" onclick="speakCurrentStory()"><span>📣</span> Lees het verhaal voor</button>`:""}<div class="story ${state.currentProfile}">${s.story.split("\n\n").map(x=>`<p>${esc(x)}</p>`).join("")}</div><div class="reading-tools"><button class="ghost" onclick="speakCurrentStory()">🔊 Voorlezen</button>${coach?`<button class="${readingRecognitionActive?'danger':'ghost'}" onclick="toggleReadingCoach()">${readingRecognitionActive?'⏹ Stop meeluisteren':'🎙️ Luister mee met hardop lezen'}</button>`:""}<button class="primary" onclick="confirmReading()">✅ ${state.currentProfile==='dani'?'Ik heb hardop gelezen':state.currentProfile==='lena'?'Naar de luistervragen':'Naar de vragen'}</button></div>${coach?`<div class="reading-coach-status" id="readingCoachStatus"><strong>${readingRecognitionActive?'Microfoon luistert mee':'Optionele leescoach'}</strong><span>${readingRecognitionActive?`Herkenning: ${readingTranscript.split(/\s+/).filter(Boolean).length} woorden`:'Er wordt geen audio opgeslagen. Alleen een woordvergelijking komt in het ouderdashboard.'}</span></div>`:""}<p class="pace">${state.currentProfile==='zana'?"Lees analytisch: onderscheid gebeurtenis, bewijs, belang, tegenargument en conclusie.":state.currentProfile==='lena'?"Luister goed. Je mag het verhaal zo vaak horen als je wilt.":"Lees rustig en duidelijk. Een punt is een korte stop; kijk vooruit naar het volgende woord."}</p>`;
+ }
+ const question=s.questions[t.index];
+ return`<div class="task-meta"><span class="pill">Vraag ${t.index+1}/${s.questions.length}</span><span class="pill">${question.kind||'begrip'}</span></div>${dots(t,s.questions.length)}<button class="story-back" onclick="showStoryModal()">📖 Tekst terugkijken</button>${state.currentProfile==='lena'?`<button class="mega-horn small" onclick="speakQuestion()"><span>📣</span> Lees vraag en antwoorden</button>`:""}<h2 class="question-box ${state.currentProfile==='lena'?'lena-question':''}">${question.icon?`<span class="question-icon">${question.icon}</span>`:''}${esc(question.q)}</h2><div class="answer-grid ${state.currentProfile==='lena'?'lena-answers':''}">${question.options.map(o=>answerButton(o,question,t)).join("")}</div>${t.answered?feedbackHTML(t,question):""}<div class="task-actions"><span class="muted">${state.currentProfile==='lena'?'Tik op het antwoord dat je hoorde.':'Kies wat het best door de tekst wordt ondersteund.'}</span><button class="primary" onclick="nextQuestion()">${t.answered?(t.index===s.questions.length-1?'Afronden':'Volgende'):'Controleer'}</button></div>`;
+};
+
+quizHTML=function(t){
+ const q0=t.items[t.index],keys=v4QuickKeys(q0),isLena=state.currentProfile==='lena';
+ return`<div class="task-meta"><span class="pill">${subjectIcon(state.currentProfile,t.subject)} ${esc(t.title)}</span><span class="pill">Vraag ${t.index+1}/${t.items.length}</span>${t.subject==='math'?`<span class="pill">⏱️ totaal + tijd per som</span>`:""}</div>${dots(t,t.items.length)}${isLena?`<button class="mega-horn small" onclick="speakQuestion()"><span>📣</span> Lees alles voor</button>`:""}<h2 class="question-box ${isLena?'lena-question':''}">${q0.icon?`<span class="question-icon">${q0.icon}</span>`:''}${esc(q0.prompt)}</h2>${q0.options?`<div class="answer-grid ${isLena?'lena-answers':''}">${q0.options.map(o=>answerButton(o,q0.answer,t)).join("")}</div>`:`<div class="smart-input-wrap"><input class="answer-input" id="answerInput" inputmode="${v4InputMode(q0)}" autocomplete="off" placeholder="${esc(q0.inputHint||'Typ je antwoord')}" value="${esc(t.selected||'')}" oninput="state.task.selected=this.value" onkeydown="if(event.key==='Enter')checkAnswer()">${keys.length?`<div class="quick-keys">${keys.map(k=>`<button onclick='appendInput(${JSON.stringify(k)})'>${esc(k)}</button>`).join("")}</div>`:""}</div>`}${t.answered?feedbackHTML(t,q0):""}<div class="task-actions"><span class="muted">${t.subject==='math'?`Tempo tot nu toe: ${t.results.length?Math.round(t.results.reduce((a,b)=>a+b.seconds,0)/t.results.length):0}s per som. Verschillende schrijfwijzen worden slim herkend.`:isLena?'Luister, kijk en tik rustig.':'Lees de volledige zin en let op wat logisch én correct is.'}</span>${t.answered?`<button class="primary" onclick="nextQuestion()">${t.index===t.items.length-1?'Afronden':'Volgende'}</button>`:`<button class="primary" onclick="checkAnswer()">Controleer</button>`}</div>`;
+};
+
+answerButton=function(o,answer,t){
+ const q0=t.type==='reading'?t.story.questions[t.index]:t.type==='lesson'?t.lesson.steps[t.step].question:t.items[t.index],correct=t.answered&&smartAnswer(q0,o).correct,wrong=t.answered&&t.selected===o&&!correct;
+ return`<button class="answer ${t.selected===o?'selected':''} ${correct?'correct':''} ${wrong?'wrong':''}" onclick='chooseAnswer(${JSON.stringify(o)})' ${t.answered?'disabled':''}>${state.currentProfile==='lena'?`<span class="lena-option-icon">${/^[\p{Emoji}\s]+$/u.test(String(o))?o:'⭐'}</span>`:''}<span>${esc(o)}</span></button>`;
+};
+
+feedbackHTML=function(t,q0){
+ const last=t.results[t.results.length-1],lesson=q0.lessonKey||({division:'division',fractions:'fractions',algebra:'algebra'}[q0.kind]);
+ return`<div class="feedback ${last.correct?'good':'bad'}"><strong>${last.correct?'Goed gezien!':'Nog niet juist — dit is waarom:'}</strong><br>${esc(q0.explain)}${last.correct?'':`<br>Juiste antwoord: <strong>${esc(q0.answer)}</strong>`}${last.interpretation&&String(last.interpretation)!==String(last.selected)?`<br><small>We lazen jouw invoer als: ${esc(last.interpretation)}</small>`:''}${!last.correct&&lesson&&LESSONS[lesson]?`<br><button class="ghost inline-help" onclick="pauseForLesson('${lesson}')">🎓 Bekijk de uitleg</button>`:''}</div>`;
+};
+window.pauseForLesson=k=>{state.task.pausedCopy=JSON.parse(JSON.stringify(state.task));startLesson(k,null)};
+
+window.speakTaskNow=()=>{if(state.task?.type==='reading'&&!state.task.readConfirmed)return speakCurrentStory();if(state.task?.type==='lesson')return speakLesson();return speakQuestion()};
+window.speakQuestion=()=>{
+ const t=state.task;if(!t)return;let q0=t.type==='reading'?t.story.questions[t.index]:t.type==='lesson'?t.lesson.steps[t.step].question:t.items[t.index];
+ if(!q0)return;const opts=q0.options?.map((o,i)=>`${i+1}. ${o}`).join('. ')||'';speak(`${q0.q||q0.prompt}. ${opts}`);
+};
+function autoSpeakLena(){
+ const t=state.task;if(!t||state.currentProfile!=="lena"||!p().settings.autoSpeak)return;
+ const key=`${t.type}-${t.readConfirmed}-${t.index??t.step}`;if(t.lastSpokenKey===key)return;t.lastSpokenKey=key;save();
+ if(t.type==='reading'&&!t.readConfirmed)speak(`${t.story.title}. ${t.story.story}`);else if(t.type==='lesson')speakLesson();else speakQuestion();
+}
+
+// ---------- Hardop-leescoach (privacyvriendelijk: transcript, geen audio-opslag) ----------
+window.toggleReadingCoach=()=>readingRecognitionActive?stopReadingCoach():startReadingCoach();
+function startReadingCoach(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR)return toast("Deze browser ondersteunt de meeleesfunctie niet. Chrome op computer of Android werkt meestal wel.");
+ readingTranscript="";readingRecognition=new SR();readingRecognition.lang="nl-NL";readingRecognition.continuous=true;readingRecognition.interimResults=true;readingRecognitionActive=true;
+ readingRecognition.onresult=e=>{let final="",interim="";for(let i=0;i<e.results.length;i++){const text=e.results[i][0].transcript;if(e.results[i].isFinal)final+=text+" ";else interim+=text+" ";}readingTranscript=(final+interim).trim();if(state.task)state.task.readTranscript=readingTranscript;const status=$("#readingCoachStatus span");if(status)status.textContent=`Herkenning: ${readingTranscript.split(/\s+/).filter(Boolean).length} woorden. Lees rustig door.`};
+ readingRecognition.onerror=e=>{readingRecognitionActive=false;toast(e.error==='not-allowed'?"Microfoontoegang is niet toegestaan.":"Meelezen stopte. Je kunt gewoon verder lezen.");render()};
+ readingRecognition.onend=()=>{if(readingRecognitionActive)try{readingRecognition.start()}catch(e){readingRecognitionActive=false}};
+ try{readingRecognition.start();render()}catch(e){readingRecognitionActive=false;toast("De microfoon kon niet starten.")}
+}
+function stopReadingCoach(){readingRecognitionActive=false;try{readingRecognition?.stop()}catch(e){}readingRecognition=null;if(state.task)state.task.readTranscript=readingTranscript;save();render()}
+function tokeniseReading(text){return String(text||"").split(/\s+/).filter(Boolean).map((raw,i)=>({raw,clean:plainText(raw).replace(/[^a-z0-9]/g,''),i})).filter(x=>x.clean)}
+function alignReading(reference,spoken){
+ const a=tokeniseReading(reference),b=tokeniseReading(spoken),n=a.length,m=b.length;
+ if(!m)return{score:null,words:a.map(x=>({word:x.raw,status:'unknown'})),transcript:spoken,matched:0,total:n};
+ // Dynamic-programming alignment; substitution/deletion/insertion cost 1.
+ const width=m+1,prev=new Uint16Array(width),cur=new Uint16Array(width),moves=new Uint8Array((n+1)*width);
+ for(let j=0;j<=m;j++){prev[j]=j;if(j)moves[j]=2}
+ for(let i=1;i<=n;i++){
+  cur[0]=i;moves[i*width]=1;
+  for(let j=1;j<=m;j++){
+   const same=a[i-1].clean===b[j-1].clean,sub=prev[j-1]+(same?0:1),del=prev[j]+1,ins=cur[j-1]+1;
+   let val=sub,mv=same?0:3;if(del<val){val=del;mv=1}if(ins<val){val=ins;mv=2}cur[j]=val;moves[i*width+j]=mv;
+  }
+  prev.set(cur);
+ }
+ let i=n,j=m;const states=Array(n).fill('missed'),extras=[];let matched=0;
+ while(i>0||j>0){const mv=moves[i*width+j];if(i>0&&j>0&&(mv===0||mv===3)){if(mv===0){states[i-1]='good';matched++}else states[i-1]='wrong';i--;j--;}else if(i>0&&(mv===1||j===0)){states[i-1]='missed';i--;}else if(j>0){extras.unshift(b[j-1].raw);j--;}else break;}
+ return{score:Math.round(matched/Math.max(1,n)*100),words:a.map((x,k)=>({word:x.raw,status:states[k]})),transcript:spoken,matched,total:n,extras:extras.slice(0,80)};
+}
+window.confirmReading=()=>{
+ if(readingRecognitionActive){readingRecognitionActive=false;try{readingRecognition?.stop()}catch(e){}readingRecognition=null}
+ const t=state.task;t.readTranscript=t.readTranscript||readingTranscript;
+ if(state.currentProfile!=="lena"&&t.readTranscript)t.readingAnalysis=alignReading(t.story.story,t.readTranscript);
+ t.readConfirmed=true;t.index=0;t.questionStartedAt=Date.now();save();readingTranscript="";render();
+};
+
+window.checkAnswer=()=>{
+ const t=state.task,q0=t.items[t.index];if(!q0.options){const input=$("#answerInput");t.selected=input?.value?.trim()||t.selected}
+ if(t.selected===null||t.selected===undefined||String(t.selected).trim()==="")return toast("Kies of typ eerst een antwoord.");recordAnswer(q0);
+};
+recordAnswer=function(q0){
+ const t=state.task,result=smartAnswer(q0,t.selected),seconds=Math.max(.2,(Date.now()-(t.questionStartedAt||Date.now()))/1000);
+ t.results.push({prompt:q0.q||q0.prompt,selected:t.selected,answer:q0.answer,accepted:q0.accepted||[],correct:result.correct,interpretation:result.interpretation,seconds:+seconds.toFixed(1),kind:q0.kind||t.subject,lessonKey:q0.lessonKey||null});
+ t.answered=true;save();render();
+};
+
+updateSkill=function(sk,acc,suspicious){
+ sk.attempts=(sk.attempts||0)+1;sk.recent=Array.isArray(sk.recent)?sk.recent:[];sk.recent.push(acc);sk.recent=sk.recent.slice(-10);sk.accuracy=Math.round(sk.recent.reduce((a,b)=>a+b,0)/sk.recent.length);sk.mastery=Math.round(sk.accuracy);sk.confidence=Math.min(1,sk.attempts/6);
+ if(!suspicious){
+  let step=acc>=95?.38:acc>=86?.26:acc>=76?.13:acc>=60?0:acc>=45?-.2:-.36;
+  if(sk.recent.length>=3){const recent=sk.recent.slice(-3).reduce((a,b)=>a+b,0)/3;if(recent>=92)step+=.12;if(recent<48)step-=.12}
+  sk.rating+=step;
+ }
+ sk.rating=clamp(sk.rating,V4_MIN_LEVEL[state.currentProfile],V4_MAX_LEVEL[state.currentProfile]);
+};
+
+finishTask=function(){
+ const t=state.task,pr=p(),total=t.results.length,correct=t.results.filter(x=>x.correct).length,accuracy=Math.round(correct/Math.max(1,total)*100),seconds=Math.round((Date.now()-t.startedAt)/1000),avg=total?+(t.results.reduce((a,b)=>a+b.seconds,0)/total).toFixed(1):0,fastWrong=t.results.filter(x=>!x.correct&&x.seconds<2.4).length,longWrong=longestWrong(t.results),sameAnswerRuns=maxSameAnswerRun(t.results),suspicious=fastWrong>=4||(avg<2.3&&accuracy<65)||longWrong>=6||sameAnswerRuns>=8;
+ let coins=correct*4+25+(t.source==="daily"?25:0),xp=correct*8+30;if(suspicious){coins=Math.round(coins*.45);xp=Math.round(xp*.65)}
+ pr.coins+=coins;pr.xp+=xp;pr.completed++;updateStreak(pr);
+ const skill=pr.skills[t.subject]||(pr.skills[t.subject]=defaultSkill(state.currentProfile)),before=skill.rating;updateSkill(skill,accuracy,suspicious);
+ if(t.dailyIndex!==null&&!pr.daily.completed.includes(t.dailyIndex))pr.daily.completed.push(t.dailyIndex);
+ const session={id:t.id,date:new Date().toISOString(),subject:t.subject,title:t.type==="reading"?t.story.title:t.title,storyId:t.story?.storyId||null,source:t.source,questions:total,correct,accuracy,seconds,avgSeconds:avg,fastWrong,longWrong,sameAnswerRuns,suspicious,ratingBefore:+before.toFixed(2),ratingAfter:+skill.rating.toFixed(2),results:t.results,readingAnalysis:t.readingAnalysis||null};
+ pr.sessions.unshift(session);pr.sessions=pr.sessions.slice(0,750);
+ if(t.readingAnalysis){pr.readingAssessments.unshift({date:session.date,sessionId:session.id,title:session.title,...t.readingAnalysis});pr.readingAssessments=pr.readingAssessments.slice(0,100)}
+ const recentSkill=pr.sessions.filter(x=>x.subject===t.subject).slice(0,3),mean=recentSkill.length?recentSkill.reduce((a,b)=>a+b.accuracy,0)/recentSkill.length:accuracy;
+ if(recentSkill.length===3&&mean<60&&!pr.alerts.some(a=>a.message.includes(`Herhaald lage score bij ${subjectName(state.currentProfile,t.subject)}`)&&Date.now()-new Date(a.date)<86400000))addAlert(state.currentProfile,"red",`Herhaald lage score bij ${subjectName(state.currentProfile,t.subject)}: gemiddeld ${Math.round(mean)}% over drie sessies.`,session.id);
+ pr.questionLog.unshift(...t.results.map(x=>({...x,date:session.date,subject:t.subject,sessionId:t.id})));pr.questionLog=pr.questionLog.slice(0,8000);
+ if(suspicious)addAlert(state.currentProfile,"red",`Mogelijk doorklikken: ${accuracy}% goed, ${fastWrong} zeer snelle fouten, foutreeks ${longWrong}, zelfde-antwoordreeks ${sameAnswerRuns}.`,session.id);
+ else if(accuracy<60)addAlert(state.currentProfile,"amber",`Extra uitleg of een lager niveau kan helpen bij ${subjectName(state.currentProfile,t.subject)}: ${accuracy}% goed.`,session.id);
+ else if(accuracy>=90)addAlert(state.currentProfile,"green",`Sterke sessie ${subjectName(state.currentProfile,t.subject)}: ${accuracy}% goed. Niveau beweegt sneller mee.`,session.id);
+ const failedLessons=t.results.filter(x=>!x.correct&&x.lessonKey).map(x=>x.lessonKey);if(failedLessons.length>=2)addAlert(state.currentProfile,"amber",`Uitlegles aanbevolen: ${curriculumName(failedLessons[0])}.`,session.id);
+ state.task=null;save();showReward({coins,xp,accuracy,suspicious,title:session.title,ratingBefore:before,ratingAfter:skill.rating});if(state.parent.autoAlerts&&state.parent.webhook&&(suspicious||accuracy<50))sendWebhook(session);
+};
+function maxSameAnswerRun(results){let best=0,cur=0,last=null;for(const r of results){const x=plainText(r.selected);if(x===last)cur++;else{last=x;cur=1}best=Math.max(best,cur)}return best}
+showReward=function(r){const delta=r.ratingAfter-r.ratingBefore,root=$("#modal-root");root.innerHTML=`<div class="reward"><div class="card reward-box"><div class="reward-icon">${r.suspicious?'🧭':r.accuracy>=90?'🏆':r.accuracy>=70?'⭐':'🌱'}</div><span class="eyebrow">Missie voltooid</span><h1>${r.suspicious?'Rustiger is sterker':r.accuracy>=90?'Topprestatie!':r.accuracy>=70?'Sterk geleerd!':'Nieuwe stap gezet'}</h1><p class="lead">${r.accuracy}% goed · +${r.xp} XP · +${r.coins} LevelCoins</p><div class="level-change ${delta>0?'up':delta<0?'down':'same'}">Niveau ${r.ratingBefore.toFixed(1)} → ${r.ratingAfter.toFixed(1)} <small>${delta>0?'omhoog door sterke beheersing':delta<0?'tijdelijk omlaag voor betere aansluiting':'blijft passend'}</small></div>${r.suspicious?`<div class="feedback bad">Meerdere antwoorden kwamen extreem snel of in een vast patroon. De beloning is lager. Lees iedere vraag volledig.</div>`:""}<button class="primary" onclick="closeReward()">Naar mijn overzicht</button></div></div>`;confetti(r.suspicious?12:48);speak(r.suspicious?'Missie klaar. Neem de volgende keer meer denktijd.':'Missie voltooid. Goed gedaan!')};
+
+// ---------- Uitgebreide gamehal met lokaal tweespelers ----------
+renderGames=function(){
+ const games=state.currentProfile==='lena'?
+  [['memory','🃏','Memory'],['focus','👾','Vang de gekke bekken'],['ttt','❌','Boter-kaas-en-eieren'],['connect','🔴','Vier op een rij junior'],['simon','🎵','Kleurgeheugen'],['patternpop','🎈','Patroon Pop'],['tapduel','⚡','Tikduel met z’n tweeën'],['sudoku','🔢','Mini-Sudoku 4×4']]:
+  state.currentProfile==='dani'?
+  [['ttt','❌','Boter-kaas-en-eieren'],['connect','🔴','Vier op een rij'],['sudoku','🔢','Sudoku 6×6'],['memory','🃏','Memory'],['focus','👾','Focus Arcade'],['simon','🎵','Simon Challenge'],['maze','🧭','Doolhofmissie'],['wordhunt','🔎','Woordjacht'],['tapduel','⚡','Reactieduel'],['logic','🧩','Breinbrekers']]:
+  [['ttt','❌','Boter-kaas-en-eieren'],['connect','🔴','Vier op een rij'],['sudoku','🔢','Sudoku 9×9'],['memory','🃏','Memory'],['focus','🎯','Reactie & remkracht'],['simon','🎵','Memory Sequence'],['maze','🧭','Doolhofstrategie'],['wordhunt','🔎','Woord- en codejacht'],['tapduel','⚡','Reactieduel'],['critical','🧠','Argumentenbattle'],['strategy','♟️','Strategie Lab']];
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Gamehal 4.0</span><h1>Robotduels én samen spelen</h1></div><p class="muted">Bij ❌ en 🔴 kies je: tegen Robo of lokaal met twee spelers.</p></div><div class="games-grid">${games.map(([g,ic,n])=>`<button class="game-tile animated-game" onclick="launchGame('${g}')"><div class="big">${ic}</div><h3>${n}</h3><p class="muted">${gameDescV4(g)}</p>${['ttt','connect','tapduel'].includes(g)?`<span class="duo-badge">👥 2 spelers mogelijk</span>`:''}</button>`).join("")}</div><section class="card" style="margin-top:18px"><span class="eyebrow">Spelregels</span><h2>Spelen beloont, leren bouwt sneller</h2><p class="muted">De eerste vijf spellen per dag leveren coins op. Tweespelerswedstrijden bewaren alleen de uitslag, niet wie er ruzie maakte over een zet 😉.</p></section>`;
+ $("#app").innerHTML=shell(body,'games');
+};
+function gameDescV4(g){return{ttt:'Kies Robo of speel om de beurt op hetzelfde scherm.',connect:'Plan vooruit, blokkeer en speel lokaal tegen elkaar.',sudoku:'Logische cijfers op leeftijdsniveau.',memory:'Vind paren met steeds wisselende thema’s.',focus:'Bewegende doelen, remrondes en gekke gezichten.',simon:'Onthoud een steeds langere kleurvolgorde.',maze:'Stuur de held door een doolhof zonder muren te raken.',wordhunt:'Kraak letters, woorden en geheime codes.',tapduel:'Wacht op groen; wie te vroeg tikt verliest.',patternpop:'Tik het patroon in de juiste volgorde.',logic:'Reeksen, posities en slimme conclusies.',critical:'Beoordeel bewijs en argumenten.',strategy:'Denk meerdere zetten vooruit.'}[g]||'Nieuwe uitdaging'}
+window.launchGame=g=>{
+ if(['ttt','connect'].includes(g))return chooseGameMode(g);
+ if(g==='sudoku')return startSudoku();if(g==='memory')return startMemory();if(g==='focus')return startFocus();if(g==='simon'||g==='strategy')return startSimon();if(g==='maze')return startMaze();if(g==='wordhunt')return startWordHunt();if(g==='tapduel')return startTapDuel();if(g==='patternpop')return startPatternPop();startActivity(g,null);
+};
+function chooseGameMode(g){modal(`<div class="reward-icon">👥</div><span class="eyebrow">Spelmodus</span><h2>${g==='ttt'?'Boter-kaas-en-eieren':'Vier op een rij'}</h2><div class="mode-grid"><button class="game-mode" onclick="closeModal();${g==='ttt'?'startTTT':'startConnect'}('robot')"><span>🤖</span><strong>Tegen Robo</strong><small>De computer speelt terug</small></button><button class="game-mode" onclick="closeModal();${g==='ttt'?'startTTT':'startConnect'}('duo')"><span>👥</span><strong>Met z’n tweeën</strong><small>Om de beurt op hetzelfde scherm</small></button></div>`)}
+
+startTTT=function(mode='robot'){game={type:'ttt',mode,board:Array(9).fill(''),over:false,turn:'❌'};renderTTT()};
+renderTTT=function(){gamePage(game.mode==='duo'?'Boter-kaas-en-eieren — 2 spelers':'Boter-kaas-en-eieren tegen Robo',`<p class="lead" id="gameMsg">${game.mode==='duo'?`Aan de beurt: ${game.turn}`:'Jij bent ❌. Maak drie op een rij.'}</p><div class="game-board ttt">${game.board.map((x,i)=>`<button onclick="tttMove(${i})">${x}</button>`).join('')}</div><div class="game-controls"><button class="ghost" onclick="startTTT('${game.mode}')">Opnieuw</button><button class="ghost" onclick="chooseGameMode('ttt')">Andere modus</button></div>`)};
+window.tttMove=i=>{
+ if(game.over||game.board[i])return;
+ if(game.mode==='duo'){
+  game.board[i]=game.turn;const w=winner3(game.board);if(w||game.board.every(Boolean))return endTTTV4(w||'draw');game.turn=game.turn==='❌'?'⭕':'❌';return renderTTT();
+ }
+ game.board[i]='❌';let w=winner3(game.board);if(w)return endTTTV4(w);const open=game.board.map((x,j)=>x?null:j).filter(x=>x!==null);if(!open.length)return endTTTV4('draw');let move=bestTTT('⭕')??bestTTT('❌')??open[Math.floor(Math.random()*open.length)];game.board[move]='⭕';w=winner3(game.board);if(w)return endTTTV4(w);renderTTT();
+};
+function endTTTV4(w){game.over=true;renderTTT();setTimeout(()=>{const e=$("#gameMsg");if(!e)return;if(game.mode==='duo')e.textContent=w==='draw'?'Gelijkspel!':`${w} wint! Geef elkaar een high five.`;else e.textContent=w==='❌'?'Jij wint! Slim gespeeld.':w==='⭕'?'Robo wint. Kijk waar je eerder had kunnen blokkeren.':'Gelijkspel — sterke verdediging.';if((game.mode==='robot'&&w==='❌')||(game.mode==='duo'&&w!=='draw'))gameReward(18,'Duel voltooid')},50)}
+
+startConnect=function(mode='robot'){game={type:'connect',mode,board:Array(42).fill(0),over:false,turn:1};renderConnect()};
+renderConnect=function(){gamePage(game.mode==='duo'?'Vier op een rij — 2 spelers':'Vier op een rij tegen Robo',`<p class="lead" id="gameMsg">${game.mode==='duo'?`Aan de beurt: ${game.turn===1?'🟡 geel':'🔴 rood'}`:'Jij bent geel. Klik op een kolom.'}</p><div class="connect-arrows">${[0,1,2,3,4,5,6].map(c=>`<button onclick="connectMove(${c})">▼</button>`).join('')}</div><div class="game-board connect">${game.board.map(v=>`<button class="${v===1?'p1':v===2?'p2':''}"></button>`).join('')}</div><div class="game-controls"><button class="ghost" onclick="startConnect('${game.mode}')">Opnieuw</button><button class="ghost" onclick="chooseGameMode('connect')">Andere modus</button></div>`)};
+window.connectMove=col=>{
+ if(game.over)return;
+ if(game.mode==='duo'){
+  if(drop(col,game.turn)<0)return;const w=connectWinner();if(w)return endConnectV4(w);if(game.board.every(Boolean))return endConnectV4('draw');game.turn=game.turn===1?2:1;return renderConnect();
+ }
+ if(drop(col,1)<0)return;let w=connectWinner();if(w)return endConnectV4(w);const cols=[0,1,2,3,4,5,6].filter(c=>game.board[c]===0);if(!cols.length)return endConnectV4('draw');let choice=cols.find(c=>{const ix=drop(c,2),win=connectWinner()===2;game.board[ix]=0;return win});if(choice===undefined)choice=cols.find(c=>{const ix=drop(c,1),win=connectWinner()===1;game.board[ix]=0;return win});if(choice===undefined)choice=cols.sort((a,b)=>Math.abs(3-a)-Math.abs(3-b))[Math.floor(Math.random()*Math.min(3,cols.length))];drop(choice,2);w=connectWinner();if(w)return endConnectV4(w);renderConnect();
+};
+function endConnectV4(w){game.over=true;renderConnect();setTimeout(()=>{const e=$("#gameMsg");if(!e)return;if(game.mode==='duo')e.textContent=w==='draw'?'Vol bord: gelijkspel!':`${w===1?'🟡 Geel':'🔴 Rood'} heeft vier op een rij!`;else e.textContent=w===1?'Vier op een rij! Jij wint.':w===2?'Robo heeft vier. Probeer eerder te blokkeren.':'Gelijkspel.';if((game.mode==='robot'&&w===1)||(game.mode==='duo'&&w!=='draw'))gameReward(24,'Vier op een rij voltooid')},50)}
+
+function startSimon(){game={type:'simon',sequence:[],input:[],round:0,locked:true,over:false};renderSimon();setTimeout(simonNextRound,500)}
+function renderSimon(){gamePage('Kleurgeheugen',`<div class="focus-hud"><div class="stat"><strong>${game.round}</strong><small>ronde</small></div></div><p class="lead" id="simonMsg">${game.locked?'Kijk goed naar de volgorde...':'Tik de kleuren na.'}</p><div class="simon-board">${['🔴','🔵','🟢','🟡'].map((x,i)=>`<button id="simon-${i}" onclick="simonTap(${i})">${x}</button>`).join('')}</div><div class="game-controls"><button class="ghost" onclick="startSimon()">Opnieuw</button></div>`)}
+function simonNextRound(){game.round++;game.input=[];game.sequence.push(Math.floor(Math.random()*4));game.locked=true;renderSimon();let delay=350;game.sequence.forEach((n,i)=>setTimeout(()=>flashSimon(n),delay+i*520));setTimeout(()=>{game.locked=false;renderSimon()},delay+game.sequence.length*520)}
+function flashSimon(i){const e=$(`#simon-${i}`);if(e){e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),300)}}
+window.simonTap=i=>{if(game.locked||game.over)return;flashSimon(i);game.input.push(i);const pos=game.input.length-1;if(game.sequence[pos]!==i){game.over=true;gamePage('Kleurgeheugen klaar',`<div class="center-result"><div class="reward-icon">🎵</div><h2>${game.round-1} rondes onthouden</h2><p class="lead">Sterk geheugen groeit door patronen in kleine stukken te onthouden.</p><button class="primary" onclick="startSimon()">Nog een keer</button></div>`);if(game.round>=4)gameReward(18,'Kleurgeheugen');return}if(game.input.length===game.sequence.length){game.locked=true;setTimeout(simonNextRound,650)}};
+
+function startTapDuel(){game={type:'tapduel',state:'waiting',winner:null,falseStart:null};renderTapDuel();game.timeout=setTimeout(()=>{game.state='go';renderTapDuel()},1200+Math.random()*2800)}
+function renderTapDuel(){gamePage('Reactieduel — twee spelers',`<p class="lead" id="tapMsg">${game.state==='waiting'?'Wacht... tik nog niet!':game.state==='go'?'NU TIKKEN!':game.falseStart?`${game.falseStart} tikte te vroeg`:`${game.winner} wint!`}</p><div class="tap-duel ${game.state}"><button onclick="tapDuel('Speler links')">👈<strong>LINKS</strong></button><button onclick="tapDuel('Speler rechts')"><strong>RECHTS</strong>👉</button></div><div class="game-controls"><button class="ghost" onclick="startTapDuel()">Nieuwe ronde</button></div>`)}
+window.tapDuel=who=>{if(game.state==='waiting'){clearTimeout(game.timeout);game.state='done';game.falseStart=who;game.winner=who==='Speler links'?'Speler rechts':'Speler links';renderTapDuel();return}if(game.state==='go'){game.state='done';game.winner=who;renderTapDuel();gameReward(10,'Reactieduel')}};
+
+const MAZES={lena:["1111111","1000001","1011101","1010001","1010111","1000001","1111111"],dani:["111111111","100000001","101111101","101000101","101010101","101010001","101011111","100000001","111111111"],zana:["1111111111","1000000001","1011111101","1010000101","1010110101","1010100101","1010101101","1010000001","1011111101","1111111111"]};
+function startMaze(){const map=MAZES[state.currentProfile].map(r=>r.split('').map(Number));game={type:'maze',map,pos:{r:1,c:1},goal:{r:map.length-2,c:map[0].length-2},moves:0};game.map[game.goal.r][game.goal.c]=0;renderMaze()}
+function renderMaze(){gamePage('Doolhofmissie',`<p class="lead">Breng ${m().icon} naar 🏆. Bewegingen: ${game.moves}</p><div class="maze" style="--cols:${game.map[0].length}">${game.map.flatMap((row,r)=>row.map((wall,c)=>`<i class="${wall?'wall':'path'}">${game.pos.r===r&&game.pos.c===c?m().icon:game.goal.r===r&&game.goal.c===c?'🏆':''}</i>`)).join('')}</div><div class="maze-controls"><button onclick="mazeMove(-1,0)">⬆️</button><button onclick="mazeMove(0,-1)">⬅️</button><button onclick="mazeMove(0,1)">➡️</button><button onclick="mazeMove(1,0)">⬇️</button></div>`)}
+window.mazeMove=(dr,dc)=>{const r=game.pos.r+dr,c=game.pos.c+dc;if(game.map[r]?.[c]!==0)return;game.pos={r,c};game.moves++;if(r===game.goal.r&&c===game.goal.c){gamePage('Doolhof gehaald!',`<div class="center-result"><div class="reward-icon">🏆</div><h2>${game.moves} bewegingen</h2><button class="primary" onclick="startMaze()">Nieuw doolhof</button></div>`);gameReward(18,'Doolhof gehaald');return}renderMaze()};
+
+function startWordHunt(){const banks={lena:['MAAN','VIS','BAL','ROOS'],dani:['VOETBAL','ALIEN','HAAI','KASTEEL','RAKET'],zana:['LEIDERSCHAP','HOCKEY','LONDEN','BEWIJS','STRATEGIE']},word=C.pick(C.rng(Date.now()),banks[state.currentProfile]),letters=C.shuffle(C.rng(Date.now()+7),word.split(''));game={type:'wordhunt',word,letters,answer:''};renderWordHunt()}
+function renderWordHunt(){gamePage('Woordjacht',`<p class="lead">Zet de letters in de goede volgorde.</p><div class="word-answer">${game.answer||'·'.repeat(game.word.length)}</div><div class="letter-bank">${game.letters.map((x,i)=>`<button onclick="wordPick(${i})">${x}</button>`).join('')}</div><div class="game-controls"><button class="ghost" onclick="game.answer='';renderWordHunt()">Wissen</button><button class="primary" onclick="checkWordHunt()">Controleer</button></div>`)}
+window.wordPick=i=>{if(!game.letters[i])return;game.answer+=game.letters[i];game.letters[i]='';renderWordHunt()};
+window.checkWordHunt=()=>{if(game.answer===game.word){toast('Woord gevonden!');confetti(25);gameReward(15,'Woordjacht')}else{toast('Nog niet. Kijk naar begin- en eindklanken.');game.answer='';game.letters=C.shuffle(C.rng(Date.now()),game.word.split(''));renderWordHunt()}};
+
+function startPatternPop(){const colors=['🔴','🔵','🟢','🟡','🟣'],len=state.currentProfile==='lena'?3:5,seq=Array.from({length:len},()=>C.pick(C.rng(Date.now()+Math.random()*1000),colors));game={type:'patternpop',seq,input:[]};renderPatternPop()}
+function renderPatternPop(){gamePage('Patroon Pop',`<p class="lead">Onthoud: ${game.seq.join(' ')}</p><div class="pattern-input">${game.input.join(' ')||'Tik het patroon na'}</div><div class="pattern-buttons">${['🔴','🔵','🟢','🟡','🟣'].map(x=>`<button onclick="patternTap('${x}')">${x}</button>`).join('')}</div>`)}
+window.patternTap=x=>{game.input.push(x);if(game.input[game.input.length-1]!==game.seq[game.input.length-1]){toast('Oeps, opnieuw!');return startPatternPop()}if(game.input.length===game.seq.length){gamePage('Patroon compleet!',`<div class="center-result"><div class="reward-icon">🎈</div><h2>Goed onthouden</h2><button class="primary" onclick="startPatternPop()">Nieuwe ronde</button></div>`);gameReward(12,'Patroon Pop');return}renderPatternPop()};
+
+// ---------- Grotere marketplace en dynamische wereldzones ----------
+function compatibleWorldItem(item){const zoneIds=(PROFILE_META[state.currentProfile].worldZones||[]).map(z=>z.id);return item.cat!=='world'||!item.zones||item.zones.some(z=>zoneIds.includes(z))}
+renderMarket=function(){
+ const cats=['featured','skin','hair','top','bottom','accessory','pet','emote','world'];
+ let items=shopCat==='featured'?shopItems.filter(x=>compatibleWorldItem(x)).sort((a,b)=>b.price-a.price).slice(0,18):shopItems.filter(x=>x.cat===shopCat&&compatibleWorldItem(x));
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">LevelShop 4.0</span><h1>Skins, pets en werelden</h1></div><span class="coin-wallet">🪙 ${p().coins} LevelCoins</span></div><div class="market-layout"><section class="card avatar-panel"><div class="avatar-studio premium">${avatarHTML()}</div><div class="custom-controls"><div class="glass"><strong>Maak jezelf of een alter ego</strong><p class="muted">Combineer huid, haar, outfit, accessoires, pet en emote. Alles blijft van jou.</p></div><div class="glass"><strong>Geen echt geld</strong><p class="muted">Coins komen uit leren en een beperkte dagelijkse spelbonus. Geen lootboxes.</p></div></div></section><section class="card shop-panel"><div class="shop-tabs">${cats.map(c=>`<button class="ghost ${shopCat===c?'primary':''}" onclick="setShopCat('${c}')">${catName(c)}</button>`).join('')}</div><div class="shop-grid v4-shop">${items.map(shopItemHTML).join('')}</div></section></div>`;
+ $("#app").innerHTML=shell(body,'market');
+};
+shopItemHTML=function(i){const owned=p().owned.includes(i.id),equipped=p().equipped[i.cat]===i.id;return`<button class="shop-item ${owned?'owned':''} ${equipped?'equipped':''}" onclick="shopAction('${i.id}')"><div class="art shop-art">${i.art}</div><strong>${esc(i.name)}</strong><small>${equipped?'In gebruik':owned?'Van jou':`🪙 ${i.price}`}</small>${i.cat==='world'?`<em>${(i.zones||[]).slice(0,2).map(z=>PROFILE_META[state.currentProfile].worldZones.find(x=>x.id===z)?.icon||'🌍').join(' ')}</em>`:''}</button>`};
+
+renderWorld=function(){
+ const pr=p(),zones=PROFILE_META[state.currentProfile].worldZones||[],zone=zones.find(z=>z.id===pr.activeWorld)||zones[0],grid=pr.worlds[zone.id]||(pr.worlds[zone.id]=Array(30).fill(null));
+ const ownedWorld=shopItems.filter(x=>x.cat==='world'&&pr.owned.includes(x.id)&&compatibleWorldItem(x)&&(x.zones||[]).includes(zone.id));
+ const filled=grid.filter(Boolean).length;
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">LevelWorlds</span><h1>${zone.icon} ${esc(zone.name)}</h1></div><span class="pill">${filled}/30 geplaatst</span></div><div class="world-tabs">${zones.map(z=>`<button class="world-tab ${z.id===zone.id?'active':''}" onclick="setWorldZone('${z.id}')"><span>${z.icon}</span>${esc(z.name)}</button>`).join('')}</div><section class="card world-builder"><div class="world-scene-v4 sky-${zone.sky} zone-${zone.id}"><span class="sun-moon"></span><span class="world-cloud wc1">☁️</span><span class="world-cloud wc2">☁️</span><span class="world-spark s1">✨</span><span class="world-spark s2">✨</span><div class="world-avatar">${avatarHTML(state.currentProfile,true)}</div><div class="world-grid-v4">${grid.map((id,i)=>{const it=shopItems.find(x=>x.id===id);return`<button class="world-cell-v4 ${it?'occupied':''}" onclick="worldCell(${i})" title="${it?esc(it.name):'Plaats hier'}">${it?`<span>${it.value||it.art}</span>`:''}</button>`}).join('')}</div><div class="world-vehicle">${zone.id==='garage'?'🏎️':zone.id==='travel'?'✈️':zone.id==='ocean'?'🐬':zone.id==='stadium'?'⚽':''}</div></div><div class="world-builder-bottom"><div><strong>Kies een item en tik een vak</strong><p class="muted">Tik zonder selectie op een geplaatst item om het terug te zetten in je inventaris.</p></div><button class="ghost" onclick="clearWorldSelection()">Selectie wissen</button></div><div class="inventory v4-inventory">${ownedWorld.length?ownedWorld.map(i=>`<button class="${selectedWorldItem===i.id?'selected':''}" onclick="selectWorld('${i.id}')" title="${esc(i.name)}"><span>${i.art}</span><small>${esc(i.name)}</small></button>`).join(''):`<div class="empty-inventory"><span>🛍️</span><p>Koop voor deze wereld nieuwe objecten in de LevelShop.</p><button class="primary" onclick="setView('market')">Naar de shop</button></div>`}</div></section>`;
+ $("#app").innerHTML=shell(body,'world');
+};
+window.setWorldZone=id=>{p().activeWorld=id;selectedWorldItem=null;save();renderWorld()};
+window.worldCell=i=>{const zone=p().activeWorld,grid=p().worlds[zone];if(selectedWorldItem){const item=shopItems.find(x=>x.id===selectedWorldItem);if(item?.zones&&!item.zones.includes(zone))return toast('Dit item hoort in een andere wereld.');grid[i]=selectedWorldItem;worldPlaceAnimation();}else grid[i]=null;save();renderWorld()};
+function worldPlaceAnimation(){confetti(8)}
+
+// ---------- Eigen code kiezen en eenvoudiger inloggen ----------
+window.openOwnCode=()=>modal(`<div class="reward-icon">🔑</div><span class="eyebrow">Mijn profielcode</span><h2>${m().name}, kies vier cijfers</h2><p class="muted">Kies een code die jij onthoudt maar je broer of zus niet makkelijk raadt.</p><label>Nieuwe code<input id="own-code-1" inputmode="numeric" maxlength="4" placeholder="4 cijfers"></label><label>Herhaal code<input id="own-code-2" inputmode="numeric" maxlength="4" placeholder="nog een keer"></label><button class="primary" style="margin-top:14px" onclick="saveOwnCode()">Code opslaan</button><button class="ghost" style="margin-top:8px" onclick="closeModal()">Annuleren</button>`);
+window.saveOwnCode=()=>{const a=$("#own-code-1").value.trim(),b=$("#own-code-2").value.trim();if(!/^\d{4}$/.test(a))return toast('Gebruik precies 4 cijfers.');if(a!==b)return toast('De twee codes zijn niet gelijk.');state.parent.codes[state.currentProfile]=a;save();closeModal();toast('Jouw nieuwe code is opgeslagen.')};
+renderPin=function(){const name=pinTarget==='parent'?'Papa-dashboard':PROFILE_META[pinTarget].name;modal(`<div class="pin-character">${pinTarget==='parent'?'🔐':PROFILE_META[pinTarget].icon}</div><span class="eyebrow">Persoonlijk profiel</span><h2>Code voor ${name}</h2><div class="pin-dots">${Array.from({length:4},(_,i)=>`<i class="pin-dot ${i<pinBuffer.length?'filled':''}"></i>`).join('')}</div><div class="keypad">${[1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].map(x=>`<button onclick="pinKey('${x}')">${x}</button>`).join('')}</div><p class="muted" style="margin-top:14px">Code vergeten? Vraag papa. In je profiel kun je daarna zelf een nieuwe code kiezen.</p>`)};
+
+// ---------- Persoonlijke groei en uitgebreid ouderdashboard ----------
+function sessionsSince(pr,days){const from=Date.now()-days*86400000;return pr.sessions.filter(x=>new Date(x.date).getTime()>=from)}
+function average(arr,key='accuracy'){return arr.length?Math.round(arr.reduce((a,b)=>a+(Number(b[key])||0),0)/arr.length):0}
+function weakestSkill(id){const entries=Object.entries(state.profiles[id].skills).filter(([s,x])=>(x.attempts||0)>0);return entries.sort((a,b)=>(a[1].accuracy||0)-(b[1].accuracy||0))[0]}
+function repeatedErrors(pr){const map={};for(const x of pr.questionLog.slice(0,300).filter(x=>!x.correct)){const key=(x.lessonKey||x.kind||x.subject||'overig');map[key]=(map[key]||0)+1}return Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,5)}
+
+renderProgress=function(){
+ const pr=p(),sessions=pr.sessions,recent=sessions.slice(0,12),avg=average(recent),week=sessionsSince(pr,7),reading=pr.readingAssessments?.[0],unlocks=Object.entries(pr.curriculum).filter(([,v])=>v);
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Mijn groei</span><h1>${m().name}'s LevelReport</h1></div><button class="ghost" onclick="openOwnCode()">🔑 Mijn code</button></div><div class="stat-grid v4-stats"><div class="stat"><strong>${pr.completed}</strong><small>missies totaal</small></div><div class="stat"><strong>${avg}%</strong><small>laatste 12</small></div><div class="stat"><strong>${week.length}</strong><small>sessies deze week</small></div><div class="stat"><strong>${level(pr.xp)}</strong><small>heldenlevel</small></div></div><div class="grid-2" style="margin-top:18px"><section class="card"><span class="eyebrow">Vaardigheden</span><h2>Niveau en beheersing</h2>${Object.entries(pr.skills).filter(([s,x])=>(x.attempts||0)>0||m().subjects.includes(s)).map(([s,x])=>`<div class="skill-v4"><div><strong>${ACTIVITY_META[s]?.icon||'⚡'} ${subjectName(state.currentProfile,s)}</strong><small>${ratingLabel(state.currentProfile,x.rating)} · ${x.accuracy||0}% recent</small></div><div class="progress"><span style="--w:${v4LevelPct(state.currentProfile,x.rating)}%"></span></div><span class="pill">${x.rating.toFixed(1)}</span></div>`).join('')}</section><section class="card"><span class="eyebrow">Ontgrendeld</span><h2>Uitlegmodules beheerst</h2><div class="unlock-grid">${unlocks.length?unlocks.map(([k])=>`<div><span>✅</span><strong>${curriculumName(k)}</strong></div>`).join(''):`<p class="muted">Start een uitlegmodule in de leerstudio.</p>`}</div>${reading?`<div class="reading-score"><span>🎙️</span><div><strong>${reading.score??'—'}%</strong><small>laatste hardop-leesherkenning</small></div></div>`:''}</section></div><section class="card" style="margin-top:18px"><span class="eyebrow">Scoretrend</span><h2>Laatste sessies</h2><div class="mini-chart big-chart">${recent.slice().reverse().map(x=>`<i style="--h:${Math.max(5,x.accuracy)}%" data-v="${x.accuracy}%"></i>`).join('')||`<p class='muted'>Nog geen resultaten.</p>`}</div><p class="muted">Het niveau reageert sneller: zeer sterke beheersing verhoogt het duidelijk; herhaalde moeite brengt de oefeningen tijdelijk terug.</p></section><section class="card" style="margin-top:18px"><span class="eyebrow">Recente missies</span><h2>Resultaten</h2>${sessionsTable(sessions.slice(0,20),false)}</section>`;
+ $("#app").innerHTML=shell(body,'progress');
+};
+
+function readingColoredHTML(a){if(!a?.words)return'<p class="muted">Geen woordanalyse beschikbaar.</p>';return`<div class="reading-legend"><span class="good">goed herkend</span><span class="wrong">anders herkend</span><span class="missed">niet herkend</span></div><div class="reading-word-map">${a.words.map(x=>`<span class="${x.status}">${esc(x.word)}</span>`).join(' ')}</div><p class="muted">Deze browserherkenning is een hulpmiddel, geen officiële leesdiagnose. Audio is niet opgeslagen.</p>`}
+window.openSessionDetails=(id,sid)=>{const x=state.profiles[id].sessions.find(s=>s.id===sid);if(!x)return;modal(`<span class="eyebrow">${PROFILE_META[id].name} · ${fmtDate(x.date)}</span><h2>${esc(x.title)}</h2><div class="stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:15px"><div class="stat"><strong>${x.accuracy}%</strong><small>score</small></div><div class="stat"><strong>${x.avgSeconds}s</strong><small>per vraag</small></div><div class="stat"><strong>${x.fastWrong}</strong><small>snelle fouten</small></div><div class="stat"><strong>${x.ratingBefore}→${x.ratingAfter}</strong><small>niveau</small></div></div>${x.readingAnalysis?`<h3>🎙️ Hardop-leesanalyse</h3>${readingColoredHTML(x.readingAnalysis)}`:''}<h3 style="margin-top:18px">Alle antwoorden</h3><div class="table-wrap"><table><thead><tr><th>#</th><th>Vraag</th><th>Gegeven</th><th>Geïnterpreteerd</th><th>Juiste antwoord</th><th>Tijd</th></tr></thead><tbody>${(x.results||[]).map((r,i)=>`<tr><td>${i+1} ${r.correct?'✅':'❌'}</td><td>${esc(r.prompt)}</td><td>${esc(r.selected)}</td><td>${esc(r.interpretation||r.selected)}</td><td>${esc(r.answer)}</td><td>${r.seconds}s</td></tr>`).join('')}</tbody></table></div><button class="primary" style="margin-top:14px" onclick="closeModal()">Sluiten</button>`)};
+
+function parentOverviewCard(id){const pr=state.profiles[id],week=sessionsSince(pr,7),recent=pr.sessions.slice(0,10),avg=average(recent),susp=recent.filter(x=>x.suspicious).length,weak=weakestSkill(id),read=pr.readingAssessments?.[0];ensureDaily(id);return`<section class="card parent-child-v4"><div class="parent-child-head"><span>${PROFILE_META[id].icon}</span><div><span class="eyebrow">${PROFILE_META[id].grade}</span><h2>${PROFILE_META[id].name}</h2></div><i class="status-dot ${susp?'red':avg&&avg<65?'amber':'green'}"></i></div><div class="stat-grid" style="grid-template-columns:1fr 1fr"><div class="stat"><strong>${pr.daily.completed.length}/${pr.daily.plan.length}</strong><small>vandaag</small></div><div class="stat"><strong>${avg||'—'}${avg?'%':''}</strong><small>laatste 10</small></div><div class="stat"><strong>${week.length}</strong><small>deze week</small></div><div class="stat"><strong>${susp}</strong><small>doorkliksignalen</small></div></div><div class="parent-insight"><strong>Aandacht:</strong> ${weak?`${subjectName(id,weak[0])} (${weak[1].accuracy||0}% recent)`:'nog onvoldoende data'}</div>${read?`<div class="parent-insight"><strong>Hardop lezen:</strong> ${read.score??'—'}% herkenning</div>`:''}<div class="mini-chart">${recent.slice().reverse().map(x=>`<i style="--h:${Math.max(5,x.accuracy)}%" data-v="${x.accuracy}%"></i>`).join('')}</div></section>`}
+
+renderParent=function(){
+ const ids=['dani','zana','lena'],all=ids.flatMap(id=>state.profiles[id].sessions.map(x=>({...x,child:PROFILE_META[id].name,profile:id}))).sort((a,b)=>new Date(b.date)-new Date(a.date)),alerts=ids.flatMap(id=>state.profiles[id].alerts.map(x=>({...x,child:PROFILE_META[id].name,profile:id}))).sort((a,b)=>new Date(b.date)-new Date(a.date)),filtered=parentFilter==='all'?all:all.filter(x=>x.profile===parentFilter);
+ const errorRows=ids.flatMap(id=>repeatedErrors(state.profiles[id]).map(([kind,count])=>({id,kind,count}))).sort((a,b)=>b.count-a.count).slice(0,12);
+ const body=`<div class="section-head" style="margin-top:0"><div><span class="eyebrow">Papa-dashboard 4.0</span><h1>In één minuut zien wat er gebeurt</h1></div><button class="ghost" onclick="closeParent()">Terug naar ${m().name}</button></div><div class="grid-3">${ids.map(parentOverviewCard).join('')}</div><section class="card parent-priority" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Prioriteiten</span><h2>Wat vraagt nu aandacht?</h2></div><span class="pill">${alerts.filter(x=>!x.read&&x.severity!=='green').length} open</span></div>${alerts.filter(x=>!x.read).slice(0,10).map(a=>`<div class="alert ${a.severity}"><i class="traffic"></i><div><strong>${a.child} · ${fmtDate(a.date)}</strong><p>${esc(a.message)}</p></div><button class="ghost" onclick="parentReadAlert('${a.profile}','${a.id}')">Afhandelen</button></div>`).join('')||`<div class="alert green"><i class="traffic"></i><div><strong>Geen open waarschuwingen</strong><p>De recente patronen zien er normaal uit.</p></div></div>`}</section><div class="grid-2" style="margin-top:18px"><section class="card"><span class="eyebrow">Foutenpatronen</span><h2>Waar gaan fouten over?</h2>${errorRows.length?`<div class="error-clusters">${errorRows.map(x=>`<div><span>${PROFILE_META[x.id].icon}</span><strong>${esc(curriculumName(x.kind))}</strong><i>${x.count} fouten</i></div>`).join('')}</div>`:`<p class="muted">Nog onvoldoende foutdata.</p>`}</section><section class="card"><span class="eyebrow">Curriculumstatus</span><h2>Uitlegmodules</h2>${ids.map(id=>`<div class="curriculum-row"><strong>${PROFILE_META[id].name}</strong><div>${Object.entries(state.profiles[id].curriculum).map(([k,v])=>`<span class="${v?'on':''}">${v?'✅':'○'} ${curriculumName(k)}</span>`).join('')}</div></div>`).join('')}</section></div><section class="card" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><span class="eyebrow">Alle sessies</span><h2>Score, tijd, niveau en gedrag</h2></div><select onchange="setParentFilter(this.value)"><option value="all" ${parentFilter==='all'?'selected':''}>Alle kinderen</option>${ids.map(id=>`<option value="${id}" ${parentFilter===id?'selected':''}>${PROFILE_META[id].name}</option>`).join('')}</select></div>${sessionsTable(filtered.slice(0,100),true)}</section><div class="grid-2" style="margin-top:18px"><section class="card"><span class="eyebrow">Profielcodes</span><h2>Codes beheren</h2><div class="settings-grid">${ids.map(id=>`<label>${PROFILE_META[id].name}<input id="code-${id}" value="${esc(state.parent.codes[id])}" maxlength="4" inputmode="numeric"><small>Het kind kan de eigen code ook in het profiel wijzigen.</small></label>`).join('')}<label>Oudercode<input id="parent-pin" value="${esc(state.parent.pin)}" maxlength="4" inputmode="numeric"></label><label>Rapport e-mail<input id="parent-email" type="email" value="${esc(state.parent.email)}"></label></div><button class="primary" style="margin-top:14px" onclick="saveParentSettings()">Codes opslaan</button></section><section class="card"><span class="eyebrow">Rapportage</span><h2>Export en meldingen</h2><label>Optionele webhook-URL<input id="parent-webhook" value="${esc(state.parent.webhook)}" placeholder="https://..."><small>Voor automatische waarschuwingen via een eigen dienst.</small></label><div class="toggle" style="margin:13px 0"><div><strong>Automatische waarschuwing</strong><small class="muted" style="display:block">Bij doorklikken of minder dan 50% goed</small></div><input id="auto-alert" type="checkbox" ${state.parent.autoAlerts?'checked':''}></div><div class="tag-row"><button class="ghost" onclick="emailReport()">✉ E-mailrapport</button><button class="ghost" onclick="exportCSV()">⬇ CSV</button><button class="ghost" onclick="exportBackup()">⬇ Back-up</button><button class="ghost" onclick="restoreBackup()">↥ Terugzetten</button></div></section></div>`;
+ $("#app").innerHTML=shell(body,'none');
+};
+window.saveParentSettings=()=>{for(const id of ['dani','zana','lena']){const v=$("#code-"+id).value.trim();if(!/^\d{4}$/.test(v))return toast(`Gebruik voor ${PROFILE_META[id].name} precies 4 cijfers.`);state.parent.codes[id]=v}const pp=$("#parent-pin").value.trim();if(!/^\d{4}$/.test(pp))return toast('Gebruik voor de oudercode precies 4 cijfers.');state.parent.pin=pp;state.parent.email=$("#parent-email").value.trim()||state.parent.email;state.parent.webhook=$("#parent-webhook").value.trim();state.parent.autoAlerts=$("#auto-alert").checked;save();toast('Codes en ouderinstellingen opgeslagen.')};
+
+// Pause a quiz for an explanation and return afterwards.
+let pausedTaskV4=null;
+window.pauseForLesson=k=>{pausedTaskV4=JSON.parse(JSON.stringify(state.task));startLesson(k,null)};
+const finishLessonBase=window.finishLesson;
+window.finishLesson=()=>{const t=state.task,last=t.results[0],key=t.lessonKey;if(!last?.correct){toast('Bekijk de uitleg nog één keer; daarna kun je opnieuw proberen.');t.step=0;t.answered=false;t.selected=null;t.results=[];save();return render()}p().curriculum[t.lesson.unlock]=true;p().learningHistory.unshift({date:new Date().toISOString(),lesson:key,mastered:true});p().coins+=35;p().xp+=50;if(pausedTaskV4){state.task=pausedTaskV4;pausedTaskV4=null;save();modal(`<div class="reward-icon">🎓</div><h2>Uitleg beheerst</h2><p class="lead">Je gaat terug naar je oefening. Probeer de volgende vraag met deze nieuwe aanpak.</p><button class="primary" onclick="closeModal();render()">Terug naar de opdracht</button>`);return}state.task=null;save();modal(`<div class="reward-icon">🎓</div><h2>${esc(LESSONS[key].title)} beheerst</h2><p class="lead">+35 coins. Deze vraagsoort kan nu in je oefenmix verschijnen.</p><button class="primary" onclick="closeModal();setView('learn')">Naar de leerstudio</button>`);confetti(35)};
+
+window.leaveTask=()=>{if(readingRecognitionActive){readingRecognitionActive=false;try{readingRecognition?.stop()}catch(e){}}if(confirm('Missie pauzeren? Niet afgeronde vragen worden niet opgeslagen.')){state.task=null;pausedTaskV4=null;save();render()}};
+
+// Final render dispatcher after all 4.0 overrides.
+render=function(){
+ clearInterval(tick);
+ if(!state.currentProfile)return renderProfiles();
+ ensureDaily();
+ if(state.task)return renderTask();
+ if(state.parentOpen)return renderParent();
+ ({home:renderHome,learn:renderLearn,games:renderGames,market:renderMarket,world:renderWorld,progress:renderProgress}[state.view]||renderHome)();
+};
+
+migrateV4();
 render();
+
 </script>
 </body>
 </html>
