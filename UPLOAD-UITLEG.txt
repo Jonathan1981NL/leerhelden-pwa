@@ -1,8 +1,5 @@
-NEXUS LEARNING WORLDS v4.3.1 FROZEN — GITHUB
-
-1. Maak in de bestaande app via Ouder eerst een JSON-back-up.
-2. Pak de ZIP uit.
-3. Open de map leerhelden-pwa.
-4. Upload index.html naar de hoofdmap van de GitHub-repository.
-5. Vervang de bestaande index.html en kies Commit changes.
-6. Open GitHub Pages en druk Ctrl+F5. Op iPad/iPhone: sluit Safari volledig en open opnieuw.
+1. Pak de ZIP uit.
+2. Open de map leerhelden-pwa.
+3. Upload index.html naar de hoofdmap van de GitHub-repository.
+4. Vervang de oude index.html en kies Commit changes.
+5. Open GitHub Pages en vernieuw met Ctrl+F5.

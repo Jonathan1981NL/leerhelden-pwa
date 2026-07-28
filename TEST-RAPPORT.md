@@ -1,32 +1,19 @@
-# Testrapport — Nexus Learning Worlds v4.3.1 FROZEN
+# TEST-RAPPORT — v4.3.2 FROZEN
 
-## Resultaat
+- Catalogusitems: 500
+- Unieke item-ID’s: 500
+- Unieke Nederlandse namen: 500
+- Unieke SVG-uitvoeringen: 500
+- Unieke animatiehandtekeningen: 500
+- Wereldthema’s met eigen vaste achtergrond: 13
+- Semantische assetcheck camper: OK (v4-road-19, SHA-256 fd73e6489789)
+- Semantische assetcheck raceauto: OK (v4-road-01, SHA-256 5ccb6772d590)
+- Semantische assetcheck reuzenrad: OK (v4-amusement-01, SHA-256 20f8afec8606)
+- Semantische assetcheck achtbaan: OK (v4-amusement-02, SHA-256 5df2c859db85)
+- Semantische assetcheck spookhuis: OK (v4-amusement-05, SHA-256 880b37a0a0f6)
+- Vaste wereldobjecten: vervangen door thematische SVG-landschappen zonder zwevende bekers, deuren, planten of willekeurige emoji.
+- Taalcontrole: alle bestaande locale-pakketten behouden; Nederlandse marktplaatsnamen blijven volledig Nederlands. Structurele taal- en schoolsysteemaudits uit v4.3.1 blijven behouden.
 
-De bevroren flatbaseline is gecontroleerd na de gerichte aanpassingen aan het accountoverzicht en ouderdashboard.
+## Belangrijke kwaliteitsgrens
 
-### Volledige regressie
-
-- 6 ingebedde JavaScriptmodules: syntactisch geldig.
-- 500 marktplaatsitems en 500 unieke grafische uitvoeringen behouden.
-- 22 spellen behouden.
-- 20 talen en 20 schoolsystemen behouden.
-- 14 leergebieden in de standaard testmatrix.
-- 340 inhoudelijke kwaliteitsvragen gecontroleerd.
-- 525 rekenvragen gecontroleerd zonder herhaling binnen twintig vragen.
-- 414 niveau-vakcombinaties gecontroleerd.
-- Wereldisolatie, avatarankers, profielreset, opslag en herlaadtests geslaagd.
-
-### Specifieke v4.3.1-controles
-
-- Precies één levende wereldpreview in het accountoverzicht.
-- De onderste dubbele wereldweergave is vervangen door een profiel- en leerroutekaart.
-- Ouderomgeving gebruikt donkere tabellen en grafiekpanelen.
-- De y-as toont labels uit het geselecteerde schoolsysteem, zoals Groep 5, 2 mavo of 4 vwo.
-- Niveau-, score-, activiteit-, tijd- en vakbalansgrafieken aanwezig.
-- Granulaire vakanalysetabel aanwezig.
-- Klikbare vakdrilldowns, spelcontrole, ontgrendelingen en accountbeheer behouden.
-- Beide ZIP-bestanden slagen voor integriteitscontrole.
-
-## Browsercontrole
-
-Een automatische headless-Chromiumcontrole kon in de uitvoeromgeving niet betrouwbaar worden gestart door lokale DBus/GPU-beperkingen. De syntaxis-, DOM-harness-, opslag-, inhouds- en regressietests zijn wel geslaagd. Een korte fysieke controle op desktop, iPad en telefoon blijft onderdeel van release-QA.
+De catalogus is nu technisch en visueel uniek op SVG-niveau en de genoemde semantische probleemcategorieën zijn afzonderlijk getekend. Een commerciële release in twintig talen vereist daarnaast native review door taal- en onderwijsexperts per land; deze flatversie kan dat niet vervangen.
