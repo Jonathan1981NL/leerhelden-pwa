@@ -1,28 +1,32 @@
-# Testrapport Nexus Learning Worlds v4.3
+# Testrapport — Nexus Learning Worlds v4.3.1 FROZEN
 
-De release is getest met een geïsoleerde browser-DOM, Node.js-syntaxiscontrole, opslag/herlaadtests, ZIP-integriteitscontrole en een lokale HTTP-server.
+## Resultaat
 
-## Geslaagde controles
+De bevroren flatbaseline is gecontroleerd na de gerichte aanpassingen aan het accountoverzicht en ouderdashboard.
 
-- Alle ingebedde JavaScript-blokken zijn syntactisch geldig.
-- 500 unieke interne objectnamen, 500 unieke Nederlandse objectnamen, 500 unieke SVG-uitvoeren en 500 unieke animatiehandtekeningen.
-- 25 volledig Nederlandse marktplaatscategorieën.
-- Wereldplaatsingen blijven per profiel én per wereld gescheiden.
-- Profielachtergronden roteren alleen tussen de eigen werelden en tonen de werkelijk geplaatste objecten.
-- Avataritems gebruiken vaste ankerpunten voor hoofd, ogen, gezicht, nek, romp, rug, hand, pols en voeten.
-- Dani start in groep 5, Zana in groep 8 en Lena in groep 1; de interne Nederlandse leerlijn is hiermee gekoppeld.
-- Vakniveaus kunnen afzonderlijk worden ingesteld en volgen een eigen geschiedenis.
-- 340 inhoudelijke kwaliteitsvragen gecontroleerd op context, antwoord, opties, hint en uitleg.
-- 525 opeenvolgende rekensomvragen gecontroleerd zonder herhaling binnen de voorgaande twintig.
-- 414 niveau-/vakcombinaties over alle 37 interne niveaus genereren geldige opdrachten.
-- 22 spellen aanwezig; klassieke bordspellen behouden, schaak, dammen en Mijnenveger inbegrepen.
-- Mijnenveger, Nim, Schuifpuzzel en Woordzoeker functioneel getest.
-- Spelblokkade na tien afgeronde rondes blijft per spel en profiel actief.
-- Nederlandse namen en instructies van de klassieke spellen gecontroleerd.
-- Interactieve oudergrafiek, vakfilters, vakgeschiedenis en detailweergave genereren geldige uitvoer.
-- Lokale opslag, harde herlaadtest en behoud van zelfgemaakte profielen geslaagd.
-- ZIP-mapstructuur en lokale HTTP-publicatie geslaagd.
+### Volledige regressie
 
-## Productiegrens
+- 6 ingebedde JavaScriptmodules: syntactisch geldig.
+- 500 marktplaatsitems en 500 unieke grafische uitvoeringen behouden.
+- 22 spellen behouden.
+- 20 talen en 20 schoolsystemen behouden.
+- 14 leergebieden in de standaard testmatrix.
+- 340 inhoudelijke kwaliteitsvragen gecontroleerd.
+- 525 rekenvragen gecontroleerd zonder herhaling binnen twintig vragen.
+- 414 niveau-vakcombinaties gecontroleerd.
+- Wereldisolatie, avatarankers, profielreset, opslag en herlaadtests geslaagd.
 
-De flat-file is een uitgebreide lokale/GitHub Pages-release. Voor betaalde publieke accounts, synchronisatie tussen apparaten, echte autorisatie, abonnementen en app-storepublicatie blijft een beveiligde backend en fysieke device-QA noodzakelijk.
+### Specifieke v4.3.1-controles
+
+- Precies één levende wereldpreview in het accountoverzicht.
+- De onderste dubbele wereldweergave is vervangen door een profiel- en leerroutekaart.
+- Ouderomgeving gebruikt donkere tabellen en grafiekpanelen.
+- De y-as toont labels uit het geselecteerde schoolsysteem, zoals Groep 5, 2 mavo of 4 vwo.
+- Niveau-, score-, activiteit-, tijd- en vakbalansgrafieken aanwezig.
+- Granulaire vakanalysetabel aanwezig.
+- Klikbare vakdrilldowns, spelcontrole, ontgrendelingen en accountbeheer behouden.
+- Beide ZIP-bestanden slagen voor integriteitscontrole.
+
+## Browsercontrole
+
+Een automatische headless-Chromiumcontrole kon in de uitvoeromgeving niet betrouwbaar worden gestart door lokale DBus/GPU-beperkingen. De syntaxis-, DOM-harness-, opslag-, inhouds- en regressietests zijn wel geslaagd. Een korte fysieke controle op desktop, iPad en telefoon blijft onderdeel van release-QA.
