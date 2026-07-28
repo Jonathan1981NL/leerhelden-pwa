@@ -1,13 +1,14 @@
-NEXUS LEARNING WORLDS V4.0 — GITHUB UPLOAD
+NEXUS LEARNING WORLDS v4.3 — UPLOAD NAAR GITHUB
 
-1. Download the ZIP.
-2. Right-click it in Downloads and choose “Alles uitpakken”.
-3. Open the extracted folder “leerhelden-pwa”.
-4. Open your GitHub repository in the browser.
-5. Choose Add file > Upload files.
-6. Upload ONLY index.html to the root of the repository.
-7. Commit the change.
-8. Under Settings > Pages, use branch main and folder /root.
-9. Open the Pages link and press Ctrl+F5 to bypass the old browser cache.
+1. Download LeerHelden-v1.0.zip.
+2. Klik met de rechtermuisknop op het bestand en kies Alles uitpakken.
+3. Open de uitgepakte map leerhelden-pwa.
+4. Maak in de huidige online app eerst via Ouder een JSON-back-up wanneer je bestaande gegevens wilt bewaren.
+5. Open je GitHub-repository.
+6. Kies Add file > Upload files.
+7. Sleep alleen index.html uit leerhelden-pwa naar GitHub.
+8. Laat de bestaande index.html vervangen en klik op Commit changes.
+9. Open de GitHub Pages-link en druk op Ctrl+F5.
+10. Op iPad/iPhone: sluit Safari volledig en open de link opnieuw.
 
-Existing progress remains available when you use the same GitHub Pages URL and browser. Export a backup from the parent dashboard before updating.
+De drie standaardprofielen zijn conform verzoek opnieuw gestart. Oude v4.1/v4.2-gegevens blijven in het herstelarchief van de ouderomgeving staan. Zelf gemaakte profielen blijven behouden.
